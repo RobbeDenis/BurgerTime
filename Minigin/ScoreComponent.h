@@ -8,6 +8,8 @@ namespace dae
 	class ScoreComponent : public BaseComponent, public Observer
 	{
 	public:
+		void PostLoad() override;
+
 		void Notify(Event event) override;
 		void Notify(BaseComponent*, Event event) override { Notify(event); };
 

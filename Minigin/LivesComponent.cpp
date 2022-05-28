@@ -7,8 +7,12 @@
 dae::LivesComponent::LivesComponent(GameObject* gameObject)
 	: BaseComponent(gameObject)
 {
-	m_pTextLives = m_pGameObject->AddComponent<TextComponent>();
-	m_pTextLives->SetFont(ResourceManager::GetInstance().LoadFont("Lingua.otf", 22), false);
+
+}
+
+void dae::LivesComponent::PostLoad()
+{
+	m_pTextLives = m_pGameObject->GetComponent<TextComponent>();
 }
 
 void dae::LivesComponent::Notify(BaseComponent* pComponent, Event event)

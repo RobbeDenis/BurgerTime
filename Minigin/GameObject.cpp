@@ -14,6 +14,7 @@ dae::GameObject::GameObject(std::string label)
 
 dae::GameObject::GameObject() 
 	: m_Label{ "" }
+	, m_Dirty{ true }
 {};
 
 dae::GameObject::~GameObject() 

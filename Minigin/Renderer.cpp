@@ -2,10 +2,7 @@
 #include "Renderer.h"
 #include "SceneManager.h"
 #include "Texture2D.h"
-#include "..\3rdParty\imgui-1.87\backends\imgui_impl_opengl2.h"
-#include "..\3rdParty\imgui-1.87\backends\imgui_impl_sdl.h"
 #include <SDL_opengl.h>
-#include "ImguiManager.h"
 
 int GetOpenGLDriverIndex()
 {
@@ -29,9 +26,6 @@ void dae::Renderer::Init(SDL_Window * window)
 	{
 		throw std::runtime_error(std::string("SDL_CreateRenderer Error: ") + SDL_GetError());
 	}
-
-	// Imgui
-	ImguiManager::GetInstance().Init(window);
 }
 
 void dae::Renderer::Render() const
@@ -41,15 +35,12 @@ void dae::Renderer::Render() const
 	SDL_RenderClear(m_Renderer);
 	
 	SceneManager::GetInstance().Render();
-	//ImguiManager::GetInstance().Render();
 	
 	SDL_RenderPresent(m_Renderer);
 }
 
 void dae::Renderer::Destroy()
 {
-	ImguiManager::GetInstance().Destroy();
-
 	if (m_Renderer != nullptr)
 	{
 		SDL_DestroyRenderer(m_Renderer);

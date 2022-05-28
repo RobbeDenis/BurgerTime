@@ -9,6 +9,8 @@ namespace dae
 	class LivesComponent final : public BaseComponent, public Observer
 	{
 	public:
+		void PostLoad() override;
+
 		void Notify(Event) override { };
 		void Notify(BaseComponent* pComponent, Event event) override;
 

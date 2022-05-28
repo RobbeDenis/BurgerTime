@@ -8,8 +8,12 @@ dae::ScoreComponent::ScoreComponent(GameObject* gameObject)
 	: BaseComponent(gameObject)
 	, m_KillValue{ m_BaseKillValue }
 {
-	m_pTextPoints = m_pGameObject->AddComponent<TextComponent>();
-	m_pTextPoints->SetFont(ResourceManager::GetInstance().LoadFont("Lingua.otf", 22), false);
+
+}
+
+void dae::ScoreComponent::PostLoad()
+{
+	m_pTextPoints = m_pGameObject->GetComponent<TextComponent>();
 }
 
 void dae::ScoreComponent::Notify(Event event)
