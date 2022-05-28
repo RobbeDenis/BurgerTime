@@ -12,7 +12,7 @@ namespace dae
 	};
 
 	class Observer;
-	class Subject : public BaseComponent
+	class Subject final
 	{
 	public:
 		void Notify(Event event);
@@ -22,10 +22,6 @@ namespace dae
 		void RemoveObserver(Observer* pObserver);
 
 	private:
-		Subject(GameObject* gameObject) : BaseComponent(gameObject) {};
-		template <typename T>
-		friend T* GameObject::AddComponent();
-
 		std::vector<Observer*> m_pObservers{};
 	};
 }

@@ -138,10 +138,9 @@ void dae::RodEngine::LoadGame() const
 
 	// Creating Peter Pepper
 	go = std::make_shared<GameObject>();
-	go->AddComponent<PeterPepper>();
-	Subject* peterSubject = go->AddComponent<Subject>();
-	peterSubject->AddObserver(peterLives);
-	peterSubject->AddObserver(peterScore);
+	PeterPepper* peter = go->AddComponent<PeterPepper>();
+	peter->AddObserver(peterLives);
+	peter->AddObserver(peterScore);
 	scene.Add(go);
 
 	// Player 2
@@ -168,11 +167,10 @@ void dae::RodEngine::LoadGame() const
 
 	// Creating Peter Pepper
 	go = std::make_shared<GameObject>();
-	PeterPepper* peter = go->AddComponent<PeterPepper>();
-	peter->SetPlayer(false);// FOR TESTING ASSIGNMENT
-	Subject* peterSubject2 = go->AddComponent<Subject>();
-	peterSubject2->AddObserver(peterLives2);
-	peterSubject2->AddObserver(peterScore2);
+	PeterPepper* peter2 = go->AddComponent<PeterPepper>();
+	peter2->SetPlayer(false);// FOR TESTING ASSIGNMENT
+	peter2->AddObserver(peterLives2);
+	peter2->AddObserver(peterScore2);
 	scene.Add(go);
 
 	// Inputs explenation

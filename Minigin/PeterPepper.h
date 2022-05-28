@@ -4,11 +4,13 @@
 namespace dae
 {
 	class Subject;
+	class Observer;
 	class PeterPepper final : public BaseComponent
 	{
 	public:
 		void PostLoad() override;
 		void Update() override;
+		void AddObserver(Observer* observer);
 
 		// FOR TESTING ASSIGNMENT
 		void SetPlayer(bool firstPlayer);
@@ -22,7 +24,7 @@ namespace dae
 
 		void Die();
 
-		Subject* m_pSubject = nullptr;
+		std::shared_ptr<Subject> m_pSubject = nullptr;
 		int m_Lives = 3;
 		// FOR TESTING ASSIGNMENT
 		bool m_FirstPlayer = true;

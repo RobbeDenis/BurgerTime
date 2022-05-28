@@ -9,15 +9,18 @@ dae::PeterPepper::PeterPepper(GameObject* gameObject)
 	: BaseComponent(gameObject)
 	, m_Lives(3)
 {
-
+	m_pSubject = std::make_shared<Subject>();
 }
 
 void dae::PeterPepper::PostLoad() 
 {
 	InputManager::GetInstance().AddController(0);
-	m_pSubject = m_pGameObject->GetComponent<Subject>();
-
 	m_pSubject->Notify(this, Event::PlayerReset);
+}
+
+void dae::PeterPepper::AddObserver(Observer* observer)
+{
+	m_pSubject->AddObserver(observer);
 }
 
 // FOR TESTING ASSIGNMENT

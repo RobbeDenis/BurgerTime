@@ -150,6 +150,9 @@
     <ClInclude Include="SoundTest.h">
       <Filter>Components\Test</Filter>
     </ClInclude>
+    <ClInclude Include="Animator.h">
+      <Filter>Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RodEnginePCH.cpp">
@@ -259,6 +262,9 @@
     </ClCompile>
     <ClCompile Include="SoundTest.cpp">
       <Filter>Components\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Animator.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
