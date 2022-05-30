@@ -19,6 +19,7 @@ namespace dae
 	{
 	public:
 		void PostLoad() override;
+		void Start() override;
 		void Update() override;
 		void AddObserver(Observer* observer);
 
@@ -39,9 +40,6 @@ namespace dae
 		float m_Width;
 		float m_Height;
 		int m_Lives = 3;
-		bool m_FirstFrame = true;
-
-
 
 
 		// FOR TESTING ASSIGNMENT

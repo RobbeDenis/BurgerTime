@@ -10,6 +10,14 @@ void dae::SceneManager::PostLoad()
 	}
 }
 
+void dae::SceneManager::Start()
+{
+	for (auto& scene : m_Scenes)
+	{
+		scene->Start();
+	}
+}
+
 void dae::SceneManager::Update()
 {
 	for(auto& scene : m_Scenes)

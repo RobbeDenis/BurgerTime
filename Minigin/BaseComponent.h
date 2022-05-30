@@ -7,6 +7,7 @@ namespace dae
 	{
 	public:
 		virtual void PostLoad() {};
+		virtual void Start() {};
 		virtual void Update() {};
 		virtual void FixedUpdate() {};
 		virtual void LateUpdate() {};

@@ -13,6 +13,7 @@ namespace dae
 		~GameObject();
 
 		void PostLoad();
+		void Start();
 		void Update();
 		void FixedUpdate();
 		void LateUpdate();

@@ -25,7 +25,7 @@ void dae::Animator::SetDst(const glm::vec2& dstPos, const float dstWidth, const 
 	m_pRenderComponent->SetDst(dstPos.x, dstPos.y, dstWidth, dstHeight);
 }
 
-void dae::Animator::AddAnimation(const int id, const int nrOffFrames, const glm::vec2& srcPos, const float srcWidth, const float srcHeight, const float timePerFrame)
+void dae::Animator::AddAnimation(const int id, const int nrOffFrames, const glm::vec2& srcPos, const float srcWidth, const float srcHeight, const bool mirror, const float timePerFrame)
 {
 	AnimationData animation;
 	animation.Id = id;
@@ -34,6 +34,7 @@ void dae::Animator::AddAnimation(const int id, const int nrOffFrames, const glm:
 	animation.SrcHeight = srcHeight;
 	animation.SrcWidth = srcWidth;
 	animation.TimePerFrame = timePerFrame;
+	animation.Mirror = mirror;
 
 	m_Animations.push_back(animation);
 }

@@ -9,7 +9,7 @@ namespace dae
 	public:
 		void PostLoad() override;
 		void FixedUpdate() override;
-		void AddAnimation(const int id, const int nrOffFrames, const glm::vec2& srcPos, const float srcWidth, const float srcHeight, const float TimePerFrame = 250.f);
+		void AddAnimation(const int id, const int nrOffFrames, const glm::vec2& srcPos, const float srcWidth, const float srcHeight, const bool mirror = false, const float TimePerFrame = 250.f);
 		void SetAnimation(const int id);
 		void SetDst(const glm::vec2& dstPos, const float dstWidth, const float dstHeight);
 
@@ -22,6 +22,7 @@ namespace dae
 			float TimePerFrame;
 			int Id;
 			int NrOffFrames;
+			bool Mirror;
 		};
 
 		Animator(GameObject* gameObject);

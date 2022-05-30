@@ -233,6 +233,8 @@ void dae::RodEngine::Run()
 
 		sceneManager.PostLoad();
 
+		sceneManager.Start();
+
 		bool doContinue = true;
 		while (doContinue)
 		{

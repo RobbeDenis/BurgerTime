@@ -30,6 +30,14 @@ void Scene::PostLoad()
 	}
 }
 
+void Scene::Start()
+{
+	for (auto& object : m_Objects)
+	{
+		object->Start();
+	}
+}
+
 void Scene::Update()
 {
 	for(auto& object : m_Objects)

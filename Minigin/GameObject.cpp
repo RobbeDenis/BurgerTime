@@ -39,6 +39,19 @@ void dae::GameObject::PostLoad()
 	}
 }
 
+void dae::GameObject::Start()
+{
+	for (BaseComponent* comp : m_pComponents)
+	{
+		comp->Start();
+	}
+
+	for (std::shared_ptr<GameObject> obj : m_pChildren)
+	{
+		obj->Start();
+	}
+}
+
 void dae::GameObject::Update()
 {
 	for (BaseComponent* c : m_pComponents)

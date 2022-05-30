@@ -10,6 +10,7 @@ namespace dae
 		Scene& CreateScene(const std::string& name);
 
 		void PostLoad();
+		void Start();
 		void Update();
 		void FixedUpdate();
 		void LateUpdate();
