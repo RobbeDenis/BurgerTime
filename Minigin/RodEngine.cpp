@@ -21,6 +21,7 @@
 #include "ScoreComponent.h"
 #include "SceneGraphTest.h"
 #include "SoundTest.h"
+#include "Animator.h"
 
 #pragma warning(push, 0)
 #pragma warning(disable:4996)
@@ -114,74 +115,83 @@ void dae::RodEngine::LoadGame() const
 	go->SetWorldPosition(7, 7);
 	scene.Add(go);
 
-	// Player 1
-	// Creating Peter Pepper UI
-	// Lives
+	// Animator test
 	go = std::make_shared<GameObject>();
-	go->AddComponent<RenderComponent>();
-	LivesComponent* peterLives = go->AddComponent<LivesComponent>();
-	TextComponent* pTextLives = go->AddComponent<TextComponent>();
-	pTextLives->SetFont(ResourceManager::GetInstance().LoadFont("Lingua.otf", 22), false);
-	pTextLives->SetColor({ 233, 252, 62 }, false);
-	go->SetWorldPosition(30, 350);
+	go->AddComponent<PeterPepper>();
+	RenderComponent* pPeterPepperRender = go->AddComponent<RenderComponent>();
+	pPeterPepperRender->SetTexture("BurgertimeSprites.png");
+	go->AddComponent<Animator>();
+	go->SetWorldPosition(150, 150);
 	scene.Add(go);
 
-	// Score
-	go = std::make_shared<GameObject>();
-	go->AddComponent<RenderComponent>();
-	ScoreComponent* peterScore = go->AddComponent<ScoreComponent>();
-	TextComponent* pTextScore = go->AddComponent<TextComponent>();
-	pTextScore->SetFont(ResourceManager::GetInstance().LoadFont("Lingua.otf", 22), false);
-	pTextScore->SetColor({ 233, 252, 62 }, false);
-	go->SetWorldPosition(30, 370);
-	scene.Add(go);
+	//// Player 1
+	//// Creating Peter Pepper UI
+	//// Lives
+	//go = std::make_shared<GameObject>();
+	//go->AddComponent<RenderComponent>();
+	//LivesComponent* peterLives = go->AddComponent<LivesComponent>();
+	//TextComponent* pTextLives = go->AddComponent<TextComponent>();
+	//pTextLives->SetFont(ResourceManager::GetInstance().LoadFont("Lingua.otf", 22), false);
+	//pTextLives->SetColor({ 233, 252, 62 }, false);
+	//go->SetWorldPosition(30, 350);
+	//scene.Add(go);
 
-	// Creating Peter Pepper
-	go = std::make_shared<GameObject>();
-	PeterPepper* peter = go->AddComponent<PeterPepper>();
-	peter->AddObserver(peterLives);
-	peter->AddObserver(peterScore);
-	scene.Add(go);
+	//// Score
+	//go = std::make_shared<GameObject>();
+	//go->AddComponent<RenderComponent>();
+	//ScoreComponent* peterScore = go->AddComponent<ScoreComponent>();
+	//TextComponent* pTextScore = go->AddComponent<TextComponent>();
+	//pTextScore->SetFont(ResourceManager::GetInstance().LoadFont("Lingua.otf", 22), false);
+	//pTextScore->SetColor({ 233, 252, 62 }, false);
+	//go->SetWorldPosition(30, 370);
+	//scene.Add(go);
 
-	// Player 2
-	// Creating Peter Pepper UI
-	// Lives
-	go = std::make_shared<GameObject>();
-	go->AddComponent<RenderComponent>();
-	LivesComponent* peterLives2 = go->AddComponent<LivesComponent>();
-	TextComponent* pTextLives2 = go->AddComponent<TextComponent>();
-	pTextLives2->SetFont(ResourceManager::GetInstance().LoadFont("Lingua.otf", 22), false);
-	pTextLives2->SetColor({ 62, 252, 233 }, false);
-	go->SetWorldPosition(30, 410);
-	scene.Add(go);
+	//// Creating Peter Pepper
+	//go = std::make_shared<GameObject>();
+	//PeterPepper* peter = go->AddComponent<PeterPepper>();
+	//peter->AddObserver(peterLives);
+	//peter->AddObserver(peterScore);
+	//scene.Add(go);
 
-	// Score
-	go = std::make_shared<GameObject>();
-	go->AddComponent<RenderComponent>();
-	ScoreComponent* peterScore2 = go->AddComponent<ScoreComponent>();
-	TextComponent* pTextScore2 = go->AddComponent<TextComponent>();
-	pTextScore2->SetFont(ResourceManager::GetInstance().LoadFont("Lingua.otf", 22), false);
-	pTextScore2->SetColor({ 62, 252, 233 }, false);
-	go->SetWorldPosition(30, 430);
-	scene.Add(go);
+	//// Player 2
+	//// Creating Peter Pepper UI
+	//// Lives
+	//go = std::make_shared<GameObject>();
+	//go->AddComponent<RenderComponent>();
+	//LivesComponent* peterLives2 = go->AddComponent<LivesComponent>();
+	//TextComponent* pTextLives2 = go->AddComponent<TextComponent>();
+	//pTextLives2->SetFont(ResourceManager::GetInstance().LoadFont("Lingua.otf", 22), false);
+	//pTextLives2->SetColor({ 62, 252, 233 }, false);
+	//go->SetWorldPosition(30, 410);
+	//scene.Add(go);
 
-	// Creating Peter Pepper
-	go = std::make_shared<GameObject>();
-	PeterPepper* peter2 = go->AddComponent<PeterPepper>();
-	peter2->SetPlayer(false);// FOR TESTING ASSIGNMENT
-	peter2->AddObserver(peterLives2);
-	peter2->AddObserver(peterScore2);
-	scene.Add(go);
+	//// Score
+	//go = std::make_shared<GameObject>();
+	//go->AddComponent<RenderComponent>();
+	//ScoreComponent* peterScore2 = go->AddComponent<ScoreComponent>();
+	//TextComponent* pTextScore2 = go->AddComponent<TextComponent>();
+	//pTextScore2->SetFont(ResourceManager::GetInstance().LoadFont("Lingua.otf", 22), false);
+	//pTextScore2->SetColor({ 62, 252, 233 }, false);
+	//go->SetWorldPosition(30, 430);
+	//scene.Add(go);
 
-	// Inputs explenation
-	std::cout << "\n\nPlayer 1:" <<
-		"\n\t* Die: DpadDown" <<
-		"\n\t* Kill enemy: DpadRight" <<
-		"\n\t* Burger fall: DpadLeft" <<
-		"\nPlayer 2:" <<
-		"\n\t* Die: ButtonA" <<
-		"\n\t* Kill enemy: ButtonB" <<
-		"\n\t* Burger fall: ButtonX\n\n" << std::endl;
+	//// Creating Peter Pepper
+	//go = std::make_shared<GameObject>();
+	//PeterPepper* peter2 = go->AddComponent<PeterPepper>();
+	//peter2->SetPlayer(false);// FOR TESTING ASSIGNMENT
+	//peter2->AddObserver(peterLives2);
+	//peter2->AddObserver(peterScore2);
+	//scene.Add(go);
+
+	//// Inputs explenation
+	//std::cout << "\n\nPlayer 1:" <<
+	//	"\n\t* Die: DpadDown" <<
+	//	"\n\t* Kill enemy: DpadRight" <<
+	//	"\n\t* Burger fall: DpadLeft" <<
+	//	"\nPlayer 2:" <<
+	//	"\n\t* Die: ButtonA" <<
+	//	"\n\t* Kill enemy: ButtonB" <<
+	//	"\n\t* Burger fall: ButtonX\n\n" << std::endl;
 
 	//// Scenegraph Test
 	//go = std::make_shared<GameObject>("IAmParent");

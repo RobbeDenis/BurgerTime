@@ -12,23 +12,22 @@ namespace dae
 
 		void SetTexture(std::shared_ptr<Texture2D> texture2D);
 		void SetTexture(const std::string& filename);
-		void SetBounds(const float x, const float y, const float width, const float height);
-		void UseBounds(bool use) { m_UseBounds = use; };
+		void SetDst(const float x, const float y, const float width, const float height);
+		void SetSrc(const float x, const float y, const float width, const float height);
+		void UseSrc(bool use) { m_UseSrc = use; };
 
 		void Render() const;
 
 
 	private:
-		RenderComponent(GameObject* gameObject) : BaseComponent(gameObject) {};
+		RenderComponent(GameObject* gameObject);
 		template <typename T>
 		friend T* GameObject::AddComponent();
 
 		std::shared_ptr<Texture2D> m_Texture2D{};
-		float m_X;
-		float m_Y;
-		float m_Width;
-		float m_Height;
-		bool m_UseBounds;
+		SDL_Rect m_SrcRect;
+		SDL_Rect m_DstRect;
+		bool m_UseSrc;
 	};
 }
 
