@@ -15,6 +15,7 @@ namespace dae
 		void SetDst(const float x, const float y, const float width, const float height);
 		void SetSrc(const float x, const float y, const float width, const float height);
 		void UseSrc(bool use) { m_UseSrc = use; };
+		void Mirror(bool mirror) { m_Mirrored = mirror; };
 
 		void Render() const;
 
@@ -28,6 +29,7 @@ namespace dae
 		SDL_Rect m_SrcRect;
 		SDL_Rect m_DstRect;
 		bool m_UseSrc;
+		bool m_Mirrored;
 	};
 }
 

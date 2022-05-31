@@ -10,6 +10,7 @@ dae::RenderComponent::RenderComponent(GameObject* gameObject)
 	, m_SrcRect{ 0,0,0,0 }
 	, m_UseSrc{ false }
 	, m_DstRect{ 0,0,0,0 }
+	, m_Mirrored{ false }
 {
 
 }
@@ -53,7 +54,7 @@ void dae::RenderComponent::Render() const
 	const auto& pos = m_pGameObject->GetWorldPosition();
 
 	if (m_UseSrc)
-		Renderer::GetInstance().RenderTexture(*m_Texture2D, m_SrcRect, int(pos.x + m_DstRect.x), int(pos.y + m_DstRect.y), m_DstRect.w, m_DstRect.h);
+		Renderer::GetInstance().RenderTexture(*m_Texture2D, m_SrcRect, int(pos.x + m_DstRect.x), int(pos.y + m_DstRect.y), m_DstRect.w, m_DstRect.h, m_Mirrored);
 	else
 		Renderer::GetInstance().RenderTexture(*m_Texture2D, pos.x, pos.y);
 }

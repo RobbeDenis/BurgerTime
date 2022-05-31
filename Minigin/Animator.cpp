@@ -53,6 +53,8 @@ void dae::Animator::SetAnimation(const int id)
 				m_Animations[i].SrcWidth, 
 				m_Animations[i].SrcHeight);
 
+			m_pRenderComponent->Mirror(m_Animations[i].Mirror);
+
 			m_ElapsedTime = 0.f;
 			m_CurrentFrame = 0;
 		}
