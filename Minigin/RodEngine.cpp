@@ -81,7 +81,7 @@ void dae::RodEngine::Initialize()
 void dae::RodEngine::LoadGame() const
 {
 	auto& scene = SceneManager::GetInstance().CreateScene("Demo");
-
+	auto& input = InputManager::GetInstance();
 	auto go = std::make_shared<GameObject>();
 
 	//// Background
@@ -115,13 +115,28 @@ void dae::RodEngine::LoadGame() const
 	go->SetWorldPosition(7, 7);
 	scene.Add(go);
 
-	// Animator test
+	// CREATING PETER PEPPER
 	go = std::make_shared<GameObject>();
-	go->AddComponent<PeterPepper>();
+
+	PeterPepper* pPeter = go->AddComponent<PeterPepper>();
+	go->AddComponent<Animator>();
+
 	RenderComponent* pPeterPepperRender = go->AddComponent<RenderComponent>();
 	pPeterPepperRender->SetTexture("BurgertimeSprites.png");
-	go->AddComponent<Animator>();
+
+	// Peter pepper
+	input.AddControllerCommand({ XBox360Controller::ControllerButton::ButtonRight, ButtonState::Down }, std::make_unique<PeterMoveRight>(pPeter));
+	input.AddControllerCommand({ XBox360Controller::ControllerButton::ButtonLeft, ButtonState::Down }, std::make_unique<PeterMoveLeft>(pPeter));
+	input.AddControllerCommand({ XBox360Controller::ControllerButton::ButtonUp, ButtonState::Down }, std::make_unique<PeterMoveUpLadder>(pPeter));
+	input.AddControllerCommand({ XBox360Controller::ControllerButton::ButtonDown, ButtonState::Down }, std::make_unique<PeterMoveDownLadder>(pPeter));
+
+	input.AddControllerCommand({ XBox360Controller::ControllerButton::ButtonRight, ButtonState::Released }, std::make_unique<PeterStopMove>(pPeter));
+	input.AddControllerCommand({ XBox360Controller::ControllerButton::ButtonLeft, ButtonState::Released }, std::make_unique<PeterStopMove>(pPeter));
+	input.AddControllerCommand({ XBox360Controller::ControllerButton::ButtonUp, ButtonState::Released }, std::make_unique<PeterStopMove>(pPeter));
+	input.AddControllerCommand({ XBox360Controller::ControllerButton::ButtonDown, ButtonState::Released }, std::make_unique<PeterStopMove>(pPeter));
+
 	go->SetWorldPosition(150, 150);
+
 	scene.Add(go);
 
 	//// Player 1

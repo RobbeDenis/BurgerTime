@@ -9,7 +9,10 @@ namespace dae
 		WalkLeft = 1,
 		WalkRight = 2,
 		LadderUp = 3,
-		LadderDown = 4
+		LadderDown = 4,
+		Death = 5,
+		LadderIdleUp = 6,
+		LadderIdleDown = 7
 	};
 
 	class Subject;
@@ -23,10 +26,16 @@ namespace dae
 		void Update() override;
 		void AddObserver(Observer* observer);
 
-		// FOR TESTING ASSIGNMENT
-		void SetPlayer(bool firstPlayer);
+		void MoveRight();
+		void MoveLeft();
+		void MoveUpLadder();
+		void MoveDownLadder();
+		void StopMoving();
 
 		int GetLives() const { return m_Lives; };
+
+		// FOR TESTING ASSIGNMENT
+		void SetPlayer(bool firstPlayer);
 
 	private:
 		PeterPepper(GameObject* gameObject);
@@ -34,12 +43,16 @@ namespace dae
 		friend T* GameObject::AddComponent();
 
 		void Die();
+		void HandleMovement();
 
 		std::shared_ptr<Subject> m_pSubject = nullptr;
 		Animator* m_Animator;
 		float m_Width;
 		float m_Height;
-		int m_Lives = 3;
+		float m_MovementSpeed;
+		int m_Lives;
+		int m_State;
+		bool m_PendingMove;
 
 
 		// FOR TESTING ASSIGNMENT

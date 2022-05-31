@@ -9,9 +9,11 @@ namespace dae
 	public:
 		void PostLoad() override;
 		void FixedUpdate() override;
-		void AddAnimation(const int id, const int nrOffFrames, const glm::vec2& srcPos, const float srcWidth, const float srcHeight, const bool mirror = false, const float TimePerFrame = 250.f);
+		void AddAnimation(const int id, const int nrOffFrames, const glm::vec2& srcPos, const float srcWidth, const float srcHeight, const bool mirror = false, const float TimePerFrame = 0.250f, const bool loop = true);
 		void SetAnimation(const int id);
 		void SetDst(const glm::vec2& dstPos, const float dstWidth, const float dstHeight);
+		void Pause();
+		void Play();
 
 	private:
 		struct AnimationData
@@ -23,6 +25,7 @@ namespace dae
 			int Id;
 			int NrOffFrames;
 			bool Mirror;
+			bool Loop;
 		};
 
 		Animator(GameObject* gameObject);
@@ -37,8 +40,9 @@ namespace dae
 		float m_DstWidth;
 		float m_DstHeight;
 		float m_ElapsedTime;
-		int m_CurrentAnimationId;
+		int m_CurrentAnimationIndex;
 		int m_CurrentFrame;
+		bool m_Pause;
 	};
 }
 

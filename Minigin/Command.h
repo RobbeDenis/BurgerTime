@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include "PeterPepper.h"
 
 class Command
 {
@@ -11,37 +12,78 @@ public:
 
 
 
-// DERIVED
-
-class Fire final : public Command
+// Peter Pepper inputs
+// RIGHT
+class PeterMoveRight final : public Command
 {
+public:
+	PeterMoveRight(dae::PeterPepper* peter) : m_pPeter(peter) {}
+
 	void Execute() override
 	{
-		std::cout << "Fire\n";
+		m_pPeter->MoveRight();
 	}
+
+private:
+	dae::PeterPepper* m_pPeter = nullptr;
 };
 
-class Duck final : public Command
+//LEFT
+class PeterMoveLeft final : public Command
 {
+public:
+	PeterMoveLeft(dae::PeterPepper* peter) : m_pPeter(peter) {}
+
 	void Execute() override
 	{
-		std::cout << "Duck\n";
+		m_pPeter->MoveLeft();
 	}
+
+private:
+	dae::PeterPepper* m_pPeter = nullptr;
 };
 
-class Jump final : public Command
+//STOP
+class PeterStopMove final : public Command
 {
+public:
+	PeterStopMove(dae::PeterPepper* peter) : m_pPeter(peter) {}
+
 	void Execute() override
 	{
-		std::cout << "Jump\n";
+		m_pPeter->StopMoving();
 	}
+
+private:
+	dae::PeterPepper* m_pPeter = nullptr;
 };
 
-class Fart final : public Command
+//UP
+class PeterMoveUpLadder final : public Command
 {
+public:
+	PeterMoveUpLadder(dae::PeterPepper* peter) : m_pPeter(peter) {}
+
 	void Execute() override
 	{
-		std::cout << "Fart\n";
+		m_pPeter->MoveUpLadder();
 	}
+
+private:
+	dae::PeterPepper* m_pPeter = nullptr;
 };
 
+//DOWN
+class PeterMoveDownLadder final : public Command
+{
+public:
+	PeterMoveDownLadder(dae::PeterPepper* peter) : m_pPeter(peter) {}
+
+	void Execute() override
+	{
+		m_pPeter->MoveDownLadder();
+	}
+
+private:
+	dae::PeterPepper* m_pPeter = nullptr;
+};
