@@ -36,6 +36,7 @@ void dae::RenderComponent::SetDst(const float x, const float y, const float widt
 	m_DstRect.y = static_cast<int>(y);
 	m_DstRect.w = static_cast<int>(width);
 	m_DstRect.h = static_cast<int>(height);
+	m_UseDst = true;
 }
 
 void dae::RenderComponent::SetSrc(const float x, const float y, const float width, const float height)
@@ -54,7 +55,15 @@ void dae::RenderComponent::Render() const
 	const auto& pos = m_pGameObject->GetWorldPosition();
 
 	if (m_UseSrc)
+	{
 		Renderer::GetInstance().RenderTexture(*m_Texture2D, m_SrcRect, int(pos.x + m_DstRect.x), int(pos.y + m_DstRect.y), m_DstRect.w, m_DstRect.h, m_Mirrored);
+	}
+	else if(m_UseDst)
+	{
+		Renderer::GetInstance().RenderTexture(*m_Texture2D, m_DstRect);
+	}
 	else
+	{
 		Renderer::GetInstance().RenderTexture(*m_Texture2D, pos.x, pos.y);
+	}
 }

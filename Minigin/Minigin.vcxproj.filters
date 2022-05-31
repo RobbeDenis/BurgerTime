@@ -153,6 +153,9 @@
     <ClInclude Include="Animator.h">
       <Filter>Components</Filter>
     </ClInclude>
+    <ClInclude Include="Collider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RodEnginePCH.cpp">
@@ -265,6 +268,9 @@
     </ClCompile>
     <ClCompile Include="Animator.cpp">
       <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Collider.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

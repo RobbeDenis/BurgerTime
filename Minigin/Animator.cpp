@@ -11,6 +11,7 @@ dae::Animator::Animator(GameObject* gameObject)
 	, m_DstHeight{ 0 }
 	, m_DstWidth{ 0 }
 	, m_ElapsedTime{ 0 }
+	, m_Pause{ false }
 {
 
 }

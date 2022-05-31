@@ -56,8 +56,8 @@ void dae::RodEngine::Initialize()
 		"Programming 4 assignment",
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
+		580,
 		640,
-		480,
 		SDL_WINDOW_OPENGL	
 	);
 
@@ -84,24 +84,11 @@ void dae::RodEngine::LoadGame() const
 	auto& input = InputManager::GetInstance();
 	auto go = std::make_shared<GameObject>();
 
-	//// Background
-	//go->AddComponent<RenderComponent>()->SetTexture("background.jpg");
-	//scene.Add(go);
-
-	//// Logo
-	//go = std::make_shared<GameObject>();
-	//go->AddComponent<RenderComponent>()->SetTexture("logo.png");
-	//go->SetWorldPosition(216, 180);
-	//scene.Add(go); 
-
-	//// Text
-	//go = std::make_shared<GameObject>();
-	//TextComponent* pTextComponent = go->AddComponent<TextComponent>();
-	//pTextComponent->SetFont(ResourceManager::GetInstance().LoadFont("Lingua.otf", 36), false);
-	//pTextComponent->SetText("Programming 4 Assignment");
-	//go->AddComponent<RenderComponent>();
-	//go->SetWorldPosition(80, 20);
-	//scene.Add(go);
+	// Background
+	RenderComponent* pBackgroundRender = go->AddComponent<RenderComponent>();
+	pBackgroundRender->SetTexture("BurgerTimeBackground.png");
+	pBackgroundRender->SetDst(25.f, 100.f, 530.f, 530.f);
+	scene.Add(go);
 
 	// FPS Counter
 	go = std::make_shared<GameObject>();

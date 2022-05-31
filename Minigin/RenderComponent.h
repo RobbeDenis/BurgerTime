@@ -29,6 +29,7 @@ namespace dae
 		SDL_Rect m_SrcRect;
 		SDL_Rect m_DstRect;
 		bool m_UseSrc;
+		bool m_UseDst;
 		bool m_Mirrored;
 	};
 }
