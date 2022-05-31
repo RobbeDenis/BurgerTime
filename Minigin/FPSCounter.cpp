@@ -1,7 +1,7 @@
 #include "RodEnginePCH.h"
 #include "FPSCounter.h"
 #include "TextComponent.h"
-#include "Time.h"
+#include "ETime.h"
 
 void dae::FPSCounter::PostLoad()
 {
@@ -15,7 +15,7 @@ void dae::FPSCounter::PostLoad()
 
 void dae::FPSCounter::Update()
 {
-	float elapsedTime = Time::GetInstance().GetDeltaTime();
+	float elapsedTime = ETime::GetInstance().GetDeltaTime();
 
 	if (m_UseSmoothing)
 	{

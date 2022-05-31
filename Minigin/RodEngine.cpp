@@ -10,7 +10,7 @@
 #include "ResourceManager.h"
 #include "GameObject.h"
 #include "Scene.h"
-#include "Time.h"
+#include "ETime.h"
 #include "BaseComponent.h"
 #include "RenderComponent.h"
 #include "TextComponent.h"
@@ -229,7 +229,7 @@ void dae::RodEngine::Run()
 		auto& renderer = Renderer::GetInstance();
 		auto& sceneManager = SceneManager::GetInstance();
 		auto& input = InputManager::GetInstance();
-		auto& time = Time::GetInstance();
+		auto& time = ETime::GetInstance();
 
 		sceneManager.PostLoad();
 

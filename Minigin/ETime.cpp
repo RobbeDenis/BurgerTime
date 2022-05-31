@@ -1,7 +1,7 @@
 #include "RodEnginePCH.h"
-#include "Time.h"
+#include "ETime.h"
 
-void dae::Time::Update()
+void dae::ETime::Update()
 {
 	auto curruntTime = std::chrono::high_resolution_clock::now();
 	m_DeltaTime = std::chrono::duration<float>(curruntTime - m_PrevTime).count();
@@ -15,7 +15,7 @@ void dae::Time::Update()
 	}
 }
 
-void dae::Time::FixedUpdateCompleted()
+void dae::ETime::FixedUpdateCompleted()
 {
 	// Check if fixed update was ready
 	if (m_IsFixedUpdateReady)

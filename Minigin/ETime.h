@@ -4,7 +4,7 @@
 
 namespace dae
 {
-	class Time final : public Singleton<Time>
+	class ETime final : public Singleton<ETime>
 	{
 	public:
 		void Update();

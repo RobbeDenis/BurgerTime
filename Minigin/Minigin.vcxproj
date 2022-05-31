@@ -253,7 +253,7 @@ xcopy $(SolutionDir)3rdParty\SDL2_mixer-2.0.4\lib\$(PlatformTarget)\*.dll $(Outp
     <ClInclude Include="Subject.h" />
     <ClInclude Include="TextComponent.h" />
     <ClInclude Include="Texture2D.h" />
-    <ClInclude Include="Time.h" />
+    <ClInclude Include="ETime.h" />
     <ClInclude Include="XBox360Controller.h" />
   </ItemGroup>
   <ItemGroup>
@@ -333,7 +333,7 @@ xcopy $(SolutionDir)3rdParty\SDL2_mixer-2.0.4\lib\$(PlatformTarget)\*.dll $(Outp
     <ClCompile Include="Subject.cpp" />
     <ClCompile Include="TextComponent.cpp" />
     <ClCompile Include="Texture2D.cpp" />
-    <ClCompile Include="Time.cpp" />
+    <ClCompile Include="ETime.cpp" />
     <ClCompile Include="XBox360Controller.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

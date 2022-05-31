@@ -60,7 +60,7 @@
     <ClInclude Include="RodEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Time.h">
+    <ClInclude Include="ETime.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TextComponent.h">
@@ -179,7 +179,7 @@
     <ClCompile Include="RodEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Time.cpp">
+    <ClCompile Include="ETime.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TextComponent.cpp">
