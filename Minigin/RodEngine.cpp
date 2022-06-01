@@ -23,10 +23,10 @@
 #include "SoundTest.h"
 #include "Animator.h"
 
-#pragma warning(push, 0)
-#pragma warning(disable:4996)
-#include <steam_api.h>
-#pragma warning (pop)
+//#pragma warning(push, 0)
+//#pragma warning(disable:4996)
+//#include <steam_api.h>
+//#pragma warning (pop)
 
 using namespace std;
 
@@ -222,41 +222,32 @@ void dae::RodEngine::Cleanup()
 
 void dae::RodEngine::Run()
 {
-	Initialize();
+	auto& renderer = Renderer::GetInstance();
+	auto& sceneManager = SceneManager::GetInstance();
+	auto& input = InputManager::GetInstance();
+	auto& time = ETime::GetInstance();
 
-	ResourceManager::GetInstance().Init("../Data/");
+	sceneManager.PostLoad();
 
-	LoadGame();
+	sceneManager.Start();
+
+	bool doContinue = true;
+	while (doContinue)
 	{
-		auto& renderer = Renderer::GetInstance();
-		auto& sceneManager = SceneManager::GetInstance();
-		auto& input = InputManager::GetInstance();
-		auto& time = ETime::GetInstance();
+		time.Update();
 
-		sceneManager.PostLoad();
-
-		sceneManager.Start();
-
-		bool doContinue = true;
-		while (doContinue)
+		if (time.IsFixedUpdateReady())
 		{
-			time.Update();
-
-			SteamAPI_RunCallbacks();
-
-			if (time.IsFixedUpdateReady())
-			{
-				sceneManager.FixedUpdate();
-				time.FixedUpdateCompleted();
-			}
-
-			doContinue = input.ProcessInput();
-
-			sceneManager.Update();
-			sceneManager.LateUpdate();
-
-			renderer.Render();
+			sceneManager.FixedUpdate();
+			time.FixedUpdateCompleted();
 		}
+
+		doContinue = input.ProcessInput();
+
+		sceneManager.Update();
+		sceneManager.LateUpdate();
+
+		renderer.Render();
 	}
 
 	Cleanup();

@@ -18,14 +18,14 @@ namespace dae
 	private:
 		struct AnimationData
 		{
-			glm::vec2 SrcPos;
-			float SrcWidth;
-			float SrcHeight;
-			float TimePerFrame;
-			int Id;
-			int NrOffFrames;
-			bool Mirror;
-			bool Loop;
+			glm::vec2 SrcPos = {0.f, 0.f};
+			float SrcWidth = 0.f;
+			float SrcHeight = 0.f;
+			float TimePerFrame = 0;
+			int Id = 0;
+			int NrOffFrames = 0;
+			bool Mirror = false;
+			bool Loop = false;
 		};
 
 		Animator(GameObject* gameObject);

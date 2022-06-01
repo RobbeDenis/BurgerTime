@@ -1,5 +1,6 @@
 #pragma once
 struct SDL_Window;
+
 namespace dae
 {
 	class RodEngine
