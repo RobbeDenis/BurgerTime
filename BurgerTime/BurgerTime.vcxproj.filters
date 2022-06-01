@@ -30,6 +30,12 @@
     <ClCompile Include="ScoreComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="Platform.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Ladder.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LivesComponent.h">
@@ -43,6 +49,12 @@
     </ClInclude>
     <ClInclude Include="BurgerTimeCommands.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Ladder.h">
+      <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

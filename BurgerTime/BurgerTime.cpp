@@ -1,23 +1,5 @@
 // BurgerTime.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
 
-#if _DEBUG
-#if __has_include(<vld.h>)
-#include <vld.h>
-#endif
-#endif
-
-#include <iostream>
-#include <memory>
-#include <vector>
-#include <string>
-
-#pragma warning(push, 0)
-#pragma warning(disable:26495)
-#pragma warning(disable:26812)
-#include <glm/glm.hpp>
-#include <SDL.h>
-#pragma warning (pop)
 
 #include <RodEngine.h>
 #include <SceneManager.h>
@@ -32,6 +14,8 @@
 #include <DebugRenderComponent.h>
 
 #include "BurgerTimeCommands.h"
+#include "Platform.h"
+#include "Ladder.h"
 
 using namespace dae;
 
@@ -109,6 +93,7 @@ void LoadGame()
 
 	// First row
 	go = std::make_shared<GameObject>();
+	go->AddComponent<Ladder>();
 	Collider* collider = go->AddComponent<Collider>();
 	collider->SetDimensions(ladderWidth, ladderHeight);
 	collider->SetLabel(ladderLabel);
@@ -118,6 +103,7 @@ void LoadGame()
 
 	ladderHeight = 385;
 	go = std::make_shared<GameObject>();
+	go->AddComponent<Ladder>();
 	collider = go->AddComponent<Collider>();
 	collider->SetDimensions(ladderWidth, ladderHeight);
 	collider->SetLabel(ladderLabel);
@@ -127,6 +113,7 @@ void LoadGame()
 
 	ladderHeight = 130;
 	go = std::make_shared<GameObject>();
+	go->AddComponent<Ladder>();
 	collider = go->AddComponent<Collider>();
 	collider->SetDimensions(ladderWidth, ladderHeight);
 	collider->SetLabel(ladderLabel);
@@ -136,6 +123,7 @@ void LoadGame()
 
 	ladderHeight = 385;
 	go = std::make_shared<GameObject>();
+	go->AddComponent<Ladder>();
 	collider = go->AddComponent<Collider>();
 	collider->SetDimensions(ladderWidth, ladderHeight);
 	collider->SetLabel(ladderLabel);
@@ -145,6 +133,7 @@ void LoadGame()
 
 	ladderHeight = 385;
 	go = std::make_shared<GameObject>();
+	go->AddComponent<Ladder>();
 	collider = go->AddComponent<Collider>();
 	collider->SetDimensions(ladderWidth, ladderHeight);
 	collider->SetLabel(ladderLabel);
@@ -154,6 +143,7 @@ void LoadGame()
 
 	ladderHeight = 173;
 	go = std::make_shared<GameObject>();
+	go->AddComponent<Ladder>();
 	collider = go->AddComponent<Collider>();
 	collider->SetDimensions(ladderWidth, ladderHeight);
 	collider->SetLabel(ladderLabel);
@@ -164,6 +154,7 @@ void LoadGame()
 	// Second row
 	ladderHeight = 215;
 	go = std::make_shared<GameObject>();
+	go->AddComponent<Ladder>();
 	collider = go->AddComponent<Collider>();
 	collider->SetDimensions(ladderWidth, ladderHeight);
 	collider->SetLabel(ladderLabel);
@@ -173,6 +164,7 @@ void LoadGame()
 
 	ladderHeight = 130;
 	go = std::make_shared<GameObject>();
+	go->AddComponent<Ladder>();
 	collider = go->AddComponent<Collider>();
 	collider->SetDimensions(ladderWidth, ladderHeight);
 	collider->SetLabel(ladderLabel);
@@ -183,6 +175,7 @@ void LoadGame()
 	// Third row
 	ladderHeight = 213;
 	go = std::make_shared<GameObject>();
+	go->AddComponent<Ladder>();
 	collider = go->AddComponent<Collider>();
 	collider->SetDimensions(ladderWidth, ladderHeight);
 	collider->SetLabel(ladderLabel);
@@ -192,6 +185,7 @@ void LoadGame()
 
 	ladderHeight = 213;
 	go = std::make_shared<GameObject>();
+	go->AddComponent<Ladder>();
 	collider = go->AddComponent<Collider>();
 	collider->SetDimensions(ladderWidth, ladderHeight);
 	collider->SetLabel(ladderLabel);
@@ -202,6 +196,7 @@ void LoadGame()
 	// Forth row
 	ladderHeight = 128;
 	go = std::make_shared<GameObject>();
+	go->AddComponent<Ladder>();
 	collider = go->AddComponent<Collider>();
 	collider->SetDimensions(ladderWidth, ladderHeight);
 	collider->SetLabel(ladderLabel);
@@ -217,6 +212,7 @@ void LoadGame()
 
 	// Row 1
 	go = std::make_shared<GameObject>();
+	go->AddComponent<Platform>();
 	collider = go->AddComponent<Collider>();
 	collider->SetDimensions(platformWidth, platformHeight);
 	collider->SetLabel(platformLabel);
@@ -229,6 +225,7 @@ void LoadGame()
 	// Row 2
 	platformWidth = 163;
 	go = std::make_shared<GameObject>();
+	go->AddComponent<Platform>();
 	collider = go->AddComponent<Collider>();
 	collider->SetDimensions(platformWidth, platformHeight);
 	collider->SetLabel(platformLabel);
@@ -240,6 +237,7 @@ void LoadGame()
 
 	platformWidth = 285;
 	go = std::make_shared<GameObject>();
+	go->AddComponent<Platform>();
 	collider = go->AddComponent<Collider>();
 	collider->SetDimensions(platformWidth, platformHeight);
 	collider->SetLabel(platformLabel);
@@ -252,6 +250,7 @@ void LoadGame()
 	// Row 3
 	platformWidth = 164;
 	go = std::make_shared<GameObject>();
+	go->AddComponent<Platform>();
 	collider = go->AddComponent<Collider>();
 	collider->SetDimensions(platformWidth, platformHeight);
 	collider->SetLabel(platformLabel);
@@ -264,6 +263,7 @@ void LoadGame()
 	// Row 4
 	platformWidth = 163;
 	go = std::make_shared<GameObject>();
+	go->AddComponent<Platform>();
 	collider = go->AddComponent<Collider>();
 	collider->SetDimensions(platformWidth, platformHeight);
 	collider->SetLabel(platformLabel);
@@ -275,6 +275,7 @@ void LoadGame()
 
 	platformWidth = 163;
 	go = std::make_shared<GameObject>();
+	go->AddComponent<Platform>();
 	collider = go->AddComponent<Collider>();
 	collider->SetDimensions(platformWidth, platformHeight);
 	collider->SetLabel(platformLabel);
@@ -287,6 +288,7 @@ void LoadGame()
 	// Row 5
 	platformWidth = 285;
 	go = std::make_shared<GameObject>();
+	go->AddComponent<Platform>();
 	collider = go->AddComponent<Collider>();
 	collider->SetDimensions(platformWidth, platformHeight);
 	collider->SetLabel(platformLabel);
@@ -299,6 +301,7 @@ void LoadGame()
 	// Row 6
 	platformWidth = 165;
 	go = std::make_shared<GameObject>();
+	go->AddComponent<Platform>();
 	collider = go->AddComponent<Collider>();
 	collider->SetDimensions(platformWidth, platformHeight);
 	collider->SetLabel(platformLabel);
@@ -311,6 +314,7 @@ void LoadGame()
 	// Row 7
 	platformWidth = 410;
 	go = std::make_shared<GameObject>();
+	go->AddComponent<Platform>();
 	collider = go->AddComponent<Collider>();
 	collider->SetDimensions(platformWidth, platformHeight);
 	collider->SetLabel(platformLabel);
@@ -323,6 +327,7 @@ void LoadGame()
 	// Row 8
 	platformWidth = 530;
 	go = std::make_shared<GameObject>();
+	go->AddComponent<Platform>();
 	collider = go->AddComponent<Collider>();
 	collider->SetDimensions(platformWidth, platformHeight);
 	collider->SetLabel(platformLabel);

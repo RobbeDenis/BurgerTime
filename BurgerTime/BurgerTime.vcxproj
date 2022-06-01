@@ -164,14 +164,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BurgerTime.cpp" />
+    <ClCompile Include="Ladder.cpp" />
     <ClCompile Include="LivesComponent.cpp" />
     <ClCompile Include="PeterPepper.cpp" />
+    <ClCompile Include="Platform.cpp" />
     <ClCompile Include="ScoreComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BurgerTimeCommands.h" />
+    <ClInclude Include="Ladder.h" />
     <ClInclude Include="LivesComponent.h" />
     <ClInclude Include="PeterPepper.h" />
+    <ClInclude Include="Platform.h" />
     <ClInclude Include="ScoreComponent.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
