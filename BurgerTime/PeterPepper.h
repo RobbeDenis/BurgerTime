@@ -18,6 +18,8 @@ namespace dae
 	class Subject;
 	class Observer;
 	class Animator;
+	class Collider;
+
 	class PeterPepper final : public BaseComponent
 	{
 	public:
@@ -47,6 +49,7 @@ namespace dae
 
 		std::shared_ptr<Subject> m_pSubject = nullptr;
 		Animator* m_Animator;
+		Collider* m_Collider;
 		float m_Width;
 		float m_Height;
 		float m_MovementSpeed;

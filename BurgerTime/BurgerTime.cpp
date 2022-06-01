@@ -28,6 +28,8 @@
 #include <ResourceManager.h>
 #include <FPSCounter.h>
 #include <Animator.h>
+#include <Collider.h>
+#include <DebugRenderComponent.h>
 
 #include "BurgerTimeCommands.h"
 
@@ -79,6 +81,8 @@ void LoadGame()
 
 	PeterPepper* pPeter = go->AddComponent<PeterPepper>();
 	go->AddComponent<Animator>();
+	go->AddComponent<Collider>();
+	go->AddComponent<DebugRenderComponent>();
 
 	RenderComponent* pPeterPepperRender = go->AddComponent<RenderComponent>();
 	pPeterPepperRender->SetTexture("BurgertimeSprites.png");
@@ -98,15 +102,100 @@ void LoadGame()
 
 	scene.Add(go);
 
+	// Adding Ladders
+	int ladderWidth = 20;
+	int ladderHeight = 90;
 
+	// First row
+	go = std::make_shared<GameObject>();
+	Collider* collider = go->AddComponent<Collider>();
+	collider->SetDimensions(ladderWidth, ladderHeight);
+	go->AddComponent<DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
+	go->SetWorldPosition({ 36.f, 135.f, 0.f });
+	scene.Add(go);
 
+	ladderHeight = 385;
+	go = std::make_shared<GameObject>();
+	collider = go->AddComponent<Collider>();
+	collider->SetDimensions(ladderWidth, ladderHeight);
+	go->AddComponent<DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
+	go->SetWorldPosition({ 158.f, 135.f, 0.f });
+	scene.Add(go);
 
+	ladderHeight = 130;
+	go = std::make_shared<GameObject>();
+	collider = go->AddComponent<Collider>();
+	collider->SetDimensions(ladderWidth, ladderHeight);
+	go->AddComponent<DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
+	go->SetWorldPosition({ 219.f, 135.f, 0.f });
+	scene.Add(go);
 
+	ladderHeight = 385;
+	go = std::make_shared<GameObject>();
+	collider = go->AddComponent<Collider>();
+	collider->SetDimensions(ladderWidth, ladderHeight);
+	go->AddComponent<DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
+	go->SetWorldPosition({ 280.f, 135.f, 0.f });
+	scene.Add(go);
 
+	ladderHeight = 385;
+	go = std::make_shared<GameObject>();
+	collider = go->AddComponent<Collider>();
+	collider->SetDimensions(ladderWidth, ladderHeight);
+	go->AddComponent<DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
+	go->SetWorldPosition({ 402.f, 135.f, 0.f });
+	scene.Add(go);
 
+	ladderHeight = 173;
+	go = std::make_shared<GameObject>();
+	collider = go->AddComponent<Collider>();
+	collider->SetDimensions(ladderWidth, ladderHeight);
+	go->AddComponent<DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
+	go->SetWorldPosition({ 525.f, 135.f, 0.f });
+	scene.Add(go);
 
+	// Second row
+	ladderHeight = 215;
+	go = std::make_shared<GameObject>();
+	collider = go->AddComponent<Collider>();
+	collider->SetDimensions(ladderWidth, ladderHeight);
+	go->AddComponent<DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
+	go->SetWorldPosition({ 96.f, 221.f, 0.f });
+	scene.Add(go);
 
+	ladderHeight = 130;
+	go = std::make_shared<GameObject>();
+	collider = go->AddComponent<Collider>();
+	collider->SetDimensions(ladderWidth, ladderHeight);
+	go->AddComponent<DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
+	go->SetWorldPosition({ 341.f, 221.f, 0.f });
+	scene.Add(go);
 
+	// Third row
+	ladderHeight = 213;
+	go = std::make_shared<GameObject>();
+	collider = go->AddComponent<Collider>();
+	collider->SetDimensions(ladderWidth, ladderHeight);
+	go->AddComponent<DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
+	go->SetWorldPosition({ 36.f, 307.f, 0.f });
+	scene.Add(go);
+
+	ladderHeight = 213;
+	go = std::make_shared<GameObject>();
+	collider = go->AddComponent<Collider>();
+	collider->SetDimensions(ladderWidth, ladderHeight);
+	go->AddComponent<DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
+	go->SetWorldPosition({ 463.f, 307.f, 0.f });
+	scene.Add(go);
+
+	// Forth row
+	ladderHeight = 128;
+	go = std::make_shared<GameObject>();
+	collider = go->AddComponent<Collider>();
+	collider->SetDimensions(ladderWidth, ladderHeight);
+	go->AddComponent<DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
+	go->SetWorldPosition({ 524.f, 390.f, 0.f });
+	scene.Add(go);
 
 
 

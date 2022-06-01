@@ -6,6 +6,8 @@
 #include "TextComponent.h"
 #include "Animator.h"
 #include "ETime.h"
+#include "Collider.h"
+#include "DebugRenderComponent.h"
 
 dae::PeterPepper::PeterPepper(GameObject* gameObject)
 	: BaseComponent(gameObject)
@@ -24,13 +26,25 @@ void dae::PeterPepper::PostLoad()
 	InputManager::GetInstance().AddController(0);
 	m_pSubject->Notify(this, Event::PlayerReset);
 
+	const float animWalkSpeed = 0.1f;
+	const float animLadderSpeed = 0.08f;
+	const float animDeathSpeed = 0.13f;
+
 	m_Animator = m_pGameObject->GetComponent<Animator>();
 	m_Animator->AddAnimation(PeterState::Idle, 1, { 16,0 }, 16, 16);
-	m_Animator->AddAnimation(PeterState::WalkLeft, 3, { 48,0 }, 16, 16, false, 0.100f);
-	m_Animator->AddAnimation(PeterState::WalkRight, 3, { 48,0 }, 16, 16, true, 0.100f);
-	m_Animator->AddAnimation(PeterState::LadderDown, 3, { 0,0 }, 16, 16, false, 0.130f);
-	m_Animator->AddAnimation(PeterState::LadderUp, 3, { 96,0 }, 16, 16, false, 0.130f);
-	m_Animator->AddAnimation(PeterState::Death, 5, { 64,16 }, 16, 16, false, 0.130f, false);
+	m_Animator->AddAnimation(PeterState::WalkLeft, 3, { 48,0 }, 16, 16, false, animWalkSpeed);
+	m_Animator->AddAnimation(PeterState::WalkRight, 3, { 48,0 }, 16, 16, true, animWalkSpeed);
+	m_Animator->AddAnimation(PeterState::LadderDown, 3, { 0,0 }, 16, 16, false, animLadderSpeed);
+	m_Animator->AddAnimation(PeterState::LadderUp, 3, { 96,0 }, 16, 16, false, animLadderSpeed);
+	m_Animator->AddAnimation(PeterState::Death, 5, { 64,16 }, 16, 16, false, animDeathSpeed, false);
+
+	m_Collider = m_pGameObject->GetComponent<Collider>();
+	m_Collider->SetDimensions(int(m_Width), int(m_Height));
+
+	// DEBUG
+	DebugRenderComponent* debugRender = m_pGameObject->GetComponent<DebugRenderComponent>();
+	debugRender->SetDimensions(int(m_Width), int(m_Height));
+	debugRender->SetColor({ 255, 0, 255, 255 });
 }
 
 void dae::PeterPepper::Start()
@@ -99,7 +113,7 @@ void dae::PeterPepper::MoveRight()
 	m_State = PeterState::WalkRight;
 	m_PendingMove = true;
 
-	std::cout << "MoveRight" << std::endl;
+	//std::cout << "MoveRight" << std::endl;
 }
 
 void dae::PeterPepper::MoveLeft()
@@ -110,7 +124,7 @@ void dae::PeterPepper::MoveLeft()
 	m_State = PeterState::WalkLeft;
 	m_PendingMove = true;
 
-	std::cout << "MoveLeft" << std::endl;
+	//std::cout << "MoveLeft" << std::endl;
 }
 
 void dae::PeterPepper::MoveUpLadder()
@@ -123,7 +137,7 @@ void dae::PeterPepper::MoveUpLadder()
 	m_State = PeterState::LadderUp;
 	m_PendingMove = true;
 
-	std::cout << "LadderUp" << std::endl;
+	//std::cout << "LadderUp" << std::endl;
 }
 
 void dae::PeterPepper::MoveDownLadder()
@@ -136,7 +150,7 @@ void dae::PeterPepper::MoveDownLadder()
 	m_State = PeterState::LadderDown;
 	m_PendingMove = true;
 
-	std::cout << "LadderDown" << std::endl;
+	//std::cout << "LadderDown" << std::endl;
 }
 
 void dae::PeterPepper::StopMoving()
@@ -160,7 +174,7 @@ void dae::PeterPepper::StopMoving()
 		m_Animator->SetAnimation(PeterState::Idle);
 	}
 
-	std::cout << "StopMoving" << std::endl;
+	//std::cout << "StopMoving" << std::endl;
 }
 
 void dae::PeterPepper::Die()

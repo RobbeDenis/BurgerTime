@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "GameObject.h"
 #include "RenderComponent.h"
+#include "DebugRenderComponent.h"
 
 using namespace dae;
 
@@ -15,6 +16,11 @@ void Scene::Add(const std::shared_ptr<GameObject>& object)
 {
 	m_Objects.push_back(object);
 	object.get()->SetScene(this);
+}
+
+void Scene::AddDebugRenderComponent(DebugRenderComponent* pRenderComp)
+{
+	m_pDebugRenderComponents.push_back(pRenderComp);
 }
 
 void Scene::AddRenderComponent(RenderComponent* pRenderComp)
@@ -65,6 +71,11 @@ void Scene::LateUpdate()
 void Scene::Render() const
 {
 	for (const auto& comp : m_pRenderComponents)
+	{
+		comp->Render();
+	}
+
+	for (const auto& comp : m_pDebugRenderComponents)
 	{
 		comp->Render();
 	}

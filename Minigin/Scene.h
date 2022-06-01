@@ -5,6 +5,7 @@ namespace dae
 {
 	class GameObject;
 	class RenderComponent;
+	class DebugRenderComponent;
 
 	class Scene
 	{
@@ -12,8 +13,7 @@ namespace dae
 	public:
 		void Add(const std::shared_ptr<GameObject>& object);
 		void AddRenderComponent(RenderComponent* pRenderComp);
-
-		void Remove(const std::shared_ptr<GameObject>& object);
+		void AddDebugRenderComponent(DebugRenderComponent* pRenderComp);
 
 		void PostLoad();
 		void Start();
@@ -34,6 +34,7 @@ namespace dae
 		std::string m_Name;
 		std::vector<std::shared_ptr<GameObject>> m_Objects{};
 		std::vector<RenderComponent*> m_pRenderComponents{};
+		std::vector<DebugRenderComponent*> m_pDebugRenderComponents{};
 
 		static unsigned int m_IdCounter; 
 	};

@@ -60,9 +60,6 @@
     <ClInclude Include="RodEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ETime.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TextComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
@@ -141,8 +138,14 @@
     <ClInclude Include="Animator.h">
       <Filter>Components</Filter>
     </ClInclude>
+    <ClInclude Include="ETime.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
     <ClInclude Include="Collider.h">
-      <Filter>Header Files</Filter>
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugRenderComponent.h">
+      <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -165,9 +168,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RodEngine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ETime.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TextComponent.cpp">
@@ -242,8 +242,14 @@
     <ClCompile Include="Animator.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="ETime.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
     <ClCompile Include="Collider.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugRenderComponent.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

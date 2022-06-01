@@ -11,6 +11,7 @@ dae::RenderComponent::RenderComponent(GameObject* gameObject)
 	, m_UseSrc{ false }
 	, m_DstRect{ 0,0,0,0 }
 	, m_Mirrored{ false }
+	, m_UseDst{ false }
 {
 
 }
