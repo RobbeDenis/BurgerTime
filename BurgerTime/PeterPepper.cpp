@@ -44,7 +44,7 @@ void dae::PeterPepper::PostLoad()
 	// DEBUG
 	DebugRenderComponent* debugRender = m_pGameObject->GetComponent<DebugRenderComponent>();
 	debugRender->SetDimensions(int(m_Width), int(m_Height));
-	debugRender->SetColor({ 255, 0, 255, 255 });
+	debugRender->SetColor({ 0, 255, 0, 255 });
 }
 
 void dae::PeterPepper::Start()
@@ -53,14 +53,34 @@ void dae::PeterPepper::Start()
 	m_Animator->SetDst({ 0,0 }, m_Width, m_Height);
 }
 
-void dae::PeterPepper::AddObserver(Observer* observer)
+void dae::PeterPepper::FixedUpdate()
 {
-	m_pSubject->AddObserver(observer);
+	HandleOverlaps();
 }
 
 void dae::PeterPepper::Update()
 {
 	HandleMovement();
+}
+
+void dae::PeterPepper::HandleOverlaps()
+{
+	for (Collider* c : m_Collider->GetColliders())
+	{
+		if (c == m_Collider)
+			continue;
+
+		if (c->GetLabel() == "Ladder")
+		{
+			if(Collider::IsOverlappingWith(c, m_Collider))
+				std::cout << "Ladder overlap" << std::endl;
+		}
+		else if (c->GetLabel() == "Platform")
+		{
+			if (Collider::IsOverlappingWith(c, m_Collider))
+				std::cout << "Platform overlap" << std::endl;
+		}
+	}
 }
 
 void dae::PeterPepper::HandleMovement()
@@ -181,6 +201,11 @@ void dae::PeterPepper::Die()
 {
 	--m_Lives;
 	m_pSubject->Notify(this, Event::PlayerDied);
+}
+
+void dae::PeterPepper::AddObserver(Observer* observer)
+{
+	m_pSubject->AddObserver(observer);
 }
 
 // FOR TESTING ASSIGNMENT

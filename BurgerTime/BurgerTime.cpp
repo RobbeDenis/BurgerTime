@@ -98,18 +98,20 @@ void LoadGame()
 	input.AddControllerCommand({ XBox360Controller::ControllerButton::ButtonUp, ButtonState::Released }, std::make_unique<PeterStopMove>(pPeter));
 	input.AddControllerCommand({ XBox360Controller::ControllerButton::ButtonDown, ButtonState::Released }, std::make_unique<PeterStopMove>(pPeter));
 
-	go->SetWorldPosition(150, 150);
+	go->SetWorldPosition(150, 50);
 
 	scene.Add(go);
 
 	// Adding Ladders
-	int ladderWidth = 20;
+	const std::string ladderLabel = "Ladder";
+	const int ladderWidth = 20;
 	int ladderHeight = 90;
 
 	// First row
 	go = std::make_shared<GameObject>();
 	Collider* collider = go->AddComponent<Collider>();
 	collider->SetDimensions(ladderWidth, ladderHeight);
+	collider->SetLabel(ladderLabel);
 	go->AddComponent<DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
 	go->SetWorldPosition({ 36.f, 135.f, 0.f });
 	scene.Add(go);
@@ -118,6 +120,7 @@ void LoadGame()
 	go = std::make_shared<GameObject>();
 	collider = go->AddComponent<Collider>();
 	collider->SetDimensions(ladderWidth, ladderHeight);
+	collider->SetLabel(ladderLabel);
 	go->AddComponent<DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
 	go->SetWorldPosition({ 158.f, 135.f, 0.f });
 	scene.Add(go);
@@ -126,6 +129,7 @@ void LoadGame()
 	go = std::make_shared<GameObject>();
 	collider = go->AddComponent<Collider>();
 	collider->SetDimensions(ladderWidth, ladderHeight);
+	collider->SetLabel(ladderLabel);
 	go->AddComponent<DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
 	go->SetWorldPosition({ 219.f, 135.f, 0.f });
 	scene.Add(go);
@@ -134,6 +138,7 @@ void LoadGame()
 	go = std::make_shared<GameObject>();
 	collider = go->AddComponent<Collider>();
 	collider->SetDimensions(ladderWidth, ladderHeight);
+	collider->SetLabel(ladderLabel);
 	go->AddComponent<DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
 	go->SetWorldPosition({ 280.f, 135.f, 0.f });
 	scene.Add(go);
@@ -142,6 +147,7 @@ void LoadGame()
 	go = std::make_shared<GameObject>();
 	collider = go->AddComponent<Collider>();
 	collider->SetDimensions(ladderWidth, ladderHeight);
+	collider->SetLabel(ladderLabel);
 	go->AddComponent<DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
 	go->SetWorldPosition({ 402.f, 135.f, 0.f });
 	scene.Add(go);
@@ -150,6 +156,7 @@ void LoadGame()
 	go = std::make_shared<GameObject>();
 	collider = go->AddComponent<Collider>();
 	collider->SetDimensions(ladderWidth, ladderHeight);
+	collider->SetLabel(ladderLabel);
 	go->AddComponent<DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
 	go->SetWorldPosition({ 525.f, 135.f, 0.f });
 	scene.Add(go);
@@ -159,6 +166,7 @@ void LoadGame()
 	go = std::make_shared<GameObject>();
 	collider = go->AddComponent<Collider>();
 	collider->SetDimensions(ladderWidth, ladderHeight);
+	collider->SetLabel(ladderLabel);
 	go->AddComponent<DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
 	go->SetWorldPosition({ 96.f, 221.f, 0.f });
 	scene.Add(go);
@@ -167,6 +175,7 @@ void LoadGame()
 	go = std::make_shared<GameObject>();
 	collider = go->AddComponent<Collider>();
 	collider->SetDimensions(ladderWidth, ladderHeight);
+	collider->SetLabel(ladderLabel);
 	go->AddComponent<DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
 	go->SetWorldPosition({ 341.f, 221.f, 0.f });
 	scene.Add(go);
@@ -176,6 +185,7 @@ void LoadGame()
 	go = std::make_shared<GameObject>();
 	collider = go->AddComponent<Collider>();
 	collider->SetDimensions(ladderWidth, ladderHeight);
+	collider->SetLabel(ladderLabel);
 	go->AddComponent<DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
 	go->SetWorldPosition({ 36.f, 307.f, 0.f });
 	scene.Add(go);
@@ -184,6 +194,7 @@ void LoadGame()
 	go = std::make_shared<GameObject>();
 	collider = go->AddComponent<Collider>();
 	collider->SetDimensions(ladderWidth, ladderHeight);
+	collider->SetLabel(ladderLabel);
 	go->AddComponent<DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
 	go->SetWorldPosition({ 463.f, 307.f, 0.f });
 	scene.Add(go);
@@ -193,12 +204,133 @@ void LoadGame()
 	go = std::make_shared<GameObject>();
 	collider = go->AddComponent<Collider>();
 	collider->SetDimensions(ladderWidth, ladderHeight);
+	collider->SetLabel(ladderLabel);
 	go->AddComponent<DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
 	go->SetWorldPosition({ 524.f, 390.f, 0.f });
 	scene.Add(go);
 
+	// Adding platforms
+	const std::string platformLabel = "Platform";
+	const SDL_Color platformDebugColor = { 255, 0, 255, 255 };
+	const int platformHeight = 6;
+	int platformWidth = 530;
 
+	// Row 1
+	go = std::make_shared<GameObject>();
+	collider = go->AddComponent<Collider>();
+	collider->SetDimensions(platformWidth, platformHeight);
+	collider->SetLabel(platformLabel);
+	DebugRenderComponent* debugRender = go->AddComponent<DebugRenderComponent>(); 
+	debugRender->SetDimensions(platformWidth, platformHeight);
+	debugRender->SetColor(platformDebugColor);
+	go->SetWorldPosition({ 25.f, 135.f, 0.f });
+	scene.Add(go);
 
+	// Row 2
+	platformWidth = 163;
+	go = std::make_shared<GameObject>();
+	collider = go->AddComponent<Collider>();
+	collider->SetDimensions(platformWidth, platformHeight);
+	collider->SetLabel(platformLabel);
+	debugRender = go->AddComponent<DebugRenderComponent>();
+	debugRender->SetDimensions(platformWidth, platformHeight);
+	debugRender->SetColor(platformDebugColor);
+	go->SetWorldPosition({ 25.f, 220.f, 0.f });
+	scene.Add(go);
+
+	platformWidth = 285;
+	go = std::make_shared<GameObject>();
+	collider = go->AddComponent<Collider>();
+	collider->SetDimensions(platformWidth, platformHeight);
+	collider->SetLabel(platformLabel);
+	debugRender = go->AddComponent<DebugRenderComponent>();
+	debugRender->SetDimensions(platformWidth, platformHeight);
+	debugRender->SetColor(platformDebugColor);
+	go->SetWorldPosition({ 270.f, 220.f, 0.f });
+	scene.Add(go);
+
+	// Row 3
+	platformWidth = 164;
+	go = std::make_shared<GameObject>();
+	collider = go->AddComponent<Collider>();
+	collider->SetDimensions(platformWidth, platformHeight);
+	collider->SetLabel(platformLabel);
+	debugRender = go->AddComponent<DebugRenderComponent>();
+	debugRender->SetDimensions(platformWidth, platformHeight);
+	debugRender->SetColor(platformDebugColor);
+	go->SetWorldPosition({ 147.f, 262.f, 0.f });
+	scene.Add(go);
+
+	// Row 4
+	platformWidth = 163;
+	go = std::make_shared<GameObject>();
+	collider = go->AddComponent<Collider>();
+	collider->SetDimensions(platformWidth, platformHeight);
+	collider->SetLabel(platformLabel);
+	debugRender = go->AddComponent<DebugRenderComponent>();
+	debugRender->SetDimensions(platformWidth, platformHeight);
+	debugRender->SetColor(platformDebugColor);
+	go->SetWorldPosition({ 25.f, 304.f, 0.f });
+	scene.Add(go);
+
+	platformWidth = 163;
+	go = std::make_shared<GameObject>();
+	collider = go->AddComponent<Collider>();
+	collider->SetDimensions(platformWidth, platformHeight);
+	collider->SetLabel(platformLabel);
+	debugRender = go->AddComponent<DebugRenderComponent>();
+	debugRender->SetDimensions(platformWidth, platformHeight);
+	debugRender->SetColor(platformDebugColor);
+	go->SetWorldPosition({ 392.f, 304.f, 0.f });
+	scene.Add(go);
+
+	// Row 5
+	platformWidth = 285;
+	go = std::make_shared<GameObject>();
+	collider = go->AddComponent<Collider>();
+	collider->SetDimensions(platformWidth, platformHeight);
+	collider->SetLabel(platformLabel);
+	debugRender = go->AddComponent<DebugRenderComponent>();
+	debugRender->SetDimensions(platformWidth, platformHeight);
+	debugRender->SetColor(platformDebugColor);
+	go->SetWorldPosition({ 148.f, 346.f, 0.f });
+	scene.Add(go);
+
+	// Row 6
+	platformWidth = 165;
+	go = std::make_shared<GameObject>();
+	collider = go->AddComponent<Collider>();
+	collider->SetDimensions(platformWidth, platformHeight);
+	collider->SetLabel(platformLabel);
+	debugRender = go->AddComponent<DebugRenderComponent>();
+	debugRender->SetDimensions(platformWidth, platformHeight);
+	debugRender->SetColor(platformDebugColor);
+	go->SetWorldPosition({ 391.f, 389.f, 0.f });
+	scene.Add(go);
+
+	// Row 7
+	platformWidth = 410;
+	go = std::make_shared<GameObject>();
+	collider = go->AddComponent<Collider>();
+	collider->SetDimensions(platformWidth, platformHeight);
+	collider->SetLabel(platformLabel);
+	debugRender = go->AddComponent<DebugRenderComponent>();
+	debugRender->SetDimensions(platformWidth, platformHeight);
+	debugRender->SetColor(platformDebugColor);
+	go->SetWorldPosition({ 24.f, 432.f, 0.f });
+	scene.Add(go);
+
+	// Row 8
+	platformWidth = 530;
+	go = std::make_shared<GameObject>();
+	collider = go->AddComponent<Collider>();
+	collider->SetDimensions(platformWidth, platformHeight);
+	collider->SetLabel(platformLabel);
+	debugRender = go->AddComponent<DebugRenderComponent>();
+	debugRender->SetDimensions(platformWidth, platformHeight);
+	debugRender->SetColor(platformDebugColor);
+	go->SetWorldPosition({ 25.f, 516.f, 0.f });
+	scene.Add(go);
 
 
 	//// Player 1

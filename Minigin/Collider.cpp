@@ -8,37 +8,19 @@ dae::Collider::Collider(GameObject* gameObject)
 	: BaseComponent(gameObject)
 	, m_Label("")
 	, m_Rect{ 0,0,0,0 }
-	, m_CalculateOverlaps(false)
 {
 	g_Colliders.push_back(this);
 }
 
-dae::Collider::~Collider()
+bool dae::Collider::IsOverlappingWith(Collider* c1, Collider* c2)
 {
-	
-}
+	SDL_Rect r1 = c1->GetRect();
+	SDL_Rect r2 = c2->GetRect();
 
-void dae::Collider::FixedUpdate()
-{
-	if (!m_CalculateOverlaps)
-		return;
-
-	//m_PrevOverlaps = m_Overlaps;
-
-	//for (dae::Collider* c : g_Colliders)
-	//{
-
-	//}
-}
-
-bool dae::Collider::IsOverlappingWith(Collider* other)
-{
-	SDL_Rect otherRect = other->m_Rect;
-
-	if (m_Rect.x > otherRect.x + otherRect.w ||
-		m_Rect.x + m_Rect.w < otherRect.x ||
-		m_Rect.y > otherRect.y + otherRect.h ||
-		m_Rect.y + m_Rect.h < otherRect.y)
+	if (r1.x > r2.x + r2.w ||
+		r1.x + r1.w < r2.x ||
+		r1.y > r2.y + r2.h ||
+		r1.y + r1.h < r2.y)
 	{
 		return false;
 	}

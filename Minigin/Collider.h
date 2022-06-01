@@ -14,12 +14,9 @@ namespace dae
 		static std::vector<Collider*> g_Colliders;
 
 	public:
-		~Collider();
+		static bool IsOverlappingWith(Collider* c1, Collider* c2);
 
-		void FixedUpdate() override;
-
-		bool IsOverlappingWith(Collider* other);
-		void EnableCalculateOverlaps(bool enable) { m_CalculateOverlaps = enable; };
+		const std::vector<Collider*>& GetColliders() const { return g_Colliders; };
 
 		void SetLabel(const std::string& label) { m_Label = label; };
 		const std::string& GetLabel() const { return m_Label; };
@@ -37,7 +34,6 @@ namespace dae
 
 		SDL_Rect m_Rect;
 		std::string m_Label;
-		bool m_CalculateOverlaps;
 	};
 }
 

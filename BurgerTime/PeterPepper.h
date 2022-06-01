@@ -15,6 +15,11 @@ namespace dae
 		LadderIdleDown = 7
 	};
 
+	struct PeterOverlapData
+	{
+		bool LadderOverlap;
+	};
+
 	class Subject;
 	class Observer;
 	class Animator;
@@ -25,6 +30,7 @@ namespace dae
 	public:
 		void PostLoad() override;
 		void Start() override;
+		void FixedUpdate() override;
 		void Update() override;
 		void AddObserver(Observer* observer);
 
@@ -45,8 +51,10 @@ namespace dae
 		friend T* GameObject::AddComponent();
 
 		void Die();
+		void HandleOverlaps();
 		void HandleMovement();
 
+		PeterOverlapData m_OverlapData;
 		std::shared_ptr<Subject> m_pSubject = nullptr;
 		Animator* m_Animator;
 		Collider* m_Collider;
