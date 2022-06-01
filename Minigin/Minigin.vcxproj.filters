@@ -108,9 +108,6 @@
     <ClInclude Include="SceneManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
-    <ClInclude Include="PeterPepper.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="InputManager.h">
       <Filter>Managers\Input</Filter>
     </ClInclude>
@@ -125,15 +122,6 @@
     </ClInclude>
     <ClInclude Include="Observer.h">
       <Filter>Observers</Filter>
-    </ClInclude>
-    <ClInclude Include="LivesComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="ScoreComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="CSteamAchievements.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SceneGraphTest.h">
       <Filter>Components\Test</Filter>
@@ -224,9 +212,6 @@
     <ClCompile Include="BaseComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="PeterPepper.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="InputManager.cpp">
       <Filter>Managers\Input</Filter>
     </ClCompile>
@@ -238,15 +223,6 @@
     </ClCompile>
     <ClCompile Include="Observer.cpp">
       <Filter>Observers</Filter>
-    </ClCompile>
-    <ClCompile Include="LivesComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="ScoreComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="CSteamAchievements.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SceneGraphTest.cpp">
       <Filter>Components\Test</Filter>

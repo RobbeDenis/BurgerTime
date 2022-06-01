@@ -2,7 +2,6 @@
 #include "ScoreComponent.h"
 #include "TextComponent.h"
 #include "ResourceManager.h"
-#include "CSteamAchievements.h"
 
 dae::ScoreComponent::ScoreComponent(GameObject* gameObject)
 	: BaseComponent(gameObject)
@@ -63,6 +62,6 @@ void dae::ScoreComponent::CheckIfGameWon()
 {
 	if (m_Score >= m_ScoreToWin)
 	{
-		CSteamAchievements::g_SteamAchievements->SetAchievement("ACH_WIN_ONE_GAME");
+		
 	}
 }

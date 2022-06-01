@@ -19,15 +19,17 @@
 #include <SDL.h>
 #pragma warning (pop)
 
-#include "RodEngine.h"
-#include "SceneManager.h"
-#include "InputManager.h"
-#include "RenderComponent.h"
-#include "Scene.h"
-#include "TextComponent.h"
-#include "ResourceManager.h"
-#include "FPSCounter.h"
-#include "Animator.h"
+#include <RodEngine.h>
+#include <SceneManager.h>
+#include <InputManager.h>
+#include <RenderComponent.h>
+#include <Scene.h>
+#include <TextComponent.h>
+#include <ResourceManager.h>
+#include <FPSCounter.h>
+#include <Animator.h>
+
+#include "BurgerTimeCommands.h"
 
 using namespace dae;
 
