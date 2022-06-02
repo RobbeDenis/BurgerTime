@@ -62,32 +62,6 @@ void LoadGame()
 	go->SetWorldPosition(7, 7);
 	scene.Add(go);
 
-	// CREATING PETER PEPPER
-	go = std::make_shared<dae::GameObject>();
-
-	PeterPepper* pPeter = go->AddComponent<PeterPepper>();
-	go->AddComponent<dae::Animator>();
-	go->AddComponent<dae::Collider>();
-	go->AddComponent<dae::DebugRenderComponent>();
-
-	dae::RenderComponent* pPeterPepperRender = go->AddComponent<dae::RenderComponent>();
-	pPeterPepperRender->SetTexture("BurgertimeSprites.png");
-
-	// Peter pepper
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonRight, dae::ButtonState::Down }, std::make_unique<PeterMoveRight>(pPeter));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonLeft, dae::ButtonState::Down }, std::make_unique<PeterMoveLeft>(pPeter));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonUp, dae::ButtonState::Down }, std::make_unique<PeterMoveUpLadder>(pPeter));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonDown, dae::ButtonState::Down }, std::make_unique<PeterMoveDownLadder>(pPeter));
-
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonRight, dae::ButtonState::Released }, std::make_unique<PeterStopMove>(pPeter));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonLeft, dae::ButtonState::Released }, std::make_unique<PeterStopMove>(pPeter));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonUp, dae::ButtonState::Released }, std::make_unique<PeterStopMove>(pPeter));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonDown, dae::ButtonState::Released }, std::make_unique<PeterStopMove>(pPeter));
-
-	go->SetWorldPosition(10, 500);
-
-	scene.Add(go);
-
 	// Adding Ladders
 	const std::string ladderLabel = "Ladder";
 	const int ladderWidth = 20;
@@ -342,6 +316,7 @@ void LoadGame()
 	// Adding Burger parts
 	const std::string burgerLabel = "Burger";
 
+	// Colum 1
 	go = std::make_shared<dae::GameObject>();
 	go->AddComponent<dae::RenderComponent>();
 	collider = go->AddComponent<dae::Collider>();
@@ -349,7 +324,176 @@ void LoadGame()
 	BurgerPart* b = go->AddComponent<BurgerPart>();
 	b->SetType(PartType::TopBun);
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
-	debugRender->SetDimensions(100, 30);
+	debugRender->SetDimensions(83, 15);
+	go->SetWorldPosition({ 65.f, 125.f, 0.f });
+	scene.Add(go);
+
+	go = std::make_shared<dae::GameObject>();
+	go->AddComponent<dae::RenderComponent>();
+	collider = go->AddComponent<dae::Collider>();
+	collider->SetLabel(burgerLabel);
+	b = go->AddComponent<BurgerPart>();
+	b->SetType(PartType::Lettuce);
+	debugRender = go->AddComponent<dae::DebugRenderComponent>();
+	debugRender->SetDimensions(83, 15);
+	go->SetWorldPosition({ 65.f, 211.f, 0.f });
+	scene.Add(go);
+
+	go = std::make_shared<dae::GameObject>();
+	go->AddComponent<dae::RenderComponent>();
+	collider = go->AddComponent<dae::Collider>();
+	collider->SetLabel(burgerLabel);
+	b = go->AddComponent<BurgerPart>();
+	b->SetType(PartType::Patty);
+	debugRender = go->AddComponent<dae::DebugRenderComponent>();
+	debugRender->SetDimensions(83, 15);
+	go->SetWorldPosition({ 65.f, 295.f, 0.f });
+	scene.Add(go);
+
+	go = std::make_shared<dae::GameObject>();
+	go->AddComponent<dae::RenderComponent>();
+	collider = go->AddComponent<dae::Collider>();
+	collider->SetLabel(burgerLabel);
+	b = go->AddComponent<BurgerPart>();
+	b->SetType(PartType::BotBun);
+	debugRender = go->AddComponent<dae::DebugRenderComponent>();
+	debugRender->SetDimensions(83, 15);
+	go->SetWorldPosition({ 65.f, 507.f, 0.f });
+	scene.Add(go);
+
+	// Colum 2
+	go = std::make_shared<dae::GameObject>();
+	go->AddComponent<dae::RenderComponent>();
+	collider = go->AddComponent<dae::Collider>();
+	collider->SetLabel(burgerLabel);
+	b = go->AddComponent<BurgerPart>();
+	b->SetType(PartType::TopBun);
+	debugRender = go->AddComponent<dae::DebugRenderComponent>();
+	debugRender->SetDimensions(83, 15);
+	go->SetWorldPosition({ 188.f, 253.f, 0.f });
+	scene.Add(go);
+
+	go = std::make_shared<dae::GameObject>();
+	go->AddComponent<dae::RenderComponent>();
+	collider = go->AddComponent<dae::Collider>();
+	collider->SetLabel(burgerLabel);
+	b = go->AddComponent<BurgerPart>();
+	b->SetType(PartType::Lettuce);
+	debugRender = go->AddComponent<dae::DebugRenderComponent>();
+	debugRender->SetDimensions(83, 15);
+	go->SetWorldPosition({ 188.f, 337.f, 0.f });
+	scene.Add(go);
+
+	go = std::make_shared<dae::GameObject>();
+	go->AddComponent<dae::RenderComponent>();
+	collider = go->AddComponent<dae::Collider>();
+	collider->SetLabel(burgerLabel);
+	b = go->AddComponent<BurgerPart>();
+	b->SetType(PartType::Patty);
+	debugRender = go->AddComponent<dae::DebugRenderComponent>();
+	debugRender->SetDimensions(83, 15);
+	go->SetWorldPosition({ 188.f, 423.f, 0.f });
+	scene.Add(go);
+
+	go = std::make_shared<dae::GameObject>();
+	go->AddComponent<dae::RenderComponent>();
+	collider = go->AddComponent<dae::Collider>();
+	collider->SetLabel(burgerLabel);
+	b = go->AddComponent<BurgerPart>();
+	b->SetType(PartType::BotBun);
+	debugRender = go->AddComponent<dae::DebugRenderComponent>();
+	debugRender->SetDimensions(83, 15);
+	go->SetWorldPosition({ 188.f, 507.f, 0.f });
+	scene.Add(go);
+
+	// Colum 3
+	go = std::make_shared<dae::GameObject>();
+	go->AddComponent<dae::RenderComponent>();
+	collider = go->AddComponent<dae::Collider>();
+	collider->SetLabel(burgerLabel);
+	b = go->AddComponent<BurgerPart>();
+	b->SetType(PartType::TopBun);
+	debugRender = go->AddComponent<dae::DebugRenderComponent>();
+	debugRender->SetDimensions(83, 15);
+	go->SetWorldPosition({ 309.f, 125.f, 0.f });
+	scene.Add(go);
+
+	go = std::make_shared<dae::GameObject>();
+	go->AddComponent<dae::RenderComponent>();
+	collider = go->AddComponent<dae::Collider>();
+	collider->SetLabel(burgerLabel);
+	b = go->AddComponent<BurgerPart>();
+	b->SetType(PartType::Lettuce);
+	debugRender = go->AddComponent<dae::DebugRenderComponent>();
+	debugRender->SetDimensions(83, 15);
+	go->SetWorldPosition({ 309.f, 211.f, 0.f });
+	scene.Add(go);
+
+	go = std::make_shared<dae::GameObject>();
+	go->AddComponent<dae::RenderComponent>();
+	collider = go->AddComponent<dae::Collider>();
+	collider->SetLabel(burgerLabel);
+	b = go->AddComponent<BurgerPart>();
+	b->SetType(PartType::Patty);
+	debugRender = go->AddComponent<dae::DebugRenderComponent>();
+	debugRender->SetDimensions(83, 15);
+	go->SetWorldPosition({ 309.f, 337.f, 0.f });
+	scene.Add(go);
+
+	go = std::make_shared<dae::GameObject>();
+	go->AddComponent<dae::RenderComponent>();
+	collider = go->AddComponent<dae::Collider>();
+	collider->SetLabel(burgerLabel);
+	b = go->AddComponent<BurgerPart>();
+	b->SetType(PartType::BotBun);
+	debugRender = go->AddComponent<dae::DebugRenderComponent>();
+	debugRender->SetDimensions(83, 15);
+	go->SetWorldPosition({ 309.f, 507.f, 0.f });
+	scene.Add(go);
+
+	// Colum 4
+	go = std::make_shared<dae::GameObject>();
+	go->AddComponent<dae::RenderComponent>();
+	collider = go->AddComponent<dae::Collider>();
+	collider->SetLabel(burgerLabel);
+	b = go->AddComponent<BurgerPart>();
+	b->SetType(PartType::TopBun);
+	debugRender = go->AddComponent<dae::DebugRenderComponent>();
+	debugRender->SetDimensions(83, 15);
+	go->SetWorldPosition({ 431.f, 125.f, 0.f });
+	scene.Add(go);
+
+	go = std::make_shared<dae::GameObject>();
+	go->AddComponent<dae::RenderComponent>();
+	collider = go->AddComponent<dae::Collider>();
+	collider->SetLabel(burgerLabel);
+	b = go->AddComponent<BurgerPart>();
+	b->SetType(PartType::Lettuce);
+	debugRender = go->AddComponent<dae::DebugRenderComponent>();
+	debugRender->SetDimensions(83, 15);
+	go->SetWorldPosition({ 431.f, 211.f, 0.f });
+	scene.Add(go);
+
+	go = std::make_shared<dae::GameObject>();
+	go->AddComponent<dae::RenderComponent>();
+	collider = go->AddComponent<dae::Collider>();
+	collider->SetLabel(burgerLabel);
+	b = go->AddComponent<BurgerPart>();
+	b->SetType(PartType::Patty);
+	debugRender = go->AddComponent<dae::DebugRenderComponent>();
+	debugRender->SetDimensions(83, 15);
+	go->SetWorldPosition({ 431.f, 295.f, 0.f });
+	scene.Add(go);
+
+	go = std::make_shared<dae::GameObject>();
+	go->AddComponent<dae::RenderComponent>();
+	collider = go->AddComponent<dae::Collider>();
+	collider->SetLabel(burgerLabel);
+	b = go->AddComponent<BurgerPart>();
+	b->SetType(PartType::BotBun);
+	debugRender = go->AddComponent<dae::DebugRenderComponent>();
+	debugRender->SetDimensions(83, 15);
+	go->SetWorldPosition({ 431.f, 380.f, 0.f });
 	scene.Add(go);
 
 
@@ -381,4 +525,30 @@ void LoadGame()
 	//peter->AddObserver(peterLives);
 	//peter->AddObserver(peterScore);
 	//scene.Add(go);
+
+	// CREATING PETER PEPPER
+	go = std::make_shared<dae::GameObject>();
+
+	PeterPepper* pPeter = go->AddComponent<PeterPepper>();
+	go->AddComponent<dae::Animator>();
+	go->AddComponent<dae::Collider>();
+	go->AddComponent<dae::DebugRenderComponent>();
+
+	dae::RenderComponent* pPeterPepperRender = go->AddComponent<dae::RenderComponent>();
+	pPeterPepperRender->SetTexture("BurgertimeSprites.png");
+
+	// Peter pepper
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonRight, dae::ButtonState::Down }, std::make_unique<PeterMoveRight>(pPeter));
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonLeft, dae::ButtonState::Down }, std::make_unique<PeterMoveLeft>(pPeter));
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonUp, dae::ButtonState::Down }, std::make_unique<PeterMoveUpLadder>(pPeter));
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonDown, dae::ButtonState::Down }, std::make_unique<PeterMoveDownLadder>(pPeter));
+
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonRight, dae::ButtonState::Released }, std::make_unique<PeterStopMove>(pPeter));
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonLeft, dae::ButtonState::Released }, std::make_unique<PeterStopMove>(pPeter));
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonUp, dae::ButtonState::Released }, std::make_unique<PeterStopMove>(pPeter));
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonDown, dae::ButtonState::Released }, std::make_unique<PeterStopMove>(pPeter));
+
+	go->SetWorldPosition(10, 500);
+
+	scene.Add(go);
 }
