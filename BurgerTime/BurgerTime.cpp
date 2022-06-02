@@ -18,6 +18,7 @@
 #include "Platform.h"
 #include "Ladder.h"
 #include "BurgerPart.h"
+#include "Plate.h"
 
 void LoadGame();
 
@@ -496,6 +497,43 @@ void LoadGame()
 	go->SetWorldPosition({ 431.f, 380.f, 0.f });
 	scene.Add(go);
 
+	// Add plates
+	const std::string plateLabel = "Plate";
+	go = std::make_shared<dae::GameObject>();
+	collider = go->AddComponent<dae::Collider>();
+	collider->SetLabel(burgerLabel);
+	go->AddComponent<Plate>();
+	debugRender = go->AddComponent<dae::DebugRenderComponent>();
+	debugRender->SetDimensions(30, 80);
+	go->SetWorldPosition({ 92.f, 548.f, 0.f });
+	scene.Add(go);
+
+	go = std::make_shared<dae::GameObject>();
+	collider = go->AddComponent<dae::Collider>();
+	collider->SetLabel(burgerLabel);
+	go->AddComponent<Plate>();
+	debugRender = go->AddComponent<dae::DebugRenderComponent>();
+	debugRender->SetDimensions(30, 80);
+	go->SetWorldPosition({ 220.f, 548.f, 0.f });
+	scene.Add(go);
+
+	go = std::make_shared<dae::GameObject>();
+	collider = go->AddComponent<dae::Collider>();
+	collider->SetLabel(burgerLabel);
+	go->AddComponent<Plate>();
+	debugRender = go->AddComponent<dae::DebugRenderComponent>();
+	debugRender->SetDimensions(30, 80);
+	go->SetWorldPosition({ 350.f, 548.f, 0.f });
+	scene.Add(go);
+
+	go = std::make_shared<dae::GameObject>();
+	collider = go->AddComponent<dae::Collider>();
+	collider->SetLabel(burgerLabel);
+	go->AddComponent<Plate>();
+	debugRender = go->AddComponent<dae::DebugRenderComponent>();
+	debugRender->SetDimensions(30, 80);
+	go->SetWorldPosition({ 450.f, 548.f, 0.f });
+	scene.Add(go);
 
 	//// Player 1
 	//// Creating Peter Pepper UI
@@ -531,7 +569,7 @@ void LoadGame()
 
 	PeterPepper* pPeter = go->AddComponent<PeterPepper>();
 	go->AddComponent<dae::Animator>();
-	go->AddComponent<dae::Collider>();
+	go->AddComponent<dae::Collider>()->SetLabel("Player");
 	go->AddComponent<dae::DebugRenderComponent>();
 
 	dae::RenderComponent* pPeterPepperRender = go->AddComponent<dae::RenderComponent>();

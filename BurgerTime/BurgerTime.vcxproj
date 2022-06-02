@@ -168,6 +168,7 @@
     <ClCompile Include="Ladder.cpp" />
     <ClCompile Include="LivesComponent.cpp" />
     <ClCompile Include="PeterPepper.cpp" />
+    <ClCompile Include="Plate.cpp" />
     <ClCompile Include="Platform.cpp" />
     <ClCompile Include="ScoreComponent.cpp" />
   </ItemGroup>
@@ -177,6 +178,7 @@
     <ClInclude Include="Ladder.h" />
     <ClInclude Include="LivesComponent.h" />
     <ClInclude Include="PeterPepper.h" />
+    <ClInclude Include="Plate.h" />
     <ClInclude Include="Platform.h" />
     <ClInclude Include="ScoreComponent.h" />
   </ItemGroup>
