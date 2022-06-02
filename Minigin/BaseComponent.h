@@ -15,6 +15,8 @@ namespace dae
 
 		virtual ~BaseComponent() = default;
 
+		GameObject* GetGameObject() const { return m_pGameObject; };
+
 	protected:
 		BaseComponent(GameObject* gameObject) : m_pGameObject{ gameObject } {};
 

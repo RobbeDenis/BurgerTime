@@ -1,36 +1,33 @@
 #pragma once
 #include "BaseComponent.h"
 #include "Observer.h"
+#include "TextComponent.h"
 
-namespace dae
+class ScoreComponent : public dae::BaseComponent, public dae::Observer
 {
-	class TextComponent;
-	class ScoreComponent : public BaseComponent, public Observer
-	{
-	public:
-		void PostLoad() override;
+public:
+	void PostLoad() override;
 
-		void Notify(Event event) override;
-		void Notify(BaseComponent*, Event event) override { Notify(event); };
+	void Notify(dae::Event event) override;
+	void Notify(BaseComponent*, dae::Event event) override { Notify(event); };
 
-		void SetColor(const SDL_Color& color);
+	void SetColor(const SDL_Color& color);
 
-	private:
-		ScoreComponent(GameObject* gameObject);
-		template <typename T>
-		friend T* GameObject::AddComponent();
+private:
+	ScoreComponent(dae::GameObject* gameObject);
+	template <typename T>
+	friend T* dae::GameObject::AddComponent();
 
-		void EnemyDied();
-		void BurgerDropped();
-		void ResetScore();
-		void CheckIfGameWon();
+	void EnemyDied();
+	void BurgerDropped();
+	void ResetScore();
+	void CheckIfGameWon();
 
-		TextComponent* m_pTextPoints = nullptr;
-		int m_ScoreToWin = 500;
-		int m_BaseKillValue = 40;
-		int m_KillValue = 40;
-		int m_BurgerValue = 30;
-		int m_Score = 0;
-	};
-}
+	dae::TextComponent* m_pTextPoints = nullptr;
+	int m_ScoreToWin = 500;
+	int m_BaseKillValue = 40;
+	int m_KillValue = 40;
+	int m_BurgerValue = 30;
+	int m_Score = 0;
+};
 

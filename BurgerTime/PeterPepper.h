@@ -1,73 +1,85 @@
 #pragma once
-#include "BaseComponent.h"
+#include <BaseComponent.h>
+#include "Subject.h"
+#include "Collider.h"
+#include "Animator.h"
 
-namespace dae
+
+enum PeterState
 {
-	enum PeterState
-	{
-		Idle = 0,
-		WalkLeft = 1,
-		WalkRight = 2,
-		LadderUp = 3,
-		LadderDown = 4,
-		Death = 5,
-		LadderIdleUp = 6,
-		LadderIdleDown = 7
-	};
+	Idle = 0,
+	WalkLeft = 1,
+	WalkRight = 2,
+	LadderUp = 3,
+	LadderDown = 4,
+	Death = 5,
+	LadderIdleUp = 6,
+	LadderIdleDown = 7
+};
 
-	struct PeterOverlapData
-	{
-		bool LadderOverlap;
-	};
+struct PeterOverlapData
+{
+	bool EnterLadder;
+	bool ExitLadder;
+	bool LadderOverlap;
+	bool WasOnLadder;
 
-	class Subject;
-	class Observer;
-	class Animator;
-	class Collider;
+	bool EnterPlatform;
+	bool ExitPlatform;
+	bool PlatformOverlap;
+	bool WasOnPlatform;
+};
 
-	class PeterPepper final : public BaseComponent
-	{
-	public:
-		void PostLoad() override;
-		void Start() override;
-		void FixedUpdate() override;
-		void Update() override;
-		void AddObserver(Observer* observer);
+class Ladder;
+class Platform;
 
-		void MoveRight();
-		void MoveLeft();
-		void MoveUpLadder();
-		void MoveDownLadder();
-		void StopMoving();
+class PeterPepper final : public dae::BaseComponent
+{
+public:
+	void PostLoad() override;
+	void Start() override;
+	void FixedUpdate() override;
+	void Update() override;
+	void AddObserver(dae::Observer* observer);
 
-		int GetLives() const { return m_Lives; };
+	void MoveRight();
+	void MoveLeft();
+	void MoveUpLadder();
+	void MoveDownLadder();
+	void StopMoving();
 
-		// FOR TESTING ASSIGNMENT
-		void SetPlayer(bool firstPlayer);
+	int GetLives() const { return m_Lives; };
 
-	private:
-		PeterPepper(GameObject* gameObject);
-		template <typename T>
-		friend T* GameObject::AddComponent();
+	// FOR TESTING ASSIGNMENT
+	void SetPlayer(bool firstPlayer);
 
-		void Die();
-		void HandleOverlaps();
-		void HandleMovement();
+private:
+	PeterPepper(dae::GameObject* gameObject);
+	template <typename T>
+	friend T* dae::GameObject::AddComponent();
 
-		PeterOverlapData m_OverlapData;
-		std::shared_ptr<Subject> m_pSubject = nullptr;
-		Animator* m_Animator;
-		Collider* m_Collider;
-		float m_Width;
-		float m_Height;
-		float m_MovementSpeed;
-		int m_Lives;
-		int m_State;
-		bool m_PendingMove;
+	void Die();
+	void HandleOverlaps();
+	void HandleMovement();
+	void SnapToOverlappingPlatform();
+	bool CanMoveOnLadder() const;
+
+	PeterOverlapData m_OverlapData;
+	std::shared_ptr<dae::Subject> m_pSubject = nullptr;
+	dae::Animator* m_Animator;
+	dae::Collider* m_Collider;
+	Ladder* m_UsingLadder;
+	Platform* m_UsingPlatform;
+	int m_Width;
+	int m_Height;
+	float m_MovementSpeed;
+	int m_Lives;
+	int m_State;
+	bool m_PendingMove;
 
 
-		// FOR TESTING ASSIGNMENT
-		bool m_FirstPlayer = true;
-	};
-}
+	// FOR TESTING ASSIGNMENT
+	bool m_FirstPlayer = true;
+};
+
 

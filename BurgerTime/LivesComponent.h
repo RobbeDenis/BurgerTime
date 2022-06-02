@@ -1,29 +1,28 @@
 #pragma once
 #include "BaseComponent.h"
 #include "Observer.h"
+#include "TextComponent.h"
 
-namespace dae
+
+class PeterPepper;
+
+class LivesComponent final : public dae::BaseComponent, public dae::Observer
 {
-	class PeterPepper;
-	class TextComponent;
-	class LivesComponent final : public BaseComponent, public Observer
-	{
-	public:
-		void PostLoad() override;
+public:
+	void PostLoad() override;
 
-		void Notify(Event) override { };
-		void Notify(BaseComponent* pComponent, Event event) override;
+	void Notify(dae::Event) override { };
+	void Notify(BaseComponent* pComponent, dae::Event event) override;
 
-		void SetColor(const SDL_Color& color);
+	void SetColor(const SDL_Color& color);
 
-	private:
-		LivesComponent(GameObject* gameObject);
-		template <typename T>
-		friend T* GameObject::AddComponent();
+private:
+	LivesComponent(dae::GameObject* gameObject);
+	template <typename T>
+	friend T* dae::GameObject::AddComponent();
 
-		void PlayerDied(PeterPepper* peter);
-		PeterPepper* m_pPeterPepper = nullptr;
-		TextComponent* m_pTextLives = nullptr;
-	};
-}
+	void PlayerDied(PeterPepper* peter);
+	PeterPepper* m_pPeterPepper = nullptr;
+	dae::TextComponent* m_pTextLives = nullptr;
+};
 

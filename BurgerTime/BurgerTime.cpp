@@ -13,11 +13,10 @@
 #include <Collider.h>
 #include <DebugRenderComponent.h>
 
+#include "PeterPepper.h"
 #include "BurgerTimeCommands.h"
 #include "Platform.h"
 #include "Ladder.h"
-
-using namespace dae;
 
 void LoadGame();
 
@@ -27,7 +26,7 @@ int main(int, char* [])
 
 	engine.Initialize();
 
-	ResourceManager::GetInstance().Init("../Data/");
+	dae::ResourceManager::GetInstance().Init("../Data/");
 
 	LoadGame();
 
@@ -37,52 +36,52 @@ int main(int, char* [])
 
 void LoadGame()
 {
-	auto& scene = SceneManager::GetInstance().CreateScene("Level");
-	auto& input = InputManager::GetInstance();
-	auto go = std::make_shared<GameObject>();
+	auto& scene = dae::SceneManager::GetInstance().CreateScene("Level");
+	auto& input = dae::InputManager::GetInstance();
+	auto go = std::make_shared<dae::GameObject>();
 
 	// Background
-	RenderComponent* pBackgroundRender = go->AddComponent<RenderComponent>();
+	dae::RenderComponent* pBackgroundRender = go->AddComponent<dae::RenderComponent>();
 	pBackgroundRender->SetTexture("BurgerTimeBackground.png");
 	pBackgroundRender->SetDst(25.f, 100.f, 530.f, 530.f);
 	scene.Add(go);
 	
 	// FPS Counter
-	go = std::make_shared<GameObject>();
-	TextComponent* pTextComponent = go.get()->AddComponent<TextComponent>();
-	pTextComponent->SetFont(ResourceManager::GetInstance().LoadFont("Lingua.otf", 13), false);
+	go = std::make_shared<dae::GameObject>();
+	dae::TextComponent* pTextComponent = go.get()->AddComponent<dae::TextComponent>();
+	pTextComponent->SetFont(dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 13), false);
 	pTextComponent->SetText("", false);
 	pTextComponent->SetColor({ 40, 215, 67 });
 
-	go->AddComponent<RenderComponent>();
-	FPSCounter* pFpsCounter = go->AddComponent<FPSCounter>();
+	go->AddComponent<dae::RenderComponent>();
+	dae::FPSCounter* pFpsCounter = go->AddComponent<dae::FPSCounter>();
 	pFpsCounter->UseSmoothing(true);
 	go->SetWorldPosition(7, 7);
 	scene.Add(go);
 
 	// CREATING PETER PEPPER
-	go = std::make_shared<GameObject>();
+	go = std::make_shared<dae::GameObject>();
 
 	PeterPepper* pPeter = go->AddComponent<PeterPepper>();
-	go->AddComponent<Animator>();
-	go->AddComponent<Collider>();
-	go->AddComponent<DebugRenderComponent>();
+	go->AddComponent<dae::Animator>();
+	go->AddComponent<dae::Collider>();
+	go->AddComponent<dae::DebugRenderComponent>();
 
-	RenderComponent* pPeterPepperRender = go->AddComponent<RenderComponent>();
+	dae::RenderComponent* pPeterPepperRender = go->AddComponent<dae::RenderComponent>();
 	pPeterPepperRender->SetTexture("BurgertimeSprites.png");
 
 	// Peter pepper
-	input.AddControllerCommand({ XBox360Controller::ControllerButton::ButtonRight, ButtonState::Down }, std::make_unique<PeterMoveRight>(pPeter));
-	input.AddControllerCommand({ XBox360Controller::ControllerButton::ButtonLeft, ButtonState::Down }, std::make_unique<PeterMoveLeft>(pPeter));
-	input.AddControllerCommand({ XBox360Controller::ControllerButton::ButtonUp, ButtonState::Down }, std::make_unique<PeterMoveUpLadder>(pPeter));
-	input.AddControllerCommand({ XBox360Controller::ControllerButton::ButtonDown, ButtonState::Down }, std::make_unique<PeterMoveDownLadder>(pPeter));
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonRight, dae::ButtonState::Down }, std::make_unique<PeterMoveRight>(pPeter));
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonLeft, dae::ButtonState::Down }, std::make_unique<PeterMoveLeft>(pPeter));
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonUp, dae::ButtonState::Down }, std::make_unique<PeterMoveUpLadder>(pPeter));
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonDown, dae::ButtonState::Down }, std::make_unique<PeterMoveDownLadder>(pPeter));
 
-	input.AddControllerCommand({ XBox360Controller::ControllerButton::ButtonRight, ButtonState::Released }, std::make_unique<PeterStopMove>(pPeter));
-	input.AddControllerCommand({ XBox360Controller::ControllerButton::ButtonLeft, ButtonState::Released }, std::make_unique<PeterStopMove>(pPeter));
-	input.AddControllerCommand({ XBox360Controller::ControllerButton::ButtonUp, ButtonState::Released }, std::make_unique<PeterStopMove>(pPeter));
-	input.AddControllerCommand({ XBox360Controller::ControllerButton::ButtonDown, ButtonState::Released }, std::make_unique<PeterStopMove>(pPeter));
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonRight, dae::ButtonState::Released }, std::make_unique<PeterStopMove>(pPeter));
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonLeft, dae::ButtonState::Released }, std::make_unique<PeterStopMove>(pPeter));
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonUp, dae::ButtonState::Released }, std::make_unique<PeterStopMove>(pPeter));
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonDown, dae::ButtonState::Released }, std::make_unique<PeterStopMove>(pPeter));
 
-	go->SetWorldPosition(150, 50);
+	go->SetWorldPosition(10, 500);
 
 	scene.Add(go);
 
@@ -92,115 +91,115 @@ void LoadGame()
 	int ladderHeight = 90;
 
 	// First row
-	go = std::make_shared<GameObject>();
-	go->AddComponent<Ladder>();
-	Collider* collider = go->AddComponent<Collider>();
-	collider->SetDimensions(ladderWidth, ladderHeight);
+	go = std::make_shared<dae::GameObject>();
+	dae::Collider* collider = go->AddComponent<dae::Collider>();
 	collider->SetLabel(ladderLabel);
-	go->AddComponent<DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
+	Ladder* l = go->AddComponent<Ladder>();
+	l->SetDimensions(ladderWidth, ladderHeight);
+	go->AddComponent<dae::DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
 	go->SetWorldPosition({ 36.f, 135.f, 0.f });
 	scene.Add(go);
 
 	ladderHeight = 385;
-	go = std::make_shared<GameObject>();
-	go->AddComponent<Ladder>();
-	collider = go->AddComponent<Collider>();
-	collider->SetDimensions(ladderWidth, ladderHeight);
+	go = std::make_shared<dae::GameObject>();
+	collider = go->AddComponent<dae::Collider>();
 	collider->SetLabel(ladderLabel);
-	go->AddComponent<DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
+	l = go->AddComponent<Ladder>();
+	l->SetDimensions(ladderWidth, ladderHeight);
+	go->AddComponent<dae::DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
 	go->SetWorldPosition({ 158.f, 135.f, 0.f });
 	scene.Add(go);
 
 	ladderHeight = 130;
-	go = std::make_shared<GameObject>();
-	go->AddComponent<Ladder>();
-	collider = go->AddComponent<Collider>();
-	collider->SetDimensions(ladderWidth, ladderHeight);
+	go = std::make_shared<dae::GameObject>();
+	collider = go->AddComponent<dae::Collider>();
 	collider->SetLabel(ladderLabel);
-	go->AddComponent<DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
+	l = go->AddComponent<Ladder>();
+	l->SetDimensions(ladderWidth, ladderHeight);
+	go->AddComponent<dae::DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
 	go->SetWorldPosition({ 219.f, 135.f, 0.f });
 	scene.Add(go);
 
 	ladderHeight = 385;
-	go = std::make_shared<GameObject>();
-	go->AddComponent<Ladder>();
-	collider = go->AddComponent<Collider>();
-	collider->SetDimensions(ladderWidth, ladderHeight);
+	go = std::make_shared<dae::GameObject>();
+	collider = go->AddComponent<dae::Collider>();
 	collider->SetLabel(ladderLabel);
-	go->AddComponent<DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
+	l = go->AddComponent<Ladder>();
+	l->SetDimensions(ladderWidth, ladderHeight);
+	go->AddComponent<dae::DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
 	go->SetWorldPosition({ 280.f, 135.f, 0.f });
 	scene.Add(go);
 
 	ladderHeight = 385;
-	go = std::make_shared<GameObject>();
-	go->AddComponent<Ladder>();
-	collider = go->AddComponent<Collider>();
-	collider->SetDimensions(ladderWidth, ladderHeight);
+	go = std::make_shared<dae::GameObject>();
+	collider = go->AddComponent<dae::Collider>();
 	collider->SetLabel(ladderLabel);
-	go->AddComponent<DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
+	l = go->AddComponent<Ladder>();
+	l->SetDimensions(ladderWidth, ladderHeight);
+	go->AddComponent<dae::DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
 	go->SetWorldPosition({ 402.f, 135.f, 0.f });
 	scene.Add(go);
 
 	ladderHeight = 173;
-	go = std::make_shared<GameObject>();
-	go->AddComponent<Ladder>();
-	collider = go->AddComponent<Collider>();
-	collider->SetDimensions(ladderWidth, ladderHeight);
+	go = std::make_shared<dae::GameObject>();
+	collider = go->AddComponent<dae::Collider>();
 	collider->SetLabel(ladderLabel);
-	go->AddComponent<DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
+	l = go->AddComponent<Ladder>();
+	l->SetDimensions(ladderWidth, ladderHeight);
+	go->AddComponent<dae::DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
 	go->SetWorldPosition({ 525.f, 135.f, 0.f });
 	scene.Add(go);
 
 	// Second row
 	ladderHeight = 215;
-	go = std::make_shared<GameObject>();
-	go->AddComponent<Ladder>();
-	collider = go->AddComponent<Collider>();
-	collider->SetDimensions(ladderWidth, ladderHeight);
+	go = std::make_shared<dae::GameObject>();
+	collider = go->AddComponent<dae::Collider>();
 	collider->SetLabel(ladderLabel);
-	go->AddComponent<DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
+	l = go->AddComponent<Ladder>();
+	l->SetDimensions(ladderWidth, ladderHeight);
+	go->AddComponent<dae::DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
 	go->SetWorldPosition({ 96.f, 221.f, 0.f });
 	scene.Add(go);
 
 	ladderHeight = 130;
-	go = std::make_shared<GameObject>();
-	go->AddComponent<Ladder>();
-	collider = go->AddComponent<Collider>();
-	collider->SetDimensions(ladderWidth, ladderHeight);
+	go = std::make_shared<dae::GameObject>();
+	collider = go->AddComponent<dae::Collider>();
 	collider->SetLabel(ladderLabel);
-	go->AddComponent<DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
+	l = go->AddComponent<Ladder>();
+	l->SetDimensions(ladderWidth, ladderHeight);
+	go->AddComponent<dae::DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
 	go->SetWorldPosition({ 341.f, 221.f, 0.f });
 	scene.Add(go);
 
 	// Third row
 	ladderHeight = 213;
-	go = std::make_shared<GameObject>();
-	go->AddComponent<Ladder>();
-	collider = go->AddComponent<Collider>();
-	collider->SetDimensions(ladderWidth, ladderHeight);
+	go = std::make_shared<dae::GameObject>();
+	collider = go->AddComponent<dae::Collider>();
 	collider->SetLabel(ladderLabel);
-	go->AddComponent<DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
+	l = go->AddComponent<Ladder>();
+	l->SetDimensions(ladderWidth, ladderHeight);
+	go->AddComponent<dae::DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
 	go->SetWorldPosition({ 36.f, 307.f, 0.f });
 	scene.Add(go);
 
 	ladderHeight = 213;
-	go = std::make_shared<GameObject>();
-	go->AddComponent<Ladder>();
-	collider = go->AddComponent<Collider>();
-	collider->SetDimensions(ladderWidth, ladderHeight);
+	go = std::make_shared<dae::GameObject>();
+	collider = go->AddComponent<dae::Collider>();
 	collider->SetLabel(ladderLabel);
-	go->AddComponent<DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
+	l = go->AddComponent<Ladder>();
+	l->SetDimensions(ladderWidth, ladderHeight);
+	go->AddComponent<dae::DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
 	go->SetWorldPosition({ 463.f, 307.f, 0.f });
 	scene.Add(go);
 
 	// Forth row
 	ladderHeight = 128;
-	go = std::make_shared<GameObject>();
-	go->AddComponent<Ladder>();
-	collider = go->AddComponent<Collider>();
-	collider->SetDimensions(ladderWidth, ladderHeight);
+	go = std::make_shared<dae::GameObject>();
+	collider = go->AddComponent<dae::Collider>();
 	collider->SetLabel(ladderLabel);
-	go->AddComponent<DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
+	l = go->AddComponent<Ladder>();
+	l->SetDimensions(ladderWidth, ladderHeight);
+	go->AddComponent<dae::DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
 	go->SetWorldPosition({ 524.f, 390.f, 0.f });
 	scene.Add(go);
 
@@ -211,12 +210,12 @@ void LoadGame()
 	int platformWidth = 530;
 
 	// Row 1
-	go = std::make_shared<GameObject>();
-	go->AddComponent<Platform>();
-	collider = go->AddComponent<Collider>();
-	collider->SetDimensions(platformWidth, platformHeight);
+	go = std::make_shared<dae::GameObject>();
+	collider = go->AddComponent<dae::Collider>();
 	collider->SetLabel(platformLabel);
-	DebugRenderComponent* debugRender = go->AddComponent<DebugRenderComponent>(); 
+	Platform * p = go->AddComponent<Platform>();
+	p->SetDimensions(platformWidth, platformHeight);
+	dae::DebugRenderComponent* debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(platformWidth, platformHeight);
 	debugRender->SetColor(platformDebugColor);
 	go->SetWorldPosition({ 25.f, 135.f, 0.f });
@@ -224,24 +223,24 @@ void LoadGame()
 
 	// Row 2
 	platformWidth = 163;
-	go = std::make_shared<GameObject>();
-	go->AddComponent<Platform>();
-	collider = go->AddComponent<Collider>();
-	collider->SetDimensions(platformWidth, platformHeight);
+	go = std::make_shared<dae::GameObject>();
+	collider = go->AddComponent<dae::Collider>();
 	collider->SetLabel(platformLabel);
-	debugRender = go->AddComponent<DebugRenderComponent>();
+	p = go->AddComponent<Platform>();
+	p->SetDimensions(platformWidth, platformHeight);
+	debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(platformWidth, platformHeight);
 	debugRender->SetColor(platformDebugColor);
 	go->SetWorldPosition({ 25.f, 220.f, 0.f });
 	scene.Add(go);
 
 	platformWidth = 285;
-	go = std::make_shared<GameObject>();
-	go->AddComponent<Platform>();
-	collider = go->AddComponent<Collider>();
-	collider->SetDimensions(platformWidth, platformHeight);
+	go = std::make_shared<dae::GameObject>();
+	collider = go->AddComponent<dae::Collider>();
 	collider->SetLabel(platformLabel);
-	debugRender = go->AddComponent<DebugRenderComponent>();
+	p = go->AddComponent<Platform>();
+	p->SetDimensions(platformWidth, platformHeight);
+	debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(platformWidth, platformHeight);
 	debugRender->SetColor(platformDebugColor);
 	go->SetWorldPosition({ 270.f, 220.f, 0.f });
@@ -249,12 +248,12 @@ void LoadGame()
 
 	// Row 3
 	platformWidth = 164;
-	go = std::make_shared<GameObject>();
-	go->AddComponent<Platform>();
-	collider = go->AddComponent<Collider>();
-	collider->SetDimensions(platformWidth, platformHeight);
+	go = std::make_shared<dae::GameObject>();
+	collider = go->AddComponent<dae::Collider>();
 	collider->SetLabel(platformLabel);
-	debugRender = go->AddComponent<DebugRenderComponent>();
+	p = go->AddComponent<Platform>();
+	p->SetDimensions(platformWidth, platformHeight);
+	debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(platformWidth, platformHeight);
 	debugRender->SetColor(platformDebugColor);
 	go->SetWorldPosition({ 147.f, 262.f, 0.f });
@@ -262,24 +261,24 @@ void LoadGame()
 
 	// Row 4
 	platformWidth = 163;
-	go = std::make_shared<GameObject>();
-	go->AddComponent<Platform>();
-	collider = go->AddComponent<Collider>();
-	collider->SetDimensions(platformWidth, platformHeight);
+	go = std::make_shared<dae::GameObject>();
+	collider = go->AddComponent<dae::Collider>();
 	collider->SetLabel(platformLabel);
-	debugRender = go->AddComponent<DebugRenderComponent>();
+	p = go->AddComponent<Platform>();
+	p->SetDimensions(platformWidth, platformHeight);
+	debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(platformWidth, platformHeight);
 	debugRender->SetColor(platformDebugColor);
 	go->SetWorldPosition({ 25.f, 304.f, 0.f });
 	scene.Add(go);
 
 	platformWidth = 163;
-	go = std::make_shared<GameObject>();
-	go->AddComponent<Platform>();
-	collider = go->AddComponent<Collider>();
-	collider->SetDimensions(platformWidth, platformHeight);
+	go = std::make_shared<dae::GameObject>();
+	collider = go->AddComponent<dae::Collider>();
 	collider->SetLabel(platformLabel);
-	debugRender = go->AddComponent<DebugRenderComponent>();
+	p = go->AddComponent<Platform>();
+	p->SetDimensions(platformWidth, platformHeight);
+	debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(platformWidth, platformHeight);
 	debugRender->SetColor(platformDebugColor);
 	go->SetWorldPosition({ 392.f, 304.f, 0.f });
@@ -287,12 +286,12 @@ void LoadGame()
 
 	// Row 5
 	platformWidth = 285;
-	go = std::make_shared<GameObject>();
-	go->AddComponent<Platform>();
-	collider = go->AddComponent<Collider>();
-	collider->SetDimensions(platformWidth, platformHeight);
+	go = std::make_shared<dae::GameObject>();
+	collider = go->AddComponent<dae::Collider>();
 	collider->SetLabel(platformLabel);
-	debugRender = go->AddComponent<DebugRenderComponent>();
+	p = go->AddComponent<Platform>();
+	p->SetDimensions(platformWidth, platformHeight);
+	debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(platformWidth, platformHeight);
 	debugRender->SetColor(platformDebugColor);
 	go->SetWorldPosition({ 148.f, 346.f, 0.f });
@@ -300,12 +299,12 @@ void LoadGame()
 
 	// Row 6
 	platformWidth = 165;
-	go = std::make_shared<GameObject>();
-	go->AddComponent<Platform>();
-	collider = go->AddComponent<Collider>();
-	collider->SetDimensions(platformWidth, platformHeight);
+	go = std::make_shared<dae::GameObject>();
+	collider = go->AddComponent<dae::Collider>();
 	collider->SetLabel(platformLabel);
-	debugRender = go->AddComponent<DebugRenderComponent>();
+	p = go->AddComponent<Platform>();
+	p->SetDimensions(platformWidth, platformHeight);
+	debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(platformWidth, platformHeight);
 	debugRender->SetColor(platformDebugColor);
 	go->SetWorldPosition({ 391.f, 389.f, 0.f });
@@ -313,12 +312,12 @@ void LoadGame()
 
 	// Row 7
 	platformWidth = 410;
-	go = std::make_shared<GameObject>();
-	go->AddComponent<Platform>();
-	collider = go->AddComponent<Collider>();
-	collider->SetDimensions(platformWidth, platformHeight);
+	go = std::make_shared<dae::GameObject>();
+	collider = go->AddComponent<dae::Collider>();
 	collider->SetLabel(platformLabel);
-	debugRender = go->AddComponent<DebugRenderComponent>();
+	p = go->AddComponent<Platform>();
+	p->SetDimensions(platformWidth, platformHeight);
+	debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(platformWidth, platformHeight);
 	debugRender->SetColor(platformDebugColor);
 	go->SetWorldPosition({ 24.f, 432.f, 0.f });
@@ -326,12 +325,12 @@ void LoadGame()
 
 	// Row 8
 	platformWidth = 530;
-	go = std::make_shared<GameObject>();
-	go->AddComponent<Platform>();
-	collider = go->AddComponent<Collider>();
-	collider->SetDimensions(platformWidth, platformHeight);
+	go = std::make_shared<dae::GameObject>();
+	collider = go->AddComponent<dae::Collider>();
 	collider->SetLabel(platformLabel);
-	debugRender = go->AddComponent<DebugRenderComponent>();
+	p = go->AddComponent<Platform>();
+	p->SetDimensions(platformWidth, platformHeight);
+	debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(platformWidth, platformHeight);
 	debugRender->SetColor(platformDebugColor);
 	go->SetWorldPosition({ 25.f, 516.f, 0.f });

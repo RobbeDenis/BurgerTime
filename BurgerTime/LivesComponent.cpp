@@ -1,21 +1,19 @@
-#include "RodEnginePCH.h"
 #include "LivesComponent.h"
 #include "PeterPepper.h"
-#include "TextComponent.h"
 #include "ResourceManager.h"
 
-dae::LivesComponent::LivesComponent(GameObject* gameObject)
+LivesComponent::LivesComponent(dae::GameObject* gameObject)
 	: BaseComponent(gameObject)
 {
 
 }
 
-void dae::LivesComponent::PostLoad()
+void LivesComponent::PostLoad()
 {
-	m_pTextLives = m_pGameObject->GetComponent<TextComponent>();
+	m_pTextLives = m_pGameObject->GetComponent<dae::TextComponent>();
 }
 
-void dae::LivesComponent::Notify(BaseComponent* pComponent, Event event)
+void LivesComponent::Notify(BaseComponent* pComponent, dae::Event event)
 {
 	PeterPepper* peter = dynamic_cast<PeterPepper*>(pComponent);
 	if (peter == nullptr)
@@ -23,20 +21,20 @@ void dae::LivesComponent::Notify(BaseComponent* pComponent, Event event)
 
 	switch (event)
 	{
-	case Event::PlayerDied:
+	case dae::Event::PlayerDied:
 		PlayerDied(peter);
 		break;
-	case Event::PlayerReset:
+	case dae::Event::PlayerReset:
 		PlayerDied(peter);
 	}
 }
 
-void dae::LivesComponent::PlayerDied(PeterPepper* peter)
+void LivesComponent::PlayerDied(PeterPepper* peter)
 {
 	m_pTextLives->SetText("Lives: " + std::to_string(peter->GetLives()));
 }
 
-void dae::LivesComponent::SetColor(const SDL_Color& color)
+void LivesComponent::SetColor(const SDL_Color& color)
 {
 	m_pTextLives->SetColor(color);
 }

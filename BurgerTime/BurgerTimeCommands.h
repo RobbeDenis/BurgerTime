@@ -7,7 +7,7 @@
 class PeterMoveRight final : public Command
 {
 public:
-	PeterMoveRight(dae::PeterPepper* peter) : m_pPeter(peter) {}
+	PeterMoveRight(PeterPepper* peter) : m_pPeter(peter) {}
 
 	void Execute() override
 	{
@@ -15,14 +15,14 @@ public:
 	}
 
 private:
-	dae::PeterPepper* m_pPeter = nullptr;
+	PeterPepper* m_pPeter = nullptr;
 };
 
 //LEFT
 class PeterMoveLeft final : public Command
 {
 public:
-	PeterMoveLeft(dae::PeterPepper* peter) : m_pPeter(peter) {}
+	PeterMoveLeft(PeterPepper* peter) : m_pPeter(peter) {}
 
 	void Execute() override
 	{
@@ -30,14 +30,14 @@ public:
 	}
 
 private:
-	dae::PeterPepper* m_pPeter = nullptr;
+	PeterPepper* m_pPeter = nullptr;
 };
 
 //STOP
 class PeterStopMove final : public Command
 {
 public:
-	PeterStopMove(dae::PeterPepper* peter) : m_pPeter(peter) {}
+	PeterStopMove(PeterPepper* peter) : m_pPeter(peter) {}
 
 	void Execute() override
 	{
@@ -45,14 +45,14 @@ public:
 	}
 
 private:
-	dae::PeterPepper* m_pPeter = nullptr;
+	PeterPepper* m_pPeter = nullptr;
 };
 
 //UP
 class PeterMoveUpLadder final : public Command
 {
 public:
-	PeterMoveUpLadder(dae::PeterPepper* peter) : m_pPeter(peter) {}
+	PeterMoveUpLadder(PeterPepper* peter) : m_pPeter(peter) {}
 
 	void Execute() override
 	{
@@ -60,14 +60,14 @@ public:
 	}
 
 private:
-	dae::PeterPepper* m_pPeter = nullptr;
+	PeterPepper* m_pPeter = nullptr;
 };
 
 //DOWN
 class PeterMoveDownLadder final : public Command
 {
 public:
-	PeterMoveDownLadder(dae::PeterPepper* peter) : m_pPeter(peter) {}
+	PeterMoveDownLadder(PeterPepper* peter) : m_pPeter(peter) {}
 
 	void Execute() override
 	{
@@ -75,5 +75,5 @@ public:
 	}
 
 private:
-	dae::PeterPepper* m_pPeter = nullptr;
+	PeterPepper* m_pPeter = nullptr;
 };

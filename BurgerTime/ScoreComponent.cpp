@@ -1,36 +1,35 @@
 #include "RodEnginePCH.h"
 #include "ScoreComponent.h"
-#include "TextComponent.h"
 #include "ResourceManager.h"
 
-dae::ScoreComponent::ScoreComponent(GameObject* gameObject)
+ScoreComponent::ScoreComponent(dae::GameObject* gameObject)
 	: BaseComponent(gameObject)
 	, m_KillValue{ m_BaseKillValue }
 {
 
 }
 
-void dae::ScoreComponent::PostLoad()
+void ScoreComponent::PostLoad()
 {
-	m_pTextPoints = m_pGameObject->GetComponent<TextComponent>();
+	m_pTextPoints = m_pGameObject->GetComponent<dae::TextComponent>();
 }
 
-void dae::ScoreComponent::Notify(Event event)
+void ScoreComponent::Notify(dae::Event event)
 {
 	switch (event)
 	{
-	case Event::EnemyDied:
+	case dae::Event::EnemyDied:
 		EnemyDied();
 		break;
-	case Event::BurgerDropped:
+	case dae::Event::BurgerDropped:
 		BurgerDropped();
 		break;
-	case Event::PlayerReset:
+	case dae::Event::PlayerReset:
 		ResetScore();
 	}
 }
 
-void dae::ScoreComponent::EnemyDied()
+void ScoreComponent::EnemyDied()
 {
 	m_Score += m_KillValue;
 	m_KillValue *= 2;
@@ -39,26 +38,26 @@ void dae::ScoreComponent::EnemyDied()
 	CheckIfGameWon();
 }
 
-void dae::ScoreComponent::BurgerDropped()
+void ScoreComponent::BurgerDropped()
 {
 	m_Score += 50;
 	m_pTextPoints->SetText("Score: " + std::to_string(m_Score));
 	CheckIfGameWon();
 }
 
-void dae::ScoreComponent::ResetScore()
+void ScoreComponent::ResetScore()
 {
 	m_Score = 0;
 	m_KillValue = m_BaseKillValue;
 	m_pTextPoints->SetText("Score: " + std::to_string(m_Score));
 }
 
-void dae::ScoreComponent::SetColor(const SDL_Color& color)
+void ScoreComponent::SetColor(const SDL_Color& color)
 {
 	m_pTextPoints->SetColor(color);
 }
 
-void dae::ScoreComponent::CheckIfGameWon()
+void ScoreComponent::CheckIfGameWon()
 {
 	if (m_Score >= m_ScoreToWin)
 	{
