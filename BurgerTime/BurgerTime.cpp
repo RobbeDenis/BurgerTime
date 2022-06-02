@@ -17,6 +17,7 @@
 #include "BurgerTimeCommands.h"
 #include "Platform.h"
 #include "Ladder.h"
+#include "BurgerPart.h"
 
 void LoadGame();
 
@@ -39,6 +40,8 @@ void LoadGame()
 	auto& scene = dae::SceneManager::GetInstance().CreateScene("Level");
 	auto& input = dae::InputManager::GetInstance();
 	auto go = std::make_shared<dae::GameObject>();
+
+	scene.EnableDebugRender(true);
 
 	// Background
 	dae::RenderComponent* pBackgroundRender = go->AddComponent<dae::RenderComponent>();
@@ -179,7 +182,7 @@ void LoadGame()
 	l = go->AddComponent<Ladder>();
 	l->SetDimensions(ladderWidth, ladderHeight);
 	go->AddComponent<dae::DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
-	go->SetWorldPosition({ 36.f, 307.f, 0.f });
+	go->SetWorldPosition({ 36.f, 306.f, 0.f });
 	scene.Add(go);
 
 	ladderHeight = 213;
@@ -189,7 +192,7 @@ void LoadGame()
 	l = go->AddComponent<Ladder>();
 	l->SetDimensions(ladderWidth, ladderHeight);
 	go->AddComponent<dae::DebugRenderComponent>()->SetDimensions(ladderWidth, ladderHeight);
-	go->SetWorldPosition({ 463.f, 307.f, 0.f });
+	go->SetWorldPosition({ 463.f, 306.f, 0.f });
 	scene.Add(go);
 
 	// Forth row
@@ -206,7 +209,7 @@ void LoadGame()
 	// Adding platforms
 	const std::string platformLabel = "Platform";
 	const SDL_Color platformDebugColor = { 255, 0, 255, 255 };
-	const int platformHeight = 6;
+	const int platformHeight = 8;
 	int platformWidth = 530;
 
 	// Row 1
@@ -218,7 +221,7 @@ void LoadGame()
 	dae::DebugRenderComponent* debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(platformWidth, platformHeight);
 	debugRender->SetColor(platformDebugColor);
-	go->SetWorldPosition({ 25.f, 135.f, 0.f });
+	go->SetWorldPosition({ 25.f, 133.f, 0.f });
 	scene.Add(go);
 
 	// Row 2
@@ -231,7 +234,7 @@ void LoadGame()
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(platformWidth, platformHeight);
 	debugRender->SetColor(platformDebugColor);
-	go->SetWorldPosition({ 25.f, 220.f, 0.f });
+	go->SetWorldPosition({ 25.f, 218.f, 0.f });
 	scene.Add(go);
 
 	platformWidth = 285;
@@ -243,7 +246,7 @@ void LoadGame()
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(platformWidth, platformHeight);
 	debugRender->SetColor(platformDebugColor);
-	go->SetWorldPosition({ 270.f, 220.f, 0.f });
+	go->SetWorldPosition({ 270.f, 218.f, 0.f });
 	scene.Add(go);
 
 	// Row 3
@@ -256,7 +259,7 @@ void LoadGame()
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(platformWidth, platformHeight);
 	debugRender->SetColor(platformDebugColor);
-	go->SetWorldPosition({ 147.f, 262.f, 0.f });
+	go->SetWorldPosition({ 147.f, 260.f, 0.f });
 	scene.Add(go);
 
 	// Row 4
@@ -269,7 +272,7 @@ void LoadGame()
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(platformWidth, platformHeight);
 	debugRender->SetColor(platformDebugColor);
-	go->SetWorldPosition({ 25.f, 304.f, 0.f });
+	go->SetWorldPosition({ 25.f, 302.f, 0.f });
 	scene.Add(go);
 
 	platformWidth = 163;
@@ -281,7 +284,7 @@ void LoadGame()
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(platformWidth, platformHeight);
 	debugRender->SetColor(platformDebugColor);
-	go->SetWorldPosition({ 392.f, 304.f, 0.f });
+	go->SetWorldPosition({ 392.f, 302.f, 0.f });
 	scene.Add(go);
 
 	// Row 5
@@ -294,7 +297,7 @@ void LoadGame()
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(platformWidth, platformHeight);
 	debugRender->SetColor(platformDebugColor);
-	go->SetWorldPosition({ 148.f, 346.f, 0.f });
+	go->SetWorldPosition({ 148.f, 344.f, 0.f });
 	scene.Add(go);
 
 	// Row 6
@@ -307,7 +310,7 @@ void LoadGame()
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(platformWidth, platformHeight);
 	debugRender->SetColor(platformDebugColor);
-	go->SetWorldPosition({ 391.f, 389.f, 0.f });
+	go->SetWorldPosition({ 391.f, 387.f, 0.f });
 	scene.Add(go);
 
 	// Row 7
@@ -320,7 +323,7 @@ void LoadGame()
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(platformWidth, platformHeight);
 	debugRender->SetColor(platformDebugColor);
-	go->SetWorldPosition({ 24.f, 432.f, 0.f });
+	go->SetWorldPosition({ 24.f, 430.f, 0.f });
 	scene.Add(go);
 
 	// Row 8
@@ -333,7 +336,20 @@ void LoadGame()
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(platformWidth, platformHeight);
 	debugRender->SetColor(platformDebugColor);
-	go->SetWorldPosition({ 25.f, 516.f, 0.f });
+	go->SetWorldPosition({ 25.f, 514.f, 0.f });
+	scene.Add(go);
+
+	// Adding Burger parts
+	const std::string burgerLabel = "Burger";
+
+	go = std::make_shared<dae::GameObject>();
+	go->AddComponent<dae::RenderComponent>();
+	collider = go->AddComponent<dae::Collider>();
+	collider->SetLabel(burgerLabel);
+	BurgerPart* b = go->AddComponent<BurgerPart>();
+	b->SetType(PartType::TopBun);
+	debugRender = go->AddComponent<dae::DebugRenderComponent>();
+	debugRender->SetDimensions(100, 30);
 	scene.Add(go);
 
 

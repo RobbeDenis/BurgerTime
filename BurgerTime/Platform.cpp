@@ -3,9 +3,10 @@
 
 Platform::Platform(dae::GameObject* gameObject)
 	: BaseComponent(gameObject)
-	, m_VerticalSnapOffset(3)
+	, m_VerticalSnapOffset(4)
 	, m_Width(0)
 	, m_Height(0)
+	, m_SnapRange(4)
 {
 
 }
@@ -48,4 +49,13 @@ glm::vec3 Platform::CalculateSnappedPos(const glm::vec3& pos, const int height)
 	newPos.z = pos.z;
 
 	return newPos;
+}
+
+bool Platform::CanSnapToPlatform(const glm::vec3& pos, const int height)
+{
+	int otherY = int(pos.y) + height;
+
+	return (int(m_pGameObject->GetWorldPosition().y) <= otherY &&
+			int(m_pGameObject->GetWorldPosition().y) + m_Height + m_SnapRange >= otherY);
+
 }

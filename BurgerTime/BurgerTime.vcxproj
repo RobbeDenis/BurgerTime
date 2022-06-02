@@ -163,6 +163,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BurgerPart.cpp" />
     <ClCompile Include="BurgerTime.cpp" />
     <ClCompile Include="Ladder.cpp" />
     <ClCompile Include="LivesComponent.cpp" />
@@ -171,6 +172,7 @@
     <ClCompile Include="ScoreComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BurgerPart.h" />
     <ClInclude Include="BurgerTimeCommands.h" />
     <ClInclude Include="Ladder.h" />
     <ClInclude Include="LivesComponent.h" />

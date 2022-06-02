@@ -8,7 +8,12 @@ using namespace dae;
 
 unsigned int Scene::m_IdCounter = 0;
 
-Scene::Scene(const std::string& name) : m_Name(name) {}
+Scene::Scene(const std::string& name) 
+	: m_Name(name) 
+	, m_EnableDebug(false)
+{
+
+}
 
 Scene::~Scene() = default;
 
@@ -75,9 +80,12 @@ void Scene::Render() const
 		comp->Render();
 	}
 
-	for (const auto& comp : m_pDebugRenderComponents)
+	if (m_EnableDebug)
 	{
-		comp->Render();
+		for (const auto& comp : m_pDebugRenderComponents)
+		{
+			comp->Render();
+		}
 	}
 }
 

@@ -49,6 +49,7 @@ void PeterPepper::Start()
 	m_Animator->SetAnimation(PeterState::Death);
 	m_Animator->SetDst({ 0,0 }, float(m_Width), float(m_Height));
 
+	HandleOverlaps();
 	SnapToOverlappingPlatform();
 }
 
@@ -61,22 +62,6 @@ void PeterPepper::Update()
 {
 
 	HandleOverlaps();
-
-
-
-
-
-	if (m_OverlapData.EnterPlatform)
-		std::cout << "Plat Enter" << std::endl;
-
-	if (m_OverlapData.ExitPlatform)
-		std::cout << "Plat Exit" << std::endl;
-
-	if (m_OverlapData.EnterLadder)
-		std::cout << "Ladder Enter" << std::endl;
-
-	if (m_OverlapData.ExitLadder)
-		std::cout << "Ladder Exit" << std::endl;
 
 	HandleMovement();
 }
@@ -152,11 +137,13 @@ void PeterPepper::HandleMovement()
 	case PeterState::LadderUp:
 	{
 		newPos.y -= distance;
+		newPos = m_UsingLadder->CalculateClampedPos(newPos, m_Height);
 		break;
 	}
 	case PeterState::LadderDown:
 	{
 		newPos.y += distance;
+		newPos = m_UsingLadder->CalculateClampedPos(newPos, m_Height);
 		break;
 	}
 	default:
@@ -169,18 +156,27 @@ void PeterPepper::HandleMovement()
 
 void PeterPepper::SnapToOverlappingPlatform()
 {
-	HandleOverlaps();
+	if (!m_UsingPlatform)
+		return;
 
-	if (m_OverlapData.EnterPlatform)
+	glm::vec3 newPos = m_pGameObject->GetWorldPosition();
+	newPos = m_UsingPlatform->CalculateSnappedPos(newPos, m_Height);
+	newPos = m_UsingPlatform->CalculateClampedPos(newPos, m_Width);
+	m_pGameObject->SetWorldPosition(newPos);
+}
+
+void PeterPepper::SnapToOverlappingLadder()
+{
+	if (!m_UsingLadder)
+		return;
+
+	if (m_State == PeterState::Idle ||
+		m_State == PeterState::WalkLeft ||
+		m_State == PeterState::WalkRight)
 	{
 		glm::vec3 newPos = m_pGameObject->GetWorldPosition();
-		newPos = m_UsingPlatform->CalculateSnappedPos(newPos, m_Height);
-		newPos = m_UsingPlatform->CalculateClampedPos(newPos, m_Width);
+		newPos = m_UsingLadder->CalculateSnappedPos(newPos, m_Width);
 		m_pGameObject->SetWorldPosition(newPos);
-	}
-	else
-	{
-		std::cout << "Peter did not start on a platform\n";
 	}
 }
 
@@ -188,37 +184,54 @@ bool PeterPepper::CanMoveOnLadder() const
 {
 	if (m_OverlapData.LadderOverlap)
 	{
-		return true;
+		return m_UsingLadder->CanSnapToLadder(m_pGameObject->GetWorldPosition(), m_Width);
+	}
+	return false;
+}
+
+bool PeterPepper::CanMoveOnPlatform() const
+{
+	if (m_OverlapData.PlatformOverlap)
+	{
+		return m_UsingPlatform->CanSnapToPlatform(m_pGameObject->GetWorldPosition(), m_Height);
 	}
 	return false;
 }
 
 void PeterPepper::MoveRight()
 {
+	if (!CanMoveOnPlatform())
+		return;
+
+	SnapToOverlappingPlatform();
+
 	if (m_State != PeterState::WalkRight)
 		m_Animator->SetAnimation(PeterState::WalkRight);
 
 	m_State = PeterState::WalkRight;
 	m_PendingMove = true;
-
-	//std::cout << "MoveRight" << std::endl;
 }
 
 void PeterPepper::MoveLeft()
 {
+	if (!CanMoveOnPlatform())
+		return;
+
+	SnapToOverlappingPlatform();
+
 	if (m_State != PeterState::WalkLeft)
 		m_Animator->SetAnimation(PeterState::WalkLeft);
 
 	m_State = PeterState::WalkLeft;
 	m_PendingMove = true;
-
-	//std::cout << "MoveLeft" << std::endl;
 }
 
 void PeterPepper::MoveUpLadder()
 {
 	if (!CanMoveOnLadder())
 		return;
+
+	SnapToOverlappingLadder();
 
 	if (m_State == PeterState::LadderIdleUp)
 		m_Animator->Play();
@@ -227,14 +240,14 @@ void PeterPepper::MoveUpLadder()
 
 	m_State = PeterState::LadderUp;
 	m_PendingMove = true;
-
-	//std::cout << "LadderUp" << std::endl;
 }
 
 void PeterPepper::MoveDownLadder()
 {
 	if (!CanMoveOnLadder())
 		return;
+
+	SnapToOverlappingLadder();
 
 	if (m_State == PeterState::LadderIdleDown)
 		m_Animator->Play();
@@ -243,8 +256,6 @@ void PeterPepper::MoveDownLadder()
 
 	m_State = PeterState::LadderDown;
 	m_PendingMove = true;
-
-	//std::cout << "LadderDown" << std::endl;
 }
 
 void PeterPepper::StopMoving()
@@ -267,8 +278,6 @@ void PeterPepper::StopMoving()
 		m_State = PeterState::Idle;
 		m_Animator->SetAnimation(PeterState::Idle);
 	}
-
-	//std::cout << "StopMoving" << std::endl;
 }
 
 void PeterPepper::Die()

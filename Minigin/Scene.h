@@ -22,6 +22,8 @@ namespace dae
 		void LateUpdate();
 		void Render() const;
 
+		void EnableDebugRender(bool enable) { m_EnableDebug = enable; };
+
 		~Scene();
 		Scene(const Scene& other) = delete;
 		Scene(Scene&& other) = delete;
@@ -35,6 +37,7 @@ namespace dae
 		std::vector<std::shared_ptr<GameObject>> m_Objects{};
 		std::vector<RenderComponent*> m_pRenderComponents{};
 		std::vector<DebugRenderComponent*> m_pDebugRenderComponents{};
+		bool m_EnableDebug;
 
 		static unsigned int m_IdCounter; 
 	};

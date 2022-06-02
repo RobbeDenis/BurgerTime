@@ -62,7 +62,9 @@ private:
 	void HandleOverlaps();
 	void HandleMovement();
 	void SnapToOverlappingPlatform();
+	void SnapToOverlappingLadder();
 	bool CanMoveOnLadder() const;
+	bool CanMoveOnPlatform() const;
 
 	PeterOverlapData m_OverlapData;
 	std::shared_ptr<dae::Subject> m_pSubject = nullptr;

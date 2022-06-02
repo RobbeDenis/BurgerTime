@@ -8,6 +8,7 @@ public:
 
 	glm::vec3 CalculateClampedPos(const glm::vec3& pos, const int width);
 	glm::vec3 CalculateSnappedPos(const glm::vec3& pos, const int height);
+	bool CanSnapToPlatform(const glm::vec3& pos, const int height);
 
 private:
 	Platform(dae::GameObject* gameObject);
@@ -17,5 +18,6 @@ private:
 	int m_Width;
 	int m_Height;
 	int m_VerticalSnapOffset;
+	int m_SnapRange;
 };
 
