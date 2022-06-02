@@ -17,10 +17,12 @@ class BurgerPart final : public dae::BaseComponent
 public:
 	void PostLoad() override;
 	void FixedUpdate() override;
-	void Update() override;
 
 	void SetType(PartType type);
+	PartType GetType() const { return m_Type; };
+
 	void Fall();
+	void EnableStacking(bool enable) { m_Stacking = enable; };
 
 private:
 	BurgerPart(dae::GameObject* gameObject);
@@ -40,6 +42,13 @@ private:
 	float m_SrcH;
 	float m_SrcW;
 
+	bool m_OverlapPlatform;
+	bool m_PrevOverlapPlatform;
+	bool m_BeginOverlapPlatform;
+
 	bool m_IsFalling;
+	bool m_HitPart;
+
+	bool m_Stacking;
 };
 

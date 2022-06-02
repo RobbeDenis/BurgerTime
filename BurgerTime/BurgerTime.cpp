@@ -19,6 +19,7 @@
 #include "Ladder.h"
 #include "BurgerPart.h"
 #include "Plate.h"
+#include "ScoreComponent.h"
 
 void LoadGame();
 
@@ -42,7 +43,7 @@ void LoadGame()
 	auto& input = dae::InputManager::GetInstance();
 	auto go = std::make_shared<dae::GameObject>();
 
-	scene.EnableDebugRender(true);
+	scene.EnableDebugRender(false);
 
 	// Background
 	dae::RenderComponent* pBackgroundRender = go->AddComponent<dae::RenderComponent>();
@@ -285,7 +286,7 @@ void LoadGame()
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(platformWidth, platformHeight);
 	debugRender->SetColor(platformDebugColor);
-	go->SetWorldPosition({ 391.f, 387.f, 0.f });
+	go->SetWorldPosition({ 392.f, 387.f, 0.f });
 	scene.Add(go);
 
 	// Row 7
@@ -325,8 +326,8 @@ void LoadGame()
 	BurgerPart* b = go->AddComponent<BurgerPart>();
 	b->SetType(PartType::TopBun);
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
-	debugRender->SetDimensions(83, 15);
-	go->SetWorldPosition({ 65.f, 125.f, 0.f });
+	debugRender->SetDimensions(79, 15);
+	go->SetWorldPosition({ 67.f, 125.f, 0.f });
 	scene.Add(go);
 
 	go = std::make_shared<dae::GameObject>();
@@ -336,8 +337,8 @@ void LoadGame()
 	b = go->AddComponent<BurgerPart>();
 	b->SetType(PartType::Lettuce);
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
-	debugRender->SetDimensions(83, 15);
-	go->SetWorldPosition({ 65.f, 211.f, 0.f });
+	debugRender->SetDimensions(79, 15);
+	go->SetWorldPosition({ 67.f, 211.f, 0.f });
 	scene.Add(go);
 
 	go = std::make_shared<dae::GameObject>();
@@ -347,8 +348,8 @@ void LoadGame()
 	b = go->AddComponent<BurgerPart>();
 	b->SetType(PartType::Patty);
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
-	debugRender->SetDimensions(83, 15);
-	go->SetWorldPosition({ 65.f, 295.f, 0.f });
+	debugRender->SetDimensions(79, 15);
+	go->SetWorldPosition({ 67.f, 295.f, 0.f });
 	scene.Add(go);
 
 	go = std::make_shared<dae::GameObject>();
@@ -358,8 +359,8 @@ void LoadGame()
 	b = go->AddComponent<BurgerPart>();
 	b->SetType(PartType::BotBun);
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
-	debugRender->SetDimensions(83, 15);
-	go->SetWorldPosition({ 65.f, 507.f, 0.f });
+	debugRender->SetDimensions(79, 15);
+	go->SetWorldPosition({ 67.f, 507.f, 0.f });
 	scene.Add(go);
 
 	// Colum 2
@@ -370,8 +371,8 @@ void LoadGame()
 	b = go->AddComponent<BurgerPart>();
 	b->SetType(PartType::TopBun);
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
-	debugRender->SetDimensions(83, 15);
-	go->SetWorldPosition({ 188.f, 253.f, 0.f });
+	debugRender->SetDimensions(79, 15);
+	go->SetWorldPosition({ 190.f, 253.f, 0.f });
 	scene.Add(go);
 
 	go = std::make_shared<dae::GameObject>();
@@ -381,8 +382,8 @@ void LoadGame()
 	b = go->AddComponent<BurgerPart>();
 	b->SetType(PartType::Lettuce);
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
-	debugRender->SetDimensions(83, 15);
-	go->SetWorldPosition({ 188.f, 337.f, 0.f });
+	debugRender->SetDimensions(79, 15);
+	go->SetWorldPosition({ 190.f, 337.f, 0.f });
 	scene.Add(go);
 
 	go = std::make_shared<dae::GameObject>();
@@ -392,8 +393,8 @@ void LoadGame()
 	b = go->AddComponent<BurgerPart>();
 	b->SetType(PartType::Patty);
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
-	debugRender->SetDimensions(83, 15);
-	go->SetWorldPosition({ 188.f, 423.f, 0.f });
+	debugRender->SetDimensions(79, 15);
+	go->SetWorldPosition({ 190.f, 423.f, 0.f });
 	scene.Add(go);
 
 	go = std::make_shared<dae::GameObject>();
@@ -403,8 +404,8 @@ void LoadGame()
 	b = go->AddComponent<BurgerPart>();
 	b->SetType(PartType::BotBun);
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
-	debugRender->SetDimensions(83, 15);
-	go->SetWorldPosition({ 188.f, 507.f, 0.f });
+	debugRender->SetDimensions(79, 15);
+	go->SetWorldPosition({ 190.f, 507.f, 0.f });
 	scene.Add(go);
 
 	// Colum 3
@@ -415,8 +416,8 @@ void LoadGame()
 	b = go->AddComponent<BurgerPart>();
 	b->SetType(PartType::TopBun);
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
-	debugRender->SetDimensions(83, 15);
-	go->SetWorldPosition({ 309.f, 125.f, 0.f });
+	debugRender->SetDimensions(79, 15);
+	go->SetWorldPosition({ 312.f, 125.f, 0.f });
 	scene.Add(go);
 
 	go = std::make_shared<dae::GameObject>();
@@ -426,8 +427,8 @@ void LoadGame()
 	b = go->AddComponent<BurgerPart>();
 	b->SetType(PartType::Lettuce);
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
-	debugRender->SetDimensions(83, 15);
-	go->SetWorldPosition({ 309.f, 211.f, 0.f });
+	debugRender->SetDimensions(79, 15);
+	go->SetWorldPosition({ 312.f, 211.f, 0.f });
 	scene.Add(go);
 
 	go = std::make_shared<dae::GameObject>();
@@ -437,8 +438,8 @@ void LoadGame()
 	b = go->AddComponent<BurgerPart>();
 	b->SetType(PartType::Patty);
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
-	debugRender->SetDimensions(83, 15);
-	go->SetWorldPosition({ 309.f, 337.f, 0.f });
+	debugRender->SetDimensions(79, 15);
+	go->SetWorldPosition({ 312.f, 337.f, 0.f });
 	scene.Add(go);
 
 	go = std::make_shared<dae::GameObject>();
@@ -448,8 +449,8 @@ void LoadGame()
 	b = go->AddComponent<BurgerPart>();
 	b->SetType(PartType::BotBun);
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
-	debugRender->SetDimensions(83, 15);
-	go->SetWorldPosition({ 309.f, 507.f, 0.f });
+	debugRender->SetDimensions(79, 15);
+	go->SetWorldPosition({ 312.f, 507.f, 0.f });
 	scene.Add(go);
 
 	// Colum 4
@@ -460,8 +461,8 @@ void LoadGame()
 	b = go->AddComponent<BurgerPart>();
 	b->SetType(PartType::TopBun);
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
-	debugRender->SetDimensions(83, 15);
-	go->SetWorldPosition({ 431.f, 125.f, 0.f });
+	debugRender->SetDimensions(79, 15);
+	go->SetWorldPosition({ 435.f, 125.f, 0.f });
 	scene.Add(go);
 
 	go = std::make_shared<dae::GameObject>();
@@ -471,8 +472,8 @@ void LoadGame()
 	b = go->AddComponent<BurgerPart>();
 	b->SetType(PartType::Lettuce);
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
-	debugRender->SetDimensions(83, 15);
-	go->SetWorldPosition({ 431.f, 211.f, 0.f });
+	debugRender->SetDimensions(79, 15);
+	go->SetWorldPosition({ 435.f, 211.f, 0.f });
 	scene.Add(go);
 
 	go = std::make_shared<dae::GameObject>();
@@ -482,8 +483,8 @@ void LoadGame()
 	b = go->AddComponent<BurgerPart>();
 	b->SetType(PartType::Patty);
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
-	debugRender->SetDimensions(83, 15);
-	go->SetWorldPosition({ 431.f, 295.f, 0.f });
+	debugRender->SetDimensions(79, 15);
+	go->SetWorldPosition({ 435.f, 295.f, 0.f });
 	scene.Add(go);
 
 	go = std::make_shared<dae::GameObject>();
@@ -493,15 +494,15 @@ void LoadGame()
 	b = go->AddComponent<BurgerPart>();
 	b->SetType(PartType::BotBun);
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
-	debugRender->SetDimensions(83, 15);
-	go->SetWorldPosition({ 431.f, 380.f, 0.f });
+	debugRender->SetDimensions(79, 15);
+	go->SetWorldPosition({ 435.f, 380.f, 0.f });
 	scene.Add(go);
 
 	// Add plates
 	const std::string plateLabel = "Plate";
 	go = std::make_shared<dae::GameObject>();
 	collider = go->AddComponent<dae::Collider>();
-	collider->SetLabel(burgerLabel);
+	collider->SetLabel(plateLabel);
 	go->AddComponent<Plate>();
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(30, 80);
@@ -510,7 +511,7 @@ void LoadGame()
 
 	go = std::make_shared<dae::GameObject>();
 	collider = go->AddComponent<dae::Collider>();
-	collider->SetLabel(burgerLabel);
+	collider->SetLabel(plateLabel);
 	go->AddComponent<Plate>();
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(30, 80);
@@ -519,7 +520,7 @@ void LoadGame()
 
 	go = std::make_shared<dae::GameObject>();
 	collider = go->AddComponent<dae::Collider>();
-	collider->SetLabel(burgerLabel);
+	collider->SetLabel(plateLabel);
 	go->AddComponent<Plate>();
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(30, 80);
@@ -528,7 +529,7 @@ void LoadGame()
 
 	go = std::make_shared<dae::GameObject>();
 	collider = go->AddComponent<dae::Collider>();
-	collider->SetLabel(burgerLabel);
+	collider->SetLabel(plateLabel);
 	go->AddComponent<Plate>();
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(30, 80);
@@ -589,4 +590,13 @@ void LoadGame()
 	go->SetWorldPosition(10, 500);
 
 	scene.Add(go);
+
+	//go = std::make_shared<GameObject>();
+	//go->AddComponent<dae::RenderComponent>();
+	//ScoreComponent* peterScore = go->AddComponent<ScoreComponent>();
+	//TextComponent* pTextScore = go->AddComponent<TextComponent>();
+	//pTextScore->SetFont(ResourceManager::GetInstance().LoadFont("Lingua.otf", 22), false);
+	//pTextScore->SetColor({ 233, 252, 62 }, false);
+	//go->SetWorldPosition(30, 370);
+	//scene.Add(go);
 }

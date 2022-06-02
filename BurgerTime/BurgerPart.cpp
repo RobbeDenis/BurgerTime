@@ -1,11 +1,12 @@
 #include "BurgerPart.h"
 #include <RenderComponent.h>
 #include <ETime.h>
+#include "Plate.h"
 
 BurgerPart::BurgerPart(dae::GameObject* gameObject)
 	: BaseComponent(gameObject)
 	, m_Collider(nullptr)
-	, m_Width(83)
+	, m_Width(79)
 	, m_Height(15)
 	, m_Type(PartType::TopBun)
 	, m_SrcH(8.f)
@@ -14,6 +15,11 @@ BurgerPart::BurgerPart(dae::GameObject* gameObject)
 	, m_SrcY(48.f)
 	, m_FallSpeed(80.f)
 	, m_IsFalling(false)
+	, m_OverlapPlatform(false)
+	, m_BeginOverlapPlatform(false)
+	, m_PrevOverlapPlatform(false)
+	, m_HitPart(false)
+	, m_Stacking(false)
 {
 
 }
@@ -41,13 +47,10 @@ void BurgerPart::FixedUpdate()
 	}
 }
 
-void BurgerPart::Update()
-{
-
-}
-
 void BurgerPart::HandleOverlaps()
 {
+	m_OverlapPlatform = false;
+
 	for (dae::Collider* c : m_Collider->GetColliders())
 	{
 		if (c == m_Collider)
@@ -58,12 +61,61 @@ void BurgerPart::HandleOverlaps()
 			if (dae::Collider::IsOverlappingWith(c, m_Collider))
 				Fall();
 		}
+		if (m_IsFalling && !m_HitPart && c->GetLabel() == "Burger")
+		{				
+			if (dae::Collider::IsOverlappingWith(c, m_Collider))
+			{
+				BurgerPart* b = c->GetGameObject()->GetComponent<BurgerPart>();
+
+				if (m_Stacking)
+				{
+					m_IsFalling = false;
+				}
+				// Only let the part fall if this comes from above
+				else if (m_pGameObject->GetWorldPosition().y < c->GetGameObject()->GetWorldPosition().y)
+				{
+					b->Fall();
+					m_HitPart = true;
+				}
+			}
+		}
+		if (c->GetLabel() == "Platform")
+		{
+			if (dae::Collider::IsOverlappingWith(c, m_Collider))
+			{
+				m_OverlapPlatform = true;
+				m_BeginOverlapPlatform = !m_PrevOverlapPlatform;
+
+				if (m_BeginOverlapPlatform)
+				{
+					m_IsFalling = false;
+					m_HitPart = false;
+				}
+			}
+		}
+		if (m_IsFalling && m_Stacking && c->GetLabel() == "Plate")
+		{
+			if (dae::Collider::IsOverlappingWith(c, m_Collider))
+			{
+				Plate* p = c->GetGameObject()->GetComponent<Plate>();
+
+				glm::vec3 newPos = m_pGameObject->GetWorldPosition();
+				if (p->CalculateClampedPos(newPos, m_Height))
+				{
+					m_pGameObject->SetWorldPosition(newPos);
+					m_IsFalling = false;
+				}
+			}
+		}
 	}
+
+	m_PrevOverlapPlatform = m_OverlapPlatform;
 }
 
 void BurgerPart::Fall()
 {
 	m_IsFalling = true;
+	m_HitPart = false;
 }
 
 void BurgerPart::SetType(PartType type)
