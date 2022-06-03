@@ -31,7 +31,7 @@ void LivesComponent::Notify(BaseComponent* pComponent, dae::Event event)
 
 void LivesComponent::PlayerDied(PeterPepper* peter)
 {
-	m_pTextLives->SetText("Lives: " + std::to_string(peter->GetLives()));
+	m_pTextLives->SetText(std::to_string(peter->GetLives()));
 }
 
 void LivesComponent::SetColor(const SDL_Color& color)

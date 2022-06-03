@@ -20,6 +20,7 @@
 #include "BurgerPart.h"
 #include "Plate.h"
 #include "ScoreComponent.h"
+#include "LivesComponent.h"
 
 void LoadGame();
 
@@ -63,6 +64,42 @@ void LoadGame()
 	pFpsCounter->UseSmoothing(true);
 	go->SetWorldPosition(7, 7);
 	scene.Add(go);
+
+	// Score component
+	go = std::make_shared<dae::GameObject>();
+	go->AddComponent<dae::RenderComponent>();
+	ScoreComponent* peterScore = go->AddComponent<ScoreComponent>();
+	dae::TextComponent* pTextScore = go->AddComponent<dae::TextComponent>();
+	pTextScore->SetFont(dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 22), false);
+	pTextScore->SetColor({ 255, 255, 255 }, false);
+	go->SetWorldPosition(40, 23);
+	scene.Add(go);
+
+	auto child = go->AddChild();
+	child->AddComponent<dae::RenderComponent>();
+	pTextScore = child->AddComponent<dae::TextComponent>();
+	pTextScore->SetFont(dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 22), false);
+	pTextScore->SetColor({ 255, 0, 0 }, false);
+	pTextScore->SetText("1UP");
+	child->SetLocalPosition({ 20, -20, 0 });
+
+	// Lives
+	go = std::make_shared<dae::GameObject>();
+	go->AddComponent<dae::RenderComponent>();
+	LivesComponent* peterLives = go->AddComponent<LivesComponent>();
+	dae::TextComponent* pTextLives = go->AddComponent<dae::TextComponent>();
+	pTextLives->SetFont(dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 22), false);
+	pTextLives->SetColor({ 255, 255, 255 }, false);
+	go->SetWorldPosition(550, 23);
+	scene.Add(go);
+
+	child = go->AddChild();
+	auto lRender = child->AddComponent<dae::RenderComponent>();
+	lRender->SetTexture("BurgertimeSprites.png");
+	lRender->UseSrc(true);
+	lRender->SetSrc(216.f, 9.f, 24.f, 6.f);
+	lRender->SetDst(0.f, 0.f, 50.f, 15.f);
+	child->SetLocalPosition({ -20, -20, 0 });
 
 	// Adding Ladders
 	const std::string ladderLabel = "Ladder";
@@ -325,6 +362,7 @@ void LoadGame()
 	collider->SetLabel(burgerLabel);
 	BurgerPart* b = go->AddComponent<BurgerPart>();
 	b->SetType(PartType::TopBun);
+	b->AddObserver(peterScore);
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(79, 15);
 	go->SetWorldPosition({ 67.f, 125.f, 0.f });
@@ -336,6 +374,7 @@ void LoadGame()
 	collider->SetLabel(burgerLabel);
 	b = go->AddComponent<BurgerPart>();
 	b->SetType(PartType::Lettuce);
+	b->AddObserver(peterScore);
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(79, 15);
 	go->SetWorldPosition({ 67.f, 211.f, 0.f });
@@ -347,6 +386,7 @@ void LoadGame()
 	collider->SetLabel(burgerLabel);
 	b = go->AddComponent<BurgerPart>();
 	b->SetType(PartType::Patty);
+	b->AddObserver(peterScore);
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(79, 15);
 	go->SetWorldPosition({ 67.f, 295.f, 0.f });
@@ -358,6 +398,7 @@ void LoadGame()
 	collider->SetLabel(burgerLabel);
 	b = go->AddComponent<BurgerPart>();
 	b->SetType(PartType::BotBun);
+	b->AddObserver(peterScore);
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(79, 15);
 	go->SetWorldPosition({ 67.f, 507.f, 0.f });
@@ -370,6 +411,7 @@ void LoadGame()
 	collider->SetLabel(burgerLabel);
 	b = go->AddComponent<BurgerPart>();
 	b->SetType(PartType::TopBun);
+	b->AddObserver(peterScore);
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(79, 15);
 	go->SetWorldPosition({ 190.f, 253.f, 0.f });
@@ -381,6 +423,7 @@ void LoadGame()
 	collider->SetLabel(burgerLabel);
 	b = go->AddComponent<BurgerPart>();
 	b->SetType(PartType::Lettuce);
+	b->AddObserver(peterScore);
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(79, 15);
 	go->SetWorldPosition({ 190.f, 337.f, 0.f });
@@ -392,6 +435,7 @@ void LoadGame()
 	collider->SetLabel(burgerLabel);
 	b = go->AddComponent<BurgerPart>();
 	b->SetType(PartType::Patty);
+	b->AddObserver(peterScore);
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(79, 15);
 	go->SetWorldPosition({ 190.f, 423.f, 0.f });
@@ -403,6 +447,7 @@ void LoadGame()
 	collider->SetLabel(burgerLabel);
 	b = go->AddComponent<BurgerPart>();
 	b->SetType(PartType::BotBun);
+	b->AddObserver(peterScore);
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(79, 15);
 	go->SetWorldPosition({ 190.f, 507.f, 0.f });
@@ -415,6 +460,7 @@ void LoadGame()
 	collider->SetLabel(burgerLabel);
 	b = go->AddComponent<BurgerPart>();
 	b->SetType(PartType::TopBun);
+	b->AddObserver(peterScore);
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(79, 15);
 	go->SetWorldPosition({ 312.f, 125.f, 0.f });
@@ -426,6 +472,7 @@ void LoadGame()
 	collider->SetLabel(burgerLabel);
 	b = go->AddComponent<BurgerPart>();
 	b->SetType(PartType::Lettuce);
+	b->AddObserver(peterScore);
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(79, 15);
 	go->SetWorldPosition({ 312.f, 211.f, 0.f });
@@ -437,6 +484,7 @@ void LoadGame()
 	collider->SetLabel(burgerLabel);
 	b = go->AddComponent<BurgerPart>();
 	b->SetType(PartType::Patty);
+	b->AddObserver(peterScore);
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(79, 15);
 	go->SetWorldPosition({ 312.f, 337.f, 0.f });
@@ -448,6 +496,7 @@ void LoadGame()
 	collider->SetLabel(burgerLabel);
 	b = go->AddComponent<BurgerPart>();
 	b->SetType(PartType::BotBun);
+	b->AddObserver(peterScore);
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(79, 15);
 	go->SetWorldPosition({ 312.f, 507.f, 0.f });
@@ -460,6 +509,7 @@ void LoadGame()
 	collider->SetLabel(burgerLabel);
 	b = go->AddComponent<BurgerPart>();
 	b->SetType(PartType::TopBun);
+	b->AddObserver(peterScore);
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(79, 15);
 	go->SetWorldPosition({ 435.f, 125.f, 0.f });
@@ -471,6 +521,7 @@ void LoadGame()
 	collider->SetLabel(burgerLabel);
 	b = go->AddComponent<BurgerPart>();
 	b->SetType(PartType::Lettuce);
+	b->AddObserver(peterScore);
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(79, 15);
 	go->SetWorldPosition({ 435.f, 211.f, 0.f });
@@ -482,6 +533,7 @@ void LoadGame()
 	collider->SetLabel(burgerLabel);
 	b = go->AddComponent<BurgerPart>();
 	b->SetType(PartType::Patty);
+	b->AddObserver(peterScore);
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(79, 15);
 	go->SetWorldPosition({ 435.f, 295.f, 0.f });
@@ -493,6 +545,7 @@ void LoadGame()
 	collider->SetLabel(burgerLabel);
 	b = go->AddComponent<BurgerPart>();
 	b->SetType(PartType::BotBun);
+	b->AddObserver(peterScore);
 	debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(79, 15);
 	go->SetWorldPosition({ 435.f, 380.f, 0.f });
@@ -587,16 +640,11 @@ void LoadGame()
 	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonUp, dae::ButtonState::Released }, std::make_unique<PeterStopMove>(pPeter));
 	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonDown, dae::ButtonState::Released }, std::make_unique<PeterStopMove>(pPeter));
 
+	// Adding observors
+	pPeter->AddObserver(peterScore);
+	pPeter->AddObserver(peterLives);
+
 	go->SetWorldPosition(10, 500);
 
 	scene.Add(go);
-
-	//go = std::make_shared<GameObject>();
-	//go->AddComponent<dae::RenderComponent>();
-	//ScoreComponent* peterScore = go->AddComponent<ScoreComponent>();
-	//TextComponent* pTextScore = go->AddComponent<TextComponent>();
-	//pTextScore->SetFont(ResourceManager::GetInstance().LoadFont("Lingua.otf", 22), false);
-	//pTextScore->SetColor({ 233, 252, 62 }, false);
-	//go->SetWorldPosition(30, 370);
-	//scene.Add(go);
 }

@@ -21,7 +21,7 @@ BurgerPart::BurgerPart(dae::GameObject* gameObject)
 	, m_HitPart(false)
 	, m_Stacking(false)
 {
-
+	m_pSubject = std::make_shared<dae::Subject>();
 }
 
 void BurgerPart::PostLoad()
@@ -124,4 +124,9 @@ void BurgerPart::SetType(PartType type)
 
 	dae::RenderComponent* renderComp = m_pGameObject->GetComponent<dae::RenderComponent>();
 	renderComp->SetSrc(m_SrcX, m_SrcY + (int(m_Type) * m_SrcH), m_SrcW, m_SrcH);
+}
+
+void BurgerPart::AddObserver(dae::Observer* observer)
+{
+	m_pSubject->AddObserver(observer);
 }

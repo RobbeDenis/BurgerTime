@@ -1,6 +1,7 @@
 #pragma once
 #include <BaseComponent.h>
 #include <Collider.h>
+#include <Subject.h>
 
 enum class PartType
 {
@@ -18,6 +19,8 @@ public:
 	void PostLoad() override;
 	void FixedUpdate() override;
 
+	void AddObserver(dae::Observer* observer);
+
 	void SetType(PartType type);
 	PartType GetType() const { return m_Type; };
 
@@ -31,6 +34,7 @@ private:
 
 	void HandleOverlaps();
 
+	std::shared_ptr<dae::Subject> m_pSubject;
 	dae::Collider* m_Collider;
 	PartType m_Type;
 	int m_Width;

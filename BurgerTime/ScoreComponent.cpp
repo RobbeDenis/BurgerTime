@@ -34,14 +34,14 @@ void ScoreComponent::EnemyDied()
 	m_Score += m_KillValue;
 	m_KillValue *= 2;
 
-	m_pTextPoints->SetText("Score: " + std::to_string(m_Score));
+	m_pTextPoints->SetText(std::to_string(m_Score));
 	CheckIfGameWon();
 }
 
 void ScoreComponent::BurgerDropped()
 {
 	m_Score += 50;
-	m_pTextPoints->SetText("Score: " + std::to_string(m_Score));
+	m_pTextPoints->SetText(std::to_string(m_Score));
 	CheckIfGameWon();
 }
 
@@ -49,7 +49,7 @@ void ScoreComponent::ResetScore()
 {
 	m_Score = 0;
 	m_KillValue = m_BaseKillValue;
-	m_pTextPoints->SetText("Score: " + std::to_string(m_Score));
+	m_pTextPoints->SetText(std::to_string(m_Score));
 }
 
 void ScoreComponent::SetColor(const SDL_Color& color)
@@ -59,8 +59,5 @@ void ScoreComponent::SetColor(const SDL_Color& color)
 
 void ScoreComponent::CheckIfGameWon()
 {
-	if (m_Score >= m_ScoreToWin)
-	{
-		
-	}
+	
 }
