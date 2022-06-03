@@ -42,6 +42,12 @@
     <ClCompile Include="Plate.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Character.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LivesComponent.h">
@@ -70,6 +76,12 @@
     </ClInclude>
     <ClInclude Include="BTEvents.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Character.h">
+      <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

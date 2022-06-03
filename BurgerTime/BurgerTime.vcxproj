@@ -165,6 +165,8 @@
   <ItemGroup>
     <ClCompile Include="BurgerPart.cpp" />
     <ClCompile Include="BurgerTime.cpp" />
+    <ClCompile Include="Character.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Ladder.cpp" />
     <ClCompile Include="LivesComponent.cpp" />
     <ClCompile Include="PeterPepper.cpp" />
@@ -176,6 +178,8 @@
     <ClInclude Include="BTEvents.h" />
     <ClInclude Include="BurgerPart.h" />
     <ClInclude Include="BurgerTimeCommands.h" />
+    <ClInclude Include="Character.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Ladder.h" />
     <ClInclude Include="LivesComponent.h" />
     <ClInclude Include="PeterPepper.h" />
