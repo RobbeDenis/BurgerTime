@@ -33,6 +33,10 @@ private:
 	friend T* dae::GameObject::AddComponent();
 
 	void HandleOverlaps();
+	void ResetSegments();
+
+	std::vector<bool> m_Segments;
+	int m_TotalSegments;
 
 	std::shared_ptr<dae::Subject> m_pSubject;
 	dae::Collider* m_Collider;
@@ -40,6 +44,7 @@ private:
 	int m_Width;
 	int m_Height;
 	float m_FallSpeed;
+	int m_DisWalkedLeft;
 
 	float m_SrcX;
 	float m_SrcY;

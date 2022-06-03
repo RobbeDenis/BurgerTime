@@ -21,8 +21,15 @@ BurgerPart::BurgerPart(dae::GameObject* gameObject)
 	, m_PrevOverlapPlatform(false)
 	, m_HitPart(false)
 	, m_Stacking(false)
+	, m_TotalSegments(7)
+	, m_Segments{}
 {
 	m_pSubject = std::make_shared<dae::Subject>();
+
+	for (int i = 0; i < m_TotalSegments; i++)
+	{
+		m_Segments.push_back(false);
+	}
 }
 
 void BurgerPart::PostLoad()
@@ -60,7 +67,25 @@ void BurgerPart::HandleOverlaps()
 		if (c->GetLabel() == "Player")
 		{
 			if (dae::Collider::IsOverlappingWith(c, m_Collider))
-				Fall();
+			{
+				int otherMid = int(c->GetGameObject()->GetWorldPosition().x) + (c->GetRect().w / 2);
+				int left = int(m_pGameObject->GetWorldPosition().x);
+				int segmentLength = m_Width / m_TotalSegments;
+
+				for (int i = 0; i < m_TotalSegments; i++)
+				{
+					if (otherMid >= left + (segmentLength * i) &&
+						otherMid <= left + (segmentLength * i + 1))
+						m_Segments[i] = true;
+				}
+
+				bool canFall = true;
+				for (bool b : m_Segments)
+					canFall &= b;
+
+				if (canFall)
+					Fall();
+			}
 		}
 		if (m_IsFalling && !m_HitPart && c->GetLabel() == "Burger")
 		{				
@@ -119,6 +144,13 @@ void BurgerPart::Fall()
 {
 	m_IsFalling = true;
 	m_HitPart = false;
+	ResetSegments();
+}
+
+void BurgerPart::ResetSegments()
+{
+	for (int i = 0; i < m_TotalSegments; i++)
+		m_Segments[i] = false;
 }
 
 void BurgerPart::SetType(PartType type)
