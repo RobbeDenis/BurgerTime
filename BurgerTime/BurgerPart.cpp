@@ -2,6 +2,7 @@
 #include <RenderComponent.h>
 #include <ETime.h>
 #include "Plate.h"
+#include "BTEvents.h"
 
 BurgerPart::BurgerPart(dae::GameObject* gameObject)
 	: BaseComponent(gameObject)
@@ -69,6 +70,7 @@ void BurgerPart::HandleOverlaps()
 
 				if (m_Stacking)
 				{
+					m_pSubject->Notify(BTEvents::BurgerDropped);
 					m_IsFalling = false;
 				}
 				// Only let the part fall if this comes from above
@@ -104,6 +106,7 @@ void BurgerPart::HandleOverlaps()
 				{
 					m_pGameObject->SetWorldPosition(newPos);
 					m_IsFalling = false;
+					m_pSubject->Notify(BTEvents::BurgerDropped);
 				}
 			}
 		}
