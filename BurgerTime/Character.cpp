@@ -11,6 +11,7 @@ Character::Character(dae::GameObject* gameObject)
 	, m_State(CharacterState::Idle)
 	, m_PendingMove(false)
 	, m_MovementSpeed(100.f)
+	, m_SpawnPos{ 0.f,0.f,0.f }
 {
 	m_pSubject = std::make_shared<dae::Subject>();
 }
@@ -28,14 +29,16 @@ void Character::PostLoad()
 
 void Character::Start()
 {
-	m_Animator->SetAnimation(CharacterState::Idle);
-	m_Animator->SetDst({ 0,0 }, float(m_Width), float(m_Height));
 	HandleOverlaps();
 	SnapToOverlappingPlatform();
+	m_SpawnPos = m_pGameObject->GetWorldPosition();
 }
 
 void Character::Update()
 {
+	if (m_Killed)
+		return;
+
 	HandleOverlaps();
 	HandleMovement();
 }
@@ -174,7 +177,7 @@ bool Character::CanMoveOnPlatform() const
 
 void Character::MoveRight()
 {
-	if (!CanMoveOnPlatform())
+	if (m_Killed || !CanMoveOnPlatform())
 		return;
 
 	SnapToOverlappingPlatform();
@@ -188,7 +191,7 @@ void Character::MoveRight()
 
 void Character::MoveLeft()
 {
-	if (!CanMoveOnPlatform())
+	if (m_Killed || !CanMoveOnPlatform())
 		return;
 
 	SnapToOverlappingPlatform();
@@ -202,7 +205,7 @@ void Character::MoveLeft()
 
 void Character::MoveUpLadder()
 {
-	if (!CanMoveOnLadder())
+	if (m_Killed || !CanMoveOnLadder())
 		return;
 
 	SnapToOverlappingLadder();
@@ -218,7 +221,7 @@ void Character::MoveUpLadder()
 
 void Character::MoveDownLadder()
 {
-	if (!CanMoveOnLadder())
+	if (m_Killed || !CanMoveOnLadder())
 		return;
 
 	SnapToOverlappingLadder();
@@ -234,7 +237,7 @@ void Character::MoveDownLadder()
 
 void Character::StopMoving()
 {
-	if (m_PendingMove)
+	if (m_Killed || m_PendingMove)
 		return;
 
 	if (m_State == CharacterState::LadderDown)
@@ -252,6 +255,14 @@ void Character::StopMoving()
 		m_State = CharacterState::Idle;
 		m_Animator->SetAnimation(CharacterState::Idle);
 	}
+}
+
+void Character::Respawn()
+{
+	m_pGameObject->SetWorldPosition(m_SpawnPos);
+	m_State = CharacterState::Idle;
+	m_Animator->SetAnimation(m_State);
+	m_Killed = false;
 }
 
 void Character::AddObserver(dae::Observer* observer)

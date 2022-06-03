@@ -47,6 +47,9 @@ public:
 	virtual void MoveDownLadder();
 	virtual void StopMoving();
 
+	virtual void Kill() {};
+	virtual void Respawn();
+
 	void AddObserver(dae::Observer* observer);
 
 protected:
@@ -61,6 +64,7 @@ protected:
 	bool CanMoveOnLadder() const;
 	bool CanMoveOnPlatform() const;
 
+	glm::vec3 m_SpawnPos;
 	OverlapData m_OverlapData;
 	std::shared_ptr<dae::Subject> m_pSubject = nullptr;
 	dae::Animator* m_Animator;
@@ -72,5 +76,6 @@ protected:
 	float m_MovementSpeed;
 	int m_State;
 	bool m_PendingMove;
+	bool m_Killed;
 };
 

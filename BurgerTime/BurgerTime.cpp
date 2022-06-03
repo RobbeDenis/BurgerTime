@@ -21,6 +21,7 @@
 #include "Plate.h"
 #include "ScoreComponent.h"
 #include "LivesComponent.h"
+#include "Enemy.h"
 
 void LoadGame();
 
@@ -44,7 +45,7 @@ void LoadGame()
 	auto& input = dae::InputManager::GetInstance();
 	auto go = std::make_shared<dae::GameObject>();
 
-	scene.EnableDebugRender(false);
+	scene.EnableDebugRender(true);
 
 	// Background
 	dae::RenderComponent* pBackgroundRender = go->AddComponent<dae::RenderComponent>();
@@ -589,34 +590,16 @@ void LoadGame()
 	go->SetWorldPosition({ 450.f, 548.f, 0.f });
 	scene.Add(go);
 
-	//// Player 1
-	//// Creating Peter Pepper UI
-	//// Lives
-	//go = std::make_shared<GameObject>();
-	//go->AddComponent<RenderComponent>();
-	//LivesComponent* peterLives = go->AddComponent<LivesComponent>();
-	//TextComponent* pTextLives = go->AddComponent<TextComponent>();
-	//pTextLives->SetFont(ResourceManager::GetInstance().LoadFont("Lingua.otf", 22), false);
-	//pTextLives->SetColor({ 233, 252, 62 }, false);
-	//go->SetWorldPosition(30, 350);
-	//scene.Add(go);
-
-	//// Score
-	//go = std::make_shared<GameObject>();
-	//go->AddComponent<RenderComponent>();
-	//ScoreComponent* peterScore = go->AddComponent<ScoreComponent>();
-	//TextComponent* pTextScore = go->AddComponent<TextComponent>();
-	//pTextScore->SetFont(ResourceManager::GetInstance().LoadFont("Lingua.otf", 22), false);
-	//pTextScore->SetColor({ 233, 252, 62 }, false);
-	//go->SetWorldPosition(30, 370);
-	//scene.Add(go);
-
-	//// Creating Peter Pepper
-	//go = std::make_shared<GameObject>();
-	//PeterPepper* peter = go->AddComponent<PeterPepper>();
-	//peter->AddObserver(peterLives);
-	//peter->AddObserver(peterScore);
-	//scene.Add(go);
+	// Adding hot dogs
+	go = std::make_shared<dae::GameObject>();
+	go->AddComponent<dae::Animator>();
+	go->AddComponent<dae::Collider>()->SetLabel("Enemy");
+	go->AddComponent<dae::DebugRenderComponent>();
+	go->AddComponent<dae::RenderComponent>()->SetTexture("BurgertimeSprites.png");
+	Enemy* e = go->AddComponent<Enemy>();
+	e->SetType(EnemyType::HotDog);
+	go->SetWorldPosition({ 40.f, 120.f, 0.f });
+	scene.Add(go);
 
 	// CREATING PETER PEPPER
 	go = std::make_shared<dae::GameObject>();
@@ -630,15 +613,15 @@ void LoadGame()
 	pPeterPepperRender->SetTexture("BurgertimeSprites.png");
 
 	// Peter pepper
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonRight, dae::ButtonState::Down }, std::make_unique<PeterMoveRight>(pPeter));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonLeft, dae::ButtonState::Down }, std::make_unique<PeterMoveLeft>(pPeter));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonUp, dae::ButtonState::Down }, std::make_unique<PeterMoveUpLadder>(pPeter));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonDown, dae::ButtonState::Down }, std::make_unique<PeterMoveDownLadder>(pPeter));
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonRight, dae::ButtonState::Down }, std::make_unique<IMoveRight>(pPeter));
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonLeft, dae::ButtonState::Down }, std::make_unique<IMoveLeft>(pPeter));
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonUp, dae::ButtonState::Down }, std::make_unique<IMoveUpLadder>(pPeter));
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonDown, dae::ButtonState::Down }, std::make_unique<IMoveDownLadder>(pPeter));
 
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonRight, dae::ButtonState::Released }, std::make_unique<PeterStopMove>(pPeter));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonLeft, dae::ButtonState::Released }, std::make_unique<PeterStopMove>(pPeter));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonUp, dae::ButtonState::Released }, std::make_unique<PeterStopMove>(pPeter));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonDown, dae::ButtonState::Released }, std::make_unique<PeterStopMove>(pPeter));
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonRight, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter));
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonLeft, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter));
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonUp, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter));
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonDown, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter));
 
 	// Adding observors
 	pPeter->AddObserver(peterScore);

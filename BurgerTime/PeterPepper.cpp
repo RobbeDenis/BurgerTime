@@ -1,11 +1,14 @@
 #include "PeterPepper.h"
 #include <InputManager.h>
+#include <ETime.h>
 #include "BTEvents.h"
 
 
 PeterPepper::PeterPepper(dae::GameObject* gameObject)
 	: Character(gameObject)
 	, m_Lives(3)
+	, m_MaxDeathTime(2.5f)
+	, m_DeathTime(0.f)
 {
 	
 }
@@ -30,8 +33,40 @@ void PeterPepper::PostLoad()
 	m_Animator->AddAnimation(CharacterState::Death, 5, { 64,16 }, 16, 16, false, animDeathSpeed, false);
 }
 
+void PeterPepper::Start()
+{
+	Character::Start();
+	m_Animator->SetAnimation(CharacterState::Idle);
+	m_Animator->SetDst({ 0,0 }, float(m_Width), float(m_Height));
+}
+
+void PeterPepper::Update()
+{
+	Character::Update();
+
+	if (m_Killed)
+	{
+		m_DeathTime += dae::ETime::GetInstance().GetDeltaTime();
+		if (m_DeathTime >= m_MaxDeathTime)
+		{
+			Respawn();
+			m_DeathTime = 0.f;
+		}
+	}
+}
+
+void PeterPepper::Kill()
+{
+	if (m_Killed)
+		return;
+
+	Die();
+}
+
 void PeterPepper::Die()
 {
+	m_Killed = true;
+	m_Animator->SetAnimation(CharacterState::Death);
 	--m_Lives;
 	m_pSubject->Notify(this, BTEvents::PlayerDied);
 }

@@ -77,7 +77,7 @@ void dae::Animator::SetAnimation(const int id)
 
 void dae::Animator::FixedUpdate() 
 {
-	if (m_Pause)
+	if (m_Pause || m_Animations.empty())
 		return;
 
 	const AnimationData& animation = m_Animations[m_CurrentAnimationIndex];

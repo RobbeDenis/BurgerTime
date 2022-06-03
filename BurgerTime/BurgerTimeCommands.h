@@ -1,13 +1,13 @@
 #pragma once
 #include <Command.h>
-#include "PeterPepper.h"
+#include "Character.h"
 
 // Peter Pepper inputs
 // RIGHT
-class PeterMoveRight final : public Command
+class IMoveRight final : public Command
 {
 public:
-	PeterMoveRight(PeterPepper* peter) : m_pPeter(peter) {}
+	IMoveRight(Character* peter) : m_pPeter(peter) {}
 
 	void Execute() override
 	{
@@ -15,14 +15,14 @@ public:
 	}
 
 private:
-	PeterPepper* m_pPeter = nullptr;
+	Character* m_pPeter = nullptr;
 };
 
 //LEFT
-class PeterMoveLeft final : public Command
+class IMoveLeft final : public Command
 {
 public:
-	PeterMoveLeft(PeterPepper* peter) : m_pPeter(peter) {}
+	IMoveLeft(Character* peter) : m_pPeter(peter) {}
 
 	void Execute() override
 	{
@@ -30,14 +30,14 @@ public:
 	}
 
 private:
-	PeterPepper* m_pPeter = nullptr;
+	Character* m_pPeter = nullptr;
 };
 
 //STOP
-class PeterStopMove final : public Command
+class IStopMove final : public Command
 {
 public:
-	PeterStopMove(PeterPepper* peter) : m_pPeter(peter) {}
+	IStopMove(Character* peter) : m_pPeter(peter) {}
 
 	void Execute() override
 	{
@@ -45,14 +45,14 @@ public:
 	}
 
 private:
-	PeterPepper* m_pPeter = nullptr;
+	Character* m_pPeter = nullptr;
 };
 
 //UP
-class PeterMoveUpLadder final : public Command
+class IMoveUpLadder final : public Command
 {
 public:
-	PeterMoveUpLadder(PeterPepper* peter) : m_pPeter(peter) {}
+	IMoveUpLadder(Character* peter) : m_pPeter(peter) {}
 
 	void Execute() override
 	{
@@ -60,14 +60,14 @@ public:
 	}
 
 private:
-	PeterPepper* m_pPeter = nullptr;
+	Character* m_pPeter = nullptr;
 };
 
 //DOWN
-class PeterMoveDownLadder final : public Command
+class IMoveDownLadder final : public Command
 {
 public:
-	PeterMoveDownLadder(PeterPepper* peter) : m_pPeter(peter) {}
+	IMoveDownLadder(Character* peter) : m_pPeter(peter) {}
 
 	void Execute() override
 	{
@@ -75,5 +75,5 @@ public:
 	}
 
 private:
-	PeterPepper* m_pPeter = nullptr;
+	Character* m_pPeter = nullptr;
 };
