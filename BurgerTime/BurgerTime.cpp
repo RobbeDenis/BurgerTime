@@ -22,6 +22,7 @@
 #include "ScoreComponent.h"
 #include "LivesComponent.h"
 #include "Enemy.h"
+#include "HotdogController.h"
 
 void LoadGame();
 
@@ -45,7 +46,7 @@ void LoadGame()
 	auto& input = dae::InputManager::GetInstance();
 	auto go = std::make_shared<dae::GameObject>();
 
-	scene.EnableDebugRender(true);
+	scene.EnableDebugRender(false);
 
 	// Background
 	dae::RenderComponent* pBackgroundRender = go->AddComponent<dae::RenderComponent>();
@@ -590,17 +591,6 @@ void LoadGame()
 	go->SetWorldPosition({ 450.f, 548.f, 0.f });
 	scene.Add(go);
 
-	// Adding hot dogs
-	go = std::make_shared<dae::GameObject>();
-	go->AddComponent<dae::Animator>();
-	go->AddComponent<dae::Collider>()->SetLabel("Enemy");
-	go->AddComponent<dae::DebugRenderComponent>();
-	go->AddComponent<dae::RenderComponent>()->SetTexture("BurgertimeSprites.png");
-	Enemy* e = go->AddComponent<Enemy>();
-	e->SetType(EnemyType::HotDog);
-	go->SetWorldPosition({ 40.f, 120.f, 0.f });
-	scene.Add(go);
-
 	// CREATING PETER PEPPER
 	go = std::make_shared<dae::GameObject>();
 
@@ -629,5 +619,29 @@ void LoadGame()
 
 	go->SetWorldPosition(10, 500);
 
+	scene.Add(go);
+
+	// Adding hot dogs
+	go = std::make_shared<dae::GameObject>();
+	go->AddComponent<dae::Animator>();
+	go->AddComponent<HotdogController>()->SetTarget(pPeter);
+	go->AddComponent<dae::Collider>()->SetLabel("Enemy");
+	go->AddComponent<dae::DebugRenderComponent>();
+	go->AddComponent<dae::RenderComponent>()->SetTexture("BurgertimeSprites.png");
+	Enemy* e = go->AddComponent<Enemy>();
+	e->SetType(EnemyType::HotDog);
+	go->SetWorldPosition({ 40.f, 120.f, 0.f });
+	scene.Add(go);
+
+	// Adding Egg
+	go = std::make_shared<dae::GameObject>();
+	go->AddComponent<dae::Animator>();
+	go->AddComponent<HotdogController>()->SetTarget(pPeter);
+	go->AddComponent<dae::Collider>()->SetLabel("Enemy");
+	go->AddComponent<dae::DebugRenderComponent>();
+	go->AddComponent<dae::RenderComponent>()->SetTexture("BurgertimeSprites.png");
+	e = go->AddComponent<Enemy>();
+	e->SetType(EnemyType::Egg);
+	go->SetWorldPosition({ 500.f, 120.f, 0.f });
 	scene.Add(go);
 }

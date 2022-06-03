@@ -14,14 +14,14 @@ BurgerPart::BurgerPart(dae::GameObject* gameObject)
 	, m_SrcW(31.f)
 	, m_SrcX(112.f)
 	, m_SrcY(48.f)
-	, m_FallSpeed(80.f)
+	, m_FallSpeed(150.f)
 	, m_IsFalling(false)
 	, m_OverlapPlatform(false)
 	, m_BeginOverlapPlatform(false)
 	, m_PrevOverlapPlatform(false)
 	, m_HitPart(false)
 	, m_Stacking(false)
-	, m_TotalSegments(7)
+	, m_TotalSegments(5)
 	, m_Segments{}
 {
 	m_pSubject = std::make_shared<dae::Subject>();

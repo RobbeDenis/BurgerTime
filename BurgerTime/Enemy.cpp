@@ -12,16 +12,18 @@ void Enemy::PostLoad()
 	Character::PostLoad();
 
 	const float baseY = 32.f;
+	const float animSpeed = 0.1f;
 
 	m_Animator = m_pGameObject->GetComponent<dae::Animator>();
 	m_Animator->AddAnimation(CharacterState::Idle, 1, { 0, 32 + baseY * int(m_Type) }, 16, 16);
-	m_Animator->AddAnimation(CharacterState::WalkLeft, 2, { 32, 32 + baseY * int(m_Type) }, 16, 16);
-	m_Animator->AddAnimation(CharacterState::WalkRight, 2, { 32, 32 + baseY * int(m_Type) }, 16, 16, true);
-	m_Animator->AddAnimation(CharacterState::LadderUp, 2, { 0, 32 + baseY * int(m_Type) }, 16, 16);
-	m_Animator->AddAnimation(CharacterState::LadderDown, 2, { 64, 32 + baseY * int(m_Type) }, 16, 16);
-	m_Animator->AddAnimation(CharacterState::Death, 4, { 0, 48 + baseY * int(m_Type) }, 16, 16);
+	m_Animator->AddAnimation(CharacterState::WalkLeft, 2, { 32, 32 + baseY * int(m_Type) }, 16, 16, false, animSpeed);
+	m_Animator->AddAnimation(CharacterState::WalkRight, 2, { 32, 32 + baseY * int(m_Type) }, 16, 16, true, animSpeed);
+	m_Animator->AddAnimation(CharacterState::LadderDown, 2, { 0, 32 + baseY * int(m_Type) }, 16, 16, false, animSpeed);
+	m_Animator->AddAnimation(CharacterState::LadderUp, 2, { 64, 32 + baseY * int(m_Type) }, 16, 16, false, animSpeed);
 	m_Animator->AddAnimation(CharacterState::Death, 4, { 0, 48 + baseY * int(m_Type) }, 16, 16, false, 0.25f, false);
 	m_Animator->AddAnimation(CharacterState::Stunned, 2, { 64, 48 + baseY * int(m_Type) }, 16, 16);
+
+	m_MovementSpeed = 50.f;
 }
 
 void Enemy::Start()

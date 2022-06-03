@@ -7,6 +7,7 @@ namespace dae
 	class ETime final : public Singleton<ETime>
 	{
 	public:
+		void Start();
 		void Update();
 		void FixedUpdateCompleted();
 
@@ -18,6 +19,6 @@ namespace dae
 		float m_DeltaTime = 0;
 		float m_Lag = 0;
 		float m_MsPerFixedUpdate = 0.02f;
-		bool m_IsFixedUpdateReady = false;
+		bool m_IsFixedUpdateReady = true;
 	};
 }

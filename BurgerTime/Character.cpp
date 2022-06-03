@@ -57,25 +57,25 @@ void Character::HandleMovement()
 	case CharacterState::WalkRight:
 	{
 		newPos.x += distance;
-		newPos = m_UsingPlatform->CalculateClampedPos(newPos, m_Width);
+		newPos = m_OverlappingPlatform->CalculateClampedPos(newPos, m_Width);
 		break;
 	}
 	case CharacterState::WalkLeft:
 	{
 		newPos.x -= distance;
-		newPos = m_UsingPlatform->CalculateClampedPos(newPos, m_Width);
+		newPos = m_OverlappingPlatform->CalculateClampedPos(newPos, m_Width);
 		break;
 	}
 	case CharacterState::LadderUp:
 	{
 		newPos.y -= distance;
-		newPos = m_UsingLadder->CalculateClampedPos(newPos, m_Height);
+		newPos = m_OverlappingLadder->CalculateClampedPos(newPos, m_Height);
 		break;
 	}
 	case CharacterState::LadderDown:
 	{
 		newPos.y += distance;
-		newPos = m_UsingLadder->CalculateClampedPos(newPos, m_Height);
+		newPos = m_OverlappingLadder->CalculateClampedPos(newPos, m_Height);
 		break;
 	}
 	default:
@@ -103,7 +103,7 @@ void Character::HandleOverlaps()
 			{
 				// Is overlapping with ladder this frame
 				m_OverlapData.LadderOverlap = true;
-				m_UsingLadder = c->GetGameObject()->GetComponent<Ladder>();
+				m_OverlappingLadder = c->GetGameObject()->GetComponent<Ladder>();
 			}
 		}
 		else if (c->GetLabel() == "Platform")
@@ -112,7 +112,7 @@ void Character::HandleOverlaps()
 			{
 				// Is overlapping with platform this frame
 				m_OverlapData.PlatformOverlap = true;
-				m_UsingPlatform = c->GetGameObject()->GetComponent<Platform>();
+				m_OverlappingPlatform = c->GetGameObject()->GetComponent<Platform>();
 			}
 		}
 	}
@@ -123,28 +123,34 @@ void Character::HandleOverlaps()
 
 	m_OverlapData.WasOnPlatform = m_OverlapData.PlatformOverlap;
 
+	if (m_OverlapData.ExitPlatform)
+		m_OverlappingPlatform = nullptr;
+
 	// Ladder setting data
 	m_OverlapData.EnterLadder = m_OverlapData.LadderOverlap && !m_OverlapData.WasOnLadder;
 	m_OverlapData.ExitLadder = m_OverlapData.WasOnLadder && !m_OverlapData.LadderOverlap;
 
 	m_OverlapData.WasOnLadder = m_OverlapData.LadderOverlap;
 
+	if (m_OverlapData.EnterLadder)
+		m_OverlappingLadder = nullptr;
+
 }
 
 void Character::SnapToOverlappingPlatform()
 {
-	if (!m_UsingPlatform)
+	if (!m_OverlappingPlatform)
 		return;
 
 	glm::vec3 newPos = m_pGameObject->GetWorldPosition();
-	newPos = m_UsingPlatform->CalculateSnappedPos(newPos, m_Height);
-	newPos = m_UsingPlatform->CalculateClampedPos(newPos, m_Width);
+	newPos = m_OverlappingPlatform->CalculateSnappedPos(newPos, m_Height);
+	newPos = m_OverlappingPlatform->CalculateClampedPos(newPos, m_Width);
 	m_pGameObject->SetWorldPosition(newPos);
 }
 
 void Character::SnapToOverlappingLadder()
 {
-	if (!m_UsingLadder)
+	if (!m_OverlappingLadder)
 		return;
 
 	if (m_State == CharacterState::Idle ||
@@ -152,7 +158,7 @@ void Character::SnapToOverlappingLadder()
 		m_State == CharacterState::WalkRight)
 	{
 		glm::vec3 newPos = m_pGameObject->GetWorldPosition();
-		newPos = m_UsingLadder->CalculateSnappedPos(newPos, m_Width);
+		newPos = m_OverlappingLadder->CalculateSnappedPos(newPos, m_Width);
 		m_pGameObject->SetWorldPosition(newPos);
 	}
 }
@@ -161,7 +167,7 @@ bool Character::CanMoveOnLadder() const
 {
 	if (m_OverlapData.LadderOverlap)
 	{
-		return m_UsingLadder->CanSnapToLadder(m_pGameObject->GetWorldPosition(), m_Width);
+		return m_OverlappingLadder->CanSnapToLadder(m_pGameObject->GetWorldPosition(), m_Width);
 	}
 	return false;
 }
@@ -170,7 +176,7 @@ bool Character::CanMoveOnPlatform() const
 {
 	if (m_OverlapData.PlatformOverlap)
 	{
-		return m_UsingPlatform->CanSnapToPlatform(m_pGameObject->GetWorldPosition(), m_Height);
+		return m_OverlappingPlatform->CanSnapToPlatform(m_pGameObject->GetWorldPosition(), m_Height);
 	}
 	return false;
 }

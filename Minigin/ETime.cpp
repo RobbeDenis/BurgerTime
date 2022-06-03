@@ -1,6 +1,11 @@
 #include "RodEnginePCH.h"
 #include "ETime.h"
 
+void dae::ETime::Start()
+{
+	m_PrevTime = std::chrono::high_resolution_clock::now();
+}
+
 void dae::ETime::Update()
 {
 	auto curruntTime = std::chrono::high_resolution_clock::now();

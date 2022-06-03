@@ -20,7 +20,7 @@ void PeterPepper::PostLoad()
 	dae::InputManager::GetInstance().AddController(0);
 	m_pSubject->Notify(this, BTEvents::PlayerReset);
 
-	const float animWalkSpeed = 0.1f;
+	const float animWalkSpeed = 0.05f;
 	const float animLadderSpeed = 0.08f;
 	const float animDeathSpeed = 0.13f;
 
@@ -31,6 +31,8 @@ void PeterPepper::PostLoad()
 	m_Animator->AddAnimation(CharacterState::LadderDown, 3, { 0,0 }, 16, 16, false, animLadderSpeed);
 	m_Animator->AddAnimation(CharacterState::LadderUp, 3, { 96,0 }, 16, 16, false, animLadderSpeed);
 	m_Animator->AddAnimation(CharacterState::Death, 5, { 64,16 }, 16, 16, false, animDeathSpeed, false);
+
+	m_MovementSpeed = 70.f;
 }
 
 void PeterPepper::Start()

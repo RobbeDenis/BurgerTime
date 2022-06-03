@@ -90,6 +90,7 @@ void dae::RodEngine::Run()
 
 	sceneManager.PostLoad();
 
+	time.Start();
 	sceneManager.Start();
 
 	bool doContinue = true;

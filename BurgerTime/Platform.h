@@ -1,6 +1,7 @@
 #pragma once
 #include <BaseComponent.h>
 
+class Ladder;
 class Platform final : public dae::BaseComponent
 {
 public:
@@ -9,6 +10,8 @@ public:
 	glm::vec3 CalculateClampedPos(const glm::vec3& pos, const int width);
 	glm::vec3 CalculateSnappedPos(const glm::vec3& pos, const int height);
 	bool CanSnapToPlatform(const glm::vec3& pos, const int height);
+
+	int GetWidth() const { return m_Width; };
 
 private:
 	Platform(dae::GameObject* gameObject);

@@ -55,3 +55,14 @@ bool Ladder::CanSnapToLadder(const glm::vec3& pos, const int width)
 
 	return (abs(thisMid - otherMid) <= m_SnapRange);
 }
+
+bool Ladder::IsAtEndOffLadder(const glm::vec3& pos, const int height)
+{
+	if (pos.y < m_pGameObject->GetWorldPosition().y)
+		return true;
+
+	if (pos.y + height + height > m_pGameObject->GetWorldPosition().y + m_Height)
+		return true;
+
+	return false;
+}

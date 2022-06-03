@@ -50,6 +50,12 @@ public:
 	virtual void Kill() {};
 	virtual void Respawn();
 
+	int GetWidth() const { return m_Width; };
+	int GetHeight() const { return m_Height; };
+
+	Ladder* GetOverlappingLadder() const { return m_OverlappingLadder; };
+	Platform* GetOverlappingPlatform() const { return m_OverlappingPlatform; };
+
 	void AddObserver(dae::Observer* observer);
 
 protected:
@@ -69,8 +75,8 @@ protected:
 	std::shared_ptr<dae::Subject> m_pSubject = nullptr;
 	dae::Animator* m_Animator;
 	dae::Collider* m_Collider;
-	Ladder* m_UsingLadder;
-	Platform* m_UsingPlatform;
+	Ladder* m_OverlappingLadder;
+	Platform* m_OverlappingPlatform;
 	int m_Width;
 	int m_Height;
 	float m_MovementSpeed;

@@ -43,6 +43,7 @@ void Scene::PostLoad()
 
 void Scene::Start()
 {
+	
 	for (auto& object : m_Objects)
 	{
 		object->Start();

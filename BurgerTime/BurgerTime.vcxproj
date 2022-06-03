@@ -169,7 +169,6 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="HotdogController.cpp" />
     <ClCompile Include="Ladder.cpp" />
-    <ClCompile Include="Level.cpp" />
     <ClCompile Include="LivesComponent.cpp" />
     <ClCompile Include="PeterPepper.cpp" />
     <ClCompile Include="Plate.cpp" />
@@ -184,7 +183,6 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="HotdogController.h" />
     <ClInclude Include="Ladder.h" />
-    <ClInclude Include="Level.h" />
     <ClInclude Include="LivesComponent.h" />
     <ClInclude Include="PeterPepper.h" />
     <ClInclude Include="Plate.h" />
