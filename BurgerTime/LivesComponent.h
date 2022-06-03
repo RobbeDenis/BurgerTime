@@ -11,8 +11,8 @@ class LivesComponent final : public dae::BaseComponent, public dae::Observer
 public:
 	void PostLoad() override;
 
-	void Notify(dae::Event) override { };
-	void Notify(BaseComponent* pComponent, dae::Event event) override;
+	void Notify(int) override { };
+	void Notify(BaseComponent* pComponent, int event) override;
 
 	void SetColor(const SDL_Color& color);
 

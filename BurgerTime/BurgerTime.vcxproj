@@ -173,6 +173,7 @@
     <ClCompile Include="ScoreComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BTEvents.h" />
     <ClInclude Include="BurgerPart.h" />
     <ClInclude Include="BurgerTimeCommands.h" />
     <ClInclude Include="Ladder.h" />

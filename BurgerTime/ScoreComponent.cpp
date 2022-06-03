@@ -1,6 +1,7 @@
 #include "RodEnginePCH.h"
 #include "ScoreComponent.h"
 #include "ResourceManager.h"
+#include "BTEvents.h"
 
 ScoreComponent::ScoreComponent(dae::GameObject* gameObject)
 	: BaseComponent(gameObject)
@@ -14,17 +15,17 @@ void ScoreComponent::PostLoad()
 	m_pTextPoints = m_pGameObject->GetComponent<dae::TextComponent>();
 }
 
-void ScoreComponent::Notify(dae::Event event)
+void ScoreComponent::Notify(int event)
 {
 	switch (event)
 	{
-	case dae::Event::EnemyDied:
+	case BTEvents::EnemyDied:
 		EnemyDied();
 		break;
-	case dae::Event::BurgerDropped:
+	case BTEvents::BurgerDropped:
 		BurgerDropped();
 		break;
-	case dae::Event::PlayerReset:
+	case BTEvents::PlayerReset:
 		ResetScore();
 	}
 }

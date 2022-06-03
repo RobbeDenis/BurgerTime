@@ -1,10 +1,12 @@
 #include "PeterPepper.h"
-#include "InputManager.h"
-#include "LivesComponent.h"
-#include "ETime.h"
-#include "DebugRenderComponent.h"
+#include <InputManager.h>
+#include <AccCtrl.h>
+#include <ETime.h>
+#include <DebugRenderComponent.h>
 #include "Platform.h"
 #include "Ladder.h"
+#include "BTEvents.h"
+
 
 PeterPepper::PeterPepper(dae::GameObject* gameObject)
 	: BaseComponent(gameObject)
@@ -21,7 +23,7 @@ PeterPepper::PeterPepper(dae::GameObject* gameObject)
 void PeterPepper::PostLoad() 
 {
 	dae::InputManager::GetInstance().AddController(0);
-	m_pSubject->Notify(this, dae::Event::PlayerReset);
+	m_pSubject->Notify(this, BTEvents::PlayerReset);
 
 	const float animWalkSpeed = 0.1f;
 	const float animLadderSpeed = 0.08f;
@@ -283,7 +285,7 @@ void PeterPepper::StopMoving()
 void PeterPepper::Die()
 {
 	--m_Lives;
-	m_pSubject->Notify(this, dae::Event::PlayerDied);
+	m_pSubject->Notify(this, BTEvents::PlayerDied);
 }
 
 void PeterPepper::AddObserver(dae::Observer* observer)

@@ -1,6 +1,7 @@
 #include "LivesComponent.h"
 #include "PeterPepper.h"
 #include "ResourceManager.h"
+#include "BTEvents.h"
 
 LivesComponent::LivesComponent(dae::GameObject* gameObject)
 	: BaseComponent(gameObject)
@@ -13,7 +14,7 @@ void LivesComponent::PostLoad()
 	m_pTextLives = m_pGameObject->GetComponent<dae::TextComponent>();
 }
 
-void LivesComponent::Notify(BaseComponent* pComponent, dae::Event event)
+void LivesComponent::Notify(BaseComponent* pComponent, int event)
 {
 	PeterPepper* peter = dynamic_cast<PeterPepper*>(pComponent);
 	if (peter == nullptr)
@@ -21,10 +22,10 @@ void LivesComponent::Notify(BaseComponent* pComponent, dae::Event event)
 
 	switch (event)
 	{
-	case dae::Event::PlayerDied:
+	case BTEvents::PlayerDied:
 		PlayerDied(peter);
 		break;
-	case dae::Event::PlayerReset:
+	case BTEvents::PlayerReset:
 		PlayerDied(peter);
 	}
 }

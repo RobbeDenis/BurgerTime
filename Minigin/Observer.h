@@ -9,7 +9,7 @@ namespace dae
 	public:
 		virtual ~Observer() {};
 
-		virtual void Notify(Event event) = 0;
-		virtual void Notify(BaseComponent* pComponent, Event event) = 0;
+		virtual void Notify(int event) = 0;
+		virtual void Notify(BaseComponent* pComponent, int event) = 0;
 	};
 }

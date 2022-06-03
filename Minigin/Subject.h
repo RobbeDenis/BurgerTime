@@ -3,20 +3,12 @@
 
 namespace dae
 {
-	enum class Event
-	{
-		PlayerDied,
-		PlayerReset,
-		EnemyDied,
-		BurgerDropped
-	};
-
 	class Observer;
 	class Subject final
 	{
 	public:
-		void Notify(Event event);
-		void Notify(BaseComponent* pComponent, Event event);
+		void Notify(int event);
+		void Notify(BaseComponent* pComponent, int event);
 
 		void AddObserver(Observer* pObserver);
 		void RemoveObserver(Observer* pObserver);

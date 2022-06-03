@@ -2,7 +2,7 @@
 #include "Subject.h"
 #include "Observer.h"
 
-void dae::Subject::Notify(Event event)
+void dae::Subject::Notify(int event)
 {
 	for (Observer* observer : m_pObservers)
 	{
@@ -10,7 +10,7 @@ void dae::Subject::Notify(Event event)
 	}
 }
 
-void dae::Subject::Notify(BaseComponent* pComponent, Event event)
+void dae::Subject::Notify(BaseComponent* pComponent, int event)
 {
 	for (Observer* observer : m_pObservers)
 	{

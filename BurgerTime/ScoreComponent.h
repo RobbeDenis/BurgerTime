@@ -8,8 +8,8 @@ class ScoreComponent : public dae::BaseComponent, public dae::Observer
 public:
 	void PostLoad() override;
 
-	void Notify(dae::Event event) override;
-	void Notify(BaseComponent*, dae::Event event) override { Notify(event); };
+	void Notify(int event) override;
+	void Notify(BaseComponent*, int event) override { Notify(event); };
 
 	void SetColor(const SDL_Color& color);
 
