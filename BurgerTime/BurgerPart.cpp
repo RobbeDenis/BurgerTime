@@ -4,6 +4,7 @@
 #include "Plate.h"
 #include "BTEvents.h"
 #include "Enemy.h"
+#include "SoundSystem.h"
 
 BurgerPart::BurgerPart(dae::GameObject* gameObject)
 	: BaseComponent(gameObject)
@@ -73,7 +74,7 @@ void BurgerPart::HandleOverlaps()
 		if (c == m_Collider)
 			continue;
 
-		if (c->GetLabel() == "Player")
+		if (!m_IsFalling && c->GetLabel() == "Player")
 		{
 			if (dae::Collider::IsOverlappingWith(c, m_Collider))
 			{
@@ -85,7 +86,13 @@ void BurgerPart::HandleOverlaps()
 				{
 					if (otherMid >= left + (segmentLength * i) &&
 						otherMid <= left + (segmentLength * i + 1))
-						m_Segments[i] = true;
+					{
+						if (m_Segments[i] == false)
+						{
+							m_Segments[i] = true;
+							SoundSLocator::GetSoundSystem().Play(BTEvents::BurgerWalk, 0.1f);
+						}
+					}
 				}
 
 				bool canFall = true;
@@ -103,6 +110,9 @@ void BurgerPart::HandleOverlaps()
 		{				
 			if (dae::Collider::IsOverlappingWith(c, m_Collider))
 			{
+				if(m_IsFalling)
+					SoundSLocator::GetSoundSystem().Play(BTEvents::BurgerDropped, 0.1f);
+
 				BurgerPart* b = c->GetGameObject()->GetComponent<BurgerPart>();
 
 				if (m_Stacking)
@@ -139,6 +149,9 @@ void BurgerPart::HandleOverlaps()
 
 				if (m_BeginOverlapPlatform)
 				{
+					if (m_IsFalling)
+						SoundSLocator::GetSoundSystem().Play(BTEvents::BurgerDropped, 0.1f);
+
 					m_IsFalling = false;
 					m_HitPart = false;
 				}

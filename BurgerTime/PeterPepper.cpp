@@ -37,7 +37,7 @@ void PeterPepper::PostLoad()
 	m_Animator->AddAnimation(CharacterState::LadderUp, 3, { 96,0 }, 16, 16, false, animLadderSpeed);
 	m_Animator->AddAnimation(CharacterState::Death, 5, { 64,16 }, 16, 16, false, animDeathSpeed, false);
 
-	m_MovementSpeed = 90.f;
+	m_MovementSpeed = 75.f;
 }
 
 void PeterPepper::Start()

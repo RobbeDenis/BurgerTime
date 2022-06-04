@@ -127,7 +127,7 @@ void Enemy::Update()
 
 void Enemy::Kill()
 {
-	if (m_Killed)
+	if (m_Killed || !m_Active)
 		return;
 
 	m_pSubject->Notify(this, BTEvents::EnemyDied);

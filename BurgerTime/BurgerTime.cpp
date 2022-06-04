@@ -62,6 +62,10 @@ void LoadGame()
 	g_pSoundManager->SetVolume(0.1f);
 
 	SoundSLocator::GetSoundSystem().RegisterSound(BTEvents::PlayerDied, "LoseLife.mp3");
+	SoundSLocator::GetSoundSystem().RegisterSound(BTEvents::BurgerWalk, "BurgerWalk.wav");
+	SoundSLocator::GetSoundSystem().RegisterSound(BTEvents::EnemyDied, "EnemyDied.wav");
+	SoundSLocator::GetSoundSystem().RegisterSound(BTEvents::PepperUsed, "Attack.wav");
+	SoundSLocator::GetSoundSystem().RegisterSound(BTEvents::BurgerDropped, "Bounce.wav");
 
 	// Adding GameObjects
 	auto go = std::make_shared<dae::GameObject>();
@@ -662,7 +666,8 @@ void LoadGame()
 	e->SetType(EnemyType::HotDog);
 	e->SetValue(hotdogValue);
 	e->AddObserver(peterScore);
-	go->SetWorldPosition({ 40.f, 120.f, 0.f });
+	e->AddObserver(g_pSoundManager);
+	go->SetWorldPosition({ 60.f, 120.f, 0.f });
 	scene.Add(go);
 
 	go = std::make_shared<dae::GameObject>();
@@ -675,6 +680,7 @@ void LoadGame()
 	e->SetType(EnemyType::HotDog);
 	e->SetValue(hotdogValue);
 	e->AddObserver(peterScore);
+	e->AddObserver(g_pSoundManager);
 	go->SetWorldPosition({ 50.f, 120.f, 0.f });
 	scene.Add(go);
 
@@ -690,6 +696,7 @@ void LoadGame()
 	e->SetType(EnemyType::Egg);
 	e->SetValue(eggValue);
 	e->AddObserver(peterScore);
+	e->AddObserver(g_pSoundManager);
 	go->SetWorldPosition({ 500.f, 120.f, 0.f });
 	scene.Add(go);
 
@@ -706,6 +713,7 @@ void LoadGame()
 	e->SetType(EnemyType::Pickle);
 	e->SetValue(pickleValue);
 	e->AddObserver(peterScore);
+	e->AddObserver(g_pSoundManager);
 	go->SetWorldPosition({ 420.f, 330.f, 0.f });
 	scene.Add(go);
 

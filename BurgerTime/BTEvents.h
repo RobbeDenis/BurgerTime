@@ -7,5 +7,6 @@ enum BTEvents
 	EnemyDied = 2,
 	BurgerDropped = 3,
 	EnemiesDiedOnTop = 4,
-	PepperUsed = 5
+	PepperUsed = 5,
+	BurgerWalk = 6
 };
