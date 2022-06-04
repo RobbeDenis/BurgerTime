@@ -22,7 +22,6 @@ private:
 	friend T* dae::GameObject::AddComponent();
 
 	void PepperUsed(PeterPepper* peter);
-	PeterPepper* m_pPeterPepper = nullptr;
 	dae::TextComponent* m_pTextLives = nullptr;
 };
 

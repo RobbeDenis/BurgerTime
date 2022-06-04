@@ -1,7 +1,7 @@
 #pragma once
 #include "BaseComponent.h"
 #include "Observer.h"
-#include "TextComponent.h"
+#include <RenderComponent.h>
 
 
 class PeterPepper;
@@ -14,7 +14,7 @@ public:
 	void Notify(int) override { };
 	void Notify(BaseComponent* pComponent, int event) override;
 
-	void SetColor(const SDL_Color& color);
+	void SetMaxLives(const int lives);
 
 private:
 	LivesComponent(dae::GameObject* gameObject);
@@ -22,7 +22,10 @@ private:
 	friend T* dae::GameObject::AddComponent();
 
 	void PlayerDied(PeterPepper* peter);
-	PeterPepper* m_pPeterPepper = nullptr;
-	dae::TextComponent* m_pTextLives = nullptr;
+	
+	std::vector<dae::RenderComponent*> m_RenderComponents;
+	int m_Offset;
+	int m_Width;
+	int m_Height;
 };
 

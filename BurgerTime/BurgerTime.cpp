@@ -108,21 +108,10 @@ void LoadGame()
 
 	// Lives
 	go = std::make_shared<dae::GameObject>();
-	go->AddComponent<dae::RenderComponent>();
 	LivesComponent* peterLives = go->AddComponent<LivesComponent>();
-	dae::TextComponent* pTextLives = go->AddComponent<dae::TextComponent>();
-	pTextLives->SetFont(dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 22), false);
-	pTextLives->SetColor({ 255, 255, 255 }, false);
-	go->SetWorldPosition(550, 60);
+	peterLives->SetMaxLives(3);
+	go->SetWorldPosition(5, 640);
 	scene.Add(go);
-
-	child = go->AddChild();
-	auto lRender = child->AddComponent<dae::RenderComponent>();
-	lRender->SetTexture("BurgertimeSprites.png");
-	lRender->UseSrc(true);
-	lRender->SetSrc(216.f, 9.f, 24.f, 6.f);
-	lRender->SetDst(0.f, 0.f, 50.f, 15.f);
-	child->SetLocalPosition({ -20, -20, 0 });
 
 	// Adding Ladders
 	const std::string ladderLabel = "Ladder";
