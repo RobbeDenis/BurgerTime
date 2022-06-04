@@ -13,6 +13,8 @@ enum class PartType
 	Lettuce = 5
 };
 
+class Enemy;
+
 class BurgerPart final : public dae::BaseComponent
 {
 public:
@@ -23,9 +25,11 @@ public:
 
 	void SetType(PartType type);
 	PartType GetType() const { return m_Type; };
+	int GetEnemiesOnTop() const { return m_EnemiesOnPart; };
+	int GetFallCounter() const { return m_FallCounter; };
 
-	void Fall();
-	void EnableStacking(bool enable) { m_Stacking = enable; };
+	void Fall(bool extendFall = false);
+	void EnableStacking(bool enable);
 
 private:
 	BurgerPart(dae::GameObject* gameObject);
@@ -34,6 +38,8 @@ private:
 
 	void HandleOverlaps();
 	void ResetSegments();
+	void FallOverlappingEnemies();
+	void AddEnemiesOnPartScore();
 
 	std::vector<bool> m_Segments;
 	int m_TotalSegments;
@@ -45,6 +51,9 @@ private:
 	int m_Height;
 	float m_FallSpeed;
 	int m_DisWalkedLeft;
+	int m_FallCounter;
+	int m_BounceHeight;
+	int m_EnemiesOnPart;
 
 	float m_SrcX;
 	float m_SrcY;
@@ -59,5 +68,6 @@ private:
 	bool m_HitPart;
 
 	bool m_Stacking;
+	bool m_PlayerFall;
 };
 

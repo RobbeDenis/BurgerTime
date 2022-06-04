@@ -8,6 +8,8 @@ enum class EnemyType
 	Egg = 2
 };
 
+class BurgerPart;
+
 class Enemy final : public Character
 {
 	enum CharacterState
@@ -27,8 +29,10 @@ public:
 	void PostLoad() override;
 	void Start() override;
 	void FixedUpdate() override;
+	void Update() override;
 
 	void Kill() override;
+	void Fall(BurgerPart* bP);
 
 	void SetType(const EnemyType& type) { m_Type = type; };
 	void SetValue(const int value) { m_Value = value; };
@@ -39,7 +43,12 @@ private:
 	template <typename T>
 	friend T* dae::GameObject::AddComponent();
 
+	BurgerPart* m_FollowPart;
 	EnemyType m_Type;
+	float m_MaxRespawnTime;
+	float m_RespawnTime;
 	int m_Value;
+	bool m_Falling;
+	bool m_CanRespawn;
 };
 

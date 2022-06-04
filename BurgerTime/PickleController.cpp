@@ -71,7 +71,7 @@ void PickleController::FixedUpdate()
 		{
 			if (thisLadder && m_PrevLadder != thisLadder && thisLadder->CanSnapToLadder(thisPos, m_Character->GetWidth()))
 			{
-				// 30/70 to go on the ladder
+				// 20% to go on the ladder
 				if (20 <= rand() % 100)
 				{
 					// IF NOT AT THE END OF A LADDER GO DOWN OR UP DEPENDING ON TARGET POS
@@ -106,13 +106,19 @@ void PickleController::FixedUpdate()
 					if (thisPlatform == targetPlatform && m_State == CharacterState::WalkRight)
 					{
 						if (thisPos.x < targetPos.x)
+						{
+							m_PrevLadder = thisLadder;
 							return;
+						}
 					}
 					// IF ON SAME PLATFORM AND WALKING TO TARGET
 					if (thisPlatform == targetPlatform && m_State == CharacterState::WalkLeft)
 					{
 						if (thisPos.x > targetPos.x)
+						{
+							m_PrevLadder = thisLadder;
 							return;
+						}
 					}
 
 					// IF NOT AT THE END OF A LADDER GO DOWN OR UP DEPENDING ON TARGET POS
@@ -165,10 +171,10 @@ void PickleController::FixedUpdate()
 		{
 			if (thisPlatform->CanSnapToPlatform(thisPos, m_Character->GetHeight()))
 			{
-				// 20% to go off the ladder
-				if (10 <= rand() % 100)
+				// 10% to go off the ladder
+				if (100 <= (rand() % 1000))
 				{
-					if (50 <= rand() % 100)
+					if (thisPos.x < targetPos.x)
 					{
 						m_State = CharacterState::WalkRight;
 					}

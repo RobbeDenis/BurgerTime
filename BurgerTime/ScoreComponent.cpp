@@ -3,6 +3,7 @@
 #include "ResourceManager.h"
 #include "BTEvents.h"
 #include "Enemy.h"
+#include "BurgerPart.h"
 
 ScoreComponent::ScoreComponent(dae::GameObject* gameObject)
 	: BaseComponent(gameObject)
@@ -22,6 +23,9 @@ void ScoreComponent::Notify(BaseComponent* c, int event)
 	case BTEvents::EnemyDied:
 		EnemyDied(c);
 		break;
+	case BTEvents::EnemiesDiedOnTop:
+		EnemiesOnTop(c);
+		break;
 	}
 
 	Notify(event);
@@ -37,6 +41,14 @@ void ScoreComponent::Notify(int event)
 	case BTEvents::PlayerReset:
 		ResetScore();
 	}
+}
+
+void ScoreComponent::EnemiesOnTop(BaseComponent* burgerPart)
+{
+	BurgerPart* b = static_cast<BurgerPart*>(burgerPart);
+	m_Score += b->GetEnemiesOnTop() * m_BaseEnemyValue;
+
+	m_pTextPoints->SetText(std::to_string(m_Score));
 }
 
 void ScoreComponent::EnemyDied(BaseComponent* enemy)

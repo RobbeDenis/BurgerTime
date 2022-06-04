@@ -24,6 +24,9 @@ BurgerPart::BurgerPart(dae::GameObject* gameObject)
 	, m_Stacking(false)
 	, m_TotalSegments(5)
 	, m_Segments{}
+	, m_FallCounter{}
+	, m_BounceHeight{6}
+	, m_PlayerFall(false)
 {
 	m_pSubject = std::make_shared<dae::Subject>();
 
@@ -53,6 +56,11 @@ void BurgerPart::FixedUpdate()
 		glm::vec3 newPos = m_pGameObject->GetWorldPosition();
 		newPos.y += m_FallSpeed * dae::ETime::GetInstance().GetDeltaTime();
 		m_pGameObject->SetWorldPosition(newPos);
+	}
+	else if(m_FallCounter > 0)
+	{
+		--m_FallCounter;
+		Fall();
 	}
 }
 
@@ -85,7 +93,10 @@ void BurgerPart::HandleOverlaps()
 					canFall &= b;
 
 				if (canFall)
+				{
+					m_PlayerFall = false;
 					Fall();
+				}
 			}
 		}
 		if (m_IsFalling && !m_HitPart && c->GetLabel() == "Burger")
@@ -102,8 +113,20 @@ void BurgerPart::HandleOverlaps()
 				// Only let the part fall if this comes from above
 				else if (m_pGameObject->GetWorldPosition().y < c->GetGameObject()->GetWorldPosition().y)
 				{
-					b->Fall();
-					m_HitPart = true;
+					glm::vec3 newPos = c->GetGameObject()->GetWorldPosition();
+					newPos.y += m_BounceHeight;
+					c->GetGameObject()->SetWorldPosition(newPos);
+
+					if (m_FallCounter > 0)
+					{
+						b->Fall(true);
+						m_HitPart = true;
+					}
+					else
+					{
+						b->Fall();
+						m_HitPart = true;
+					}
 				}
 			}
 		}
@@ -141,7 +164,10 @@ void BurgerPart::HandleOverlaps()
 			if (dae::Collider::IsOverlappingWith(c, m_Collider))
 			{
 				Enemy* e = c->GetGameObject()->GetComponent<Enemy>();
-				e->Kill();
+				if (!e->GetKilled())
+				{
+					e->Kill();
+				}
 			}
 		}
 	}
@@ -149,12 +175,48 @@ void BurgerPart::HandleOverlaps()
 	m_PrevOverlapPlatform = m_OverlapPlatform;
 }
 
-void BurgerPart::Fall()
+void BurgerPart::Fall(bool extendFall)
 {
+	if (m_IsFalling)
+		return;
+
+	if (extendFall)
+	{
+		++m_FallCounter;
+	}
+
+	if (m_PlayerFall && m_EnemiesOnPart > 0)
+		AddEnemiesOnPartScore();
+
 	m_pSubject->Notify(BTEvents::BurgerDropped);
 	m_IsFalling = true;
+	m_PlayerFall = false;
 	m_HitPart = false;
 	ResetSegments();
+	FallOverlappingEnemies();
+}
+
+void BurgerPart::FallOverlappingEnemies()
+{
+	for (dae::Collider* c : m_Collider->GetColliders())
+	{
+		if (c == m_Collider)
+			continue;
+
+		if (m_IsFalling && c->GetLabel() == "Enemy")
+		{
+			if (dae::Collider::IsOverlappingWith(c, m_Collider))
+			{
+				Enemy* e = c->GetGameObject()->GetComponent<Enemy>();
+				if (!e->GetKilled())
+				{
+					e->Fall(this);
+					++m_FallCounter;
+					++m_EnemiesOnPart;
+				}
+			}
+		}
+	}
 }
 
 void BurgerPart::ResetSegments()
@@ -174,4 +236,16 @@ void BurgerPart::SetType(PartType type)
 void BurgerPart::AddObserver(dae::Observer* observer)
 {
 	m_pSubject->AddObserver(observer);
+}
+
+void BurgerPart::EnableStacking(bool enable)
+{
+	m_Stacking = enable; 
+	m_FallCounter = 0;
+}
+
+void BurgerPart::AddEnemiesOnPartScore()
+{
+	m_pSubject->Notify(this, BTEvents::EnemiesDiedOnTop);
+	m_EnemiesOnPart = 0;
 }

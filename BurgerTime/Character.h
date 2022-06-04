@@ -52,6 +52,7 @@ public:
 
 	int GetWidth() const { return m_Width; };
 	int GetHeight() const { return m_Height; };
+	bool GetKilled() const { return m_Killed; };
 
 	Ladder* GetOverlappingLadder() const { return m_OverlappingLadder; };
 	Platform* GetOverlappingPlatform() const { return m_OverlappingPlatform; };

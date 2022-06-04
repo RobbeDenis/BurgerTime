@@ -23,9 +23,11 @@ private:
 	void EnemyDied(BaseComponent* enemy);
 	void BurgerDropped();
 	void ResetScore();
+	void EnemiesOnTop(BaseComponent* burgerPart);
 
 	dae::TextComponent* m_pTextPoints = nullptr;
 	int m_BurgerValue = 50;
 	int m_Score = 0;
+	int m_BaseEnemyValue = 500;
 };
 
