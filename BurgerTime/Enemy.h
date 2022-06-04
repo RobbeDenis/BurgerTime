@@ -47,6 +47,8 @@ private:
 	EnemyType m_Type;
 	float m_MaxRespawnTime;
 	float m_RespawnTime;
+	float m_MaxInactiveTime;
+	float m_InactiveTime;
 	int m_Value;
 	bool m_Falling;
 	bool m_CanRespawn;

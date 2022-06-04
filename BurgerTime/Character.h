@@ -84,5 +84,6 @@ protected:
 	int m_State;
 	bool m_PendingMove;
 	bool m_Killed;
+	bool m_Active;
 };
 

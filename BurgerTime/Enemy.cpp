@@ -12,6 +12,8 @@ Enemy::Enemy(dae::GameObject* gameObject)
 	, m_MaxRespawnTime(2.f)
 	, m_RespawnTime(0.f)
 	, m_CanRespawn(false)
+	, m_MaxInactiveTime(1.f)
+	, m_InactiveTime(0.f)
 {
 
 }
@@ -33,7 +35,7 @@ void Enemy::PostLoad()
 	m_Animator->AddAnimation(CharacterState::Death, 4, { 0, 48 + baseY * int(m_Type) }, 16, 16, false, animDeathSpeed, false);
 	m_Animator->AddAnimation(CharacterState::Stunned, 2, { 64, 48 + baseY * int(m_Type) }, 16, 16);
 
-	m_MovementSpeed = 50.f;
+	m_MovementSpeed = 42.f;
 }
 
 void Enemy::Start()
@@ -85,14 +87,24 @@ void Enemy::Update()
 {
 	Character::Update();
 
-	if (m_CanRespawn)
+	if (!m_Active)
+	{
+		m_InactiveTime += dae::ETime::GetInstance().GetDeltaTime();
+		if (m_InactiveTime >= m_MaxInactiveTime)
+		{
+			m_InactiveTime = 0.f;
+			m_Active = true;
+			m_CanRespawn = false;
+		}
+	}
+	else if (m_CanRespawn)
 	{
 		m_RespawnTime += dae::ETime::GetInstance().GetDeltaTime();
 		if (m_RespawnTime >= m_MaxRespawnTime)
 		{
 			Respawn();
-			m_CanRespawn = false;
 			m_RespawnTime = 0.f;
+			m_Active = false;
 		}
 	}
 }

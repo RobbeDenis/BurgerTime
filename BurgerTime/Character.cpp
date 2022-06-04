@@ -12,6 +12,7 @@ Character::Character(dae::GameObject* gameObject)
 	, m_PendingMove(false)
 	, m_MovementSpeed(100.f)
 	, m_SpawnPos{ 0.f,0.f,0.f }
+	, m_Active(true)
 {
 	m_pSubject = std::make_shared<dae::Subject>();
 }
@@ -36,7 +37,7 @@ void Character::Start()
 
 void Character::Update()
 {
-	if (m_Killed)
+	if (!m_Active || m_Killed)
 		return;
 
 	HandleOverlaps();
@@ -183,7 +184,7 @@ bool Character::CanMoveOnPlatform() const
 
 void Character::MoveRight()
 {
-	if (m_Killed || !CanMoveOnPlatform())
+	if (!m_Active || m_Killed || !CanMoveOnPlatform())
 		return;
 
 	SnapToOverlappingPlatform();
@@ -197,7 +198,7 @@ void Character::MoveRight()
 
 void Character::MoveLeft()
 {
-	if (m_Killed || !CanMoveOnPlatform())
+	if (!m_Active || m_Killed || !CanMoveOnPlatform())
 		return;
 
 	SnapToOverlappingPlatform();
@@ -211,7 +212,7 @@ void Character::MoveLeft()
 
 void Character::MoveUpLadder()
 {
-	if (m_Killed || !CanMoveOnLadder())
+	if (!m_Active || m_Killed || !CanMoveOnLadder())
 		return;
 
 	SnapToOverlappingLadder();
@@ -227,7 +228,7 @@ void Character::MoveUpLadder()
 
 void Character::MoveDownLadder()
 {
-	if (m_Killed || !CanMoveOnLadder())
+	if (!m_Active || m_Killed || !CanMoveOnLadder())
 		return;
 
 	SnapToOverlappingLadder();
@@ -243,7 +244,7 @@ void Character::MoveDownLadder()
 
 void Character::StopMoving()
 {
-	if (m_Killed || m_PendingMove)
+	if (!m_Active || m_Killed || m_PendingMove)
 		return;
 
 	if (m_State == CharacterState::LadderDown)
