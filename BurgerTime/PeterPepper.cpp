@@ -2,6 +2,7 @@
 #include <InputManager.h>
 #include <ETime.h>
 #include "BTEvents.h"
+#include "PepperCloud.h"
 
 
 PeterPepper::PeterPepper(dae::GameObject* gameObject)
@@ -9,6 +10,8 @@ PeterPepper::PeterPepper(dae::GameObject* gameObject)
 	, m_Lives(3)
 	, m_MaxDeathTime(2.5f)
 	, m_DeathTime(0.f)
+	, m_PepperCloud(nullptr)
+	, m_PepperReach(34)
 {
 	
 }
@@ -32,7 +35,7 @@ void PeterPepper::PostLoad()
 	m_Animator->AddAnimation(CharacterState::LadderUp, 3, { 96,0 }, 16, 16, false, animLadderSpeed);
 	m_Animator->AddAnimation(CharacterState::Death, 5, { 64,16 }, 16, 16, false, animDeathSpeed, false);
 
-	m_MovementSpeed = 80.f;
+	m_MovementSpeed = 90.f;
 }
 
 void PeterPepper::Start()
@@ -71,4 +74,42 @@ void PeterPepper::Die()
 	m_Animator->SetAnimation(CharacterState::Death);
 	--m_Lives;
 	m_pSubject->Notify(this, BTEvents::PlayerDied);
+}
+
+void PeterPepper::UseAbility()
+{
+	glm::vec3 newPos = m_pGameObject->GetWorldPosition();
+
+	switch (m_State)
+	{
+		case CharacterState::WalkRight:
+		{
+			newPos.x += m_Width / 2 + m_PepperReach;
+			break;
+		}
+		case CharacterState::WalkLeft:
+		{
+			newPos.x -= m_Width / 2 + m_PepperReach;
+			break;
+		}
+		case CharacterState::LadderIdleUp:
+		case CharacterState::LadderUp:
+		{
+			newPos.y -= m_PepperReach + m_Height / 2;
+			break;
+		}
+		case CharacterState::LadderIdleDown:
+		case CharacterState::LadderDown:
+		{
+			newPos.y += m_PepperReach + m_Height / 2;
+			break;
+		}
+		default:
+		{
+			return;
+		}
+	}
+
+	m_PepperCloud->GetGameObject()->SetWorldPosition(newPos);
+	m_PepperCloud->Activate();
 }

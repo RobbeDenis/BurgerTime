@@ -77,3 +77,17 @@ public:
 private:
 	Character* m_pPeter = nullptr;
 };
+
+class IUseAbility final : public Command
+{
+public:
+	IUseAbility(Character* peter) : m_pPeter(peter) {}
+
+	void Execute() override
+	{
+		m_pPeter->UseAbility();
+	}
+
+private:
+	Character* m_pPeter = nullptr;
+};

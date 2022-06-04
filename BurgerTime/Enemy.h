@@ -32,6 +32,7 @@ public:
 	void Update() override;
 
 	void Kill() override;
+	void Stun();
 	void Fall(BurgerPart* bP);
 
 	void SetType(const EnemyType& type) { m_Type = type; };
@@ -49,6 +50,8 @@ private:
 	float m_RespawnTime;
 	float m_MaxInactiveTime;
 	float m_InactiveTime;
+	float m_MaxStunnedTime;
+	float m_StunnedTime;
 	int m_Value;
 	bool m_Falling;
 	bool m_CanRespawn;

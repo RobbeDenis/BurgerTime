@@ -24,6 +24,7 @@
 #include "Enemy.h"
 #include "HotdogController.h"
 #include "PickleController.h"
+#include "PepperCloud.h"
 
 void LoadGame();
 
@@ -614,6 +615,8 @@ void LoadGame()
 	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonUp, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter));
 	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonDown, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter));
 
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonA, dae::ButtonState::Pressed }, std::make_unique<IUseAbility>(pPeter));
+
 	// Adding observors
 	pPeter->AddObserver(peterScore);
 	pPeter->AddObserver(peterLives);
@@ -680,4 +683,15 @@ void LoadGame()
 	e->AddObserver(peterScore);
 	go->SetWorldPosition({ 420.f, 330.f, 0.f });
 	scene.Add(go);
+
+	// Adding pepper cloud
+	go = std::make_shared<dae::GameObject>();
+	PepperCloud* cloud = go->AddComponent<PepperCloud>();
+	go->AddComponent<dae::Animator>();
+	go->AddComponent<dae::Collider>()->SetLabel("Pepper");
+	go->AddComponent<dae::DebugRenderComponent>();
+	go->AddComponent<dae::RenderComponent>()->SetTexture("BurgertimeSprites.png");
+	scene.Add(go);
+
+	pPeter->AddPepperCloud(cloud);
 }

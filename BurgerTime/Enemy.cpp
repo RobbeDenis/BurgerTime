@@ -12,8 +12,10 @@ Enemy::Enemy(dae::GameObject* gameObject)
 	, m_MaxRespawnTime(2.f)
 	, m_RespawnTime(0.f)
 	, m_CanRespawn(false)
-	, m_MaxInactiveTime(1.f)
+	, m_MaxInactiveTime(3.f)
 	, m_InactiveTime(0.f)
+	, m_MaxStunnedTime(3.5f)
+	, m_StunnedTime(0.f)
 {
 
 }
@@ -25,6 +27,7 @@ void Enemy::PostLoad()
 	const float baseY = 32.f;
 	const float animSpeed = 0.1f;
 	const float animDeathSpeed = 0.08f;
+	const float animStunSpeed = 0.06f;
 
 	m_Animator = m_pGameObject->GetComponent<dae::Animator>();
 	m_Animator->AddAnimation(CharacterState::Idle, 1, { 0, 32 + baseY * int(m_Type) }, 16, 16);
@@ -33,7 +36,7 @@ void Enemy::PostLoad()
 	m_Animator->AddAnimation(CharacterState::LadderDown, 2, { 0, 32 + baseY * int(m_Type) }, 16, 16, false, animSpeed);
 	m_Animator->AddAnimation(CharacterState::LadderUp, 2, { 64, 32 + baseY * int(m_Type) }, 16, 16, false, animSpeed);
 	m_Animator->AddAnimation(CharacterState::Death, 4, { 0, 48 + baseY * int(m_Type) }, 16, 16, false, animDeathSpeed, false);
-	m_Animator->AddAnimation(CharacterState::Stunned, 2, { 64, 48 + baseY * int(m_Type) }, 16, 16);
+	m_Animator->AddAnimation(CharacterState::Stunned, 2, { 64, 48 + baseY * int(m_Type) }, 16, 16, false, animStunSpeed);
 
 	m_MovementSpeed = 42.f;
 }
@@ -64,7 +67,7 @@ void Enemy::FixedUpdate()
 		}
 	}
 
-	if (m_Killed)
+	if (m_Killed || !m_Active)
 		return;
 
 	for (dae::Collider* c : m_Collider->GetColliders())
@@ -85,6 +88,19 @@ void Enemy::FixedUpdate()
 
 void Enemy::Update()
 {
+	if (m_State == CharacterState::Stunned)
+	{
+		m_StunnedTime += dae::ETime::GetInstance().GetDeltaTime();
+		if (m_StunnedTime >= m_MaxStunnedTime)
+		{
+			m_StunnedTime = 0.f;
+			m_State = CharacterState::Idle;
+			m_Animator->SetAnimation(CharacterState::Idle);
+			m_Active = true;
+		}
+		return;
+	}
+
 	Character::Update();
 
 	if (!m_Active)
@@ -126,4 +142,15 @@ void Enemy::Fall(BurgerPart* bP)
 	m_Animator->Pause();
 	m_Killed = true;
 	m_Falling = true;
+}
+
+void Enemy::Stun()
+{
+	if (!m_Active || m_Killed)
+		return;
+
+	m_State = CharacterState::Stunned;
+	m_Animator->SetAnimation(CharacterState::Stunned);
+	m_StunnedTime = 0.f;
+	m_Active = false;
 }

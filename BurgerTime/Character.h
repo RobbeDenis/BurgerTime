@@ -49,6 +49,7 @@ public:
 
 	virtual void Kill() {};
 	virtual void Respawn();
+	virtual void UseAbility() {};
 
 	int GetWidth() const { return m_Width; };
 	int GetHeight() const { return m_Height; };
