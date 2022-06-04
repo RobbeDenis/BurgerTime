@@ -3,6 +3,7 @@
 #include <ETime.h>
 #include "Plate.h"
 #include "BTEvents.h"
+#include "Enemy.h"
 
 BurgerPart::BurgerPart(dae::GameObject* gameObject)
 	: BaseComponent(gameObject)
@@ -14,7 +15,7 @@ BurgerPart::BurgerPart(dae::GameObject* gameObject)
 	, m_SrcW(31.f)
 	, m_SrcX(112.f)
 	, m_SrcY(48.f)
-	, m_FallSpeed(150.f)
+	, m_FallSpeed(200.f)
 	, m_IsFalling(false)
 	, m_OverlapPlatform(false)
 	, m_BeginOverlapPlatform(false)
@@ -120,6 +121,7 @@ void BurgerPart::HandleOverlaps()
 				}
 			}
 		}
+
 		if (m_IsFalling && m_Stacking && c->GetLabel() == "Plate")
 		{
 			if (dae::Collider::IsOverlappingWith(c, m_Collider))
@@ -131,8 +133,15 @@ void BurgerPart::HandleOverlaps()
 				{
 					m_pGameObject->SetWorldPosition(newPos);
 					m_IsFalling = false;
-					m_pSubject->Notify(BTEvents::BurgerDropped);
 				}
+			}
+		}
+		if (m_IsFalling && c->GetLabel() == "Enemy")
+		{
+			if (dae::Collider::IsOverlappingWith(c, m_Collider))
+			{
+				Enemy* e = c->GetGameObject()->GetComponent<Enemy>();
+				e->Kill();
 			}
 		}
 	}
@@ -142,6 +151,7 @@ void BurgerPart::HandleOverlaps()
 
 void BurgerPart::Fall()
 {
+	m_pSubject->Notify(BTEvents::BurgerDropped);
 	m_IsFalling = true;
 	m_HitPart = false;
 	ResetSegments();

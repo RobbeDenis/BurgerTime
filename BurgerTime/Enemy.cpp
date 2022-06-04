@@ -1,4 +1,5 @@
 #include "Enemy.h"
+#include "BTEvents.h"
 
 Enemy::Enemy(dae::GameObject* gameObject)
 	: Character(gameObject)
@@ -51,4 +52,14 @@ void Enemy::FixedUpdate()
 			}
 		}
 	}
+}
+
+void Enemy::Kill()
+{
+	if (m_Killed)
+		return;
+
+	m_pSubject->Notify(this, BTEvents::EnemyDied);
+	m_Animator->SetAnimation(CharacterState::Death);
+	m_Killed = true;
 }

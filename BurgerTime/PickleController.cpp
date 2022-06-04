@@ -1,11 +1,11 @@
-#include "HotdogController.h"
+#include "PickleController.h"
 #include <ETime.h>
 #include <random>
 #include "Character.h"
 #include "Ladder.h"
 #include "Platform.h"
 
-HotdogController::HotdogController(dae::GameObject* gameObject)
+PickleController::PickleController(dae::GameObject* gameObject)
 	: BaseComponent(gameObject)
 	, m_Character(nullptr)
 	, m_Target(nullptr)
@@ -21,12 +21,12 @@ HotdogController::HotdogController(dae::GameObject* gameObject)
 
 }
 
-void HotdogController::PostLoad()
+void PickleController::PostLoad()
 {
 	m_Character = m_pGameObject->GetComponent<Character>();
 }
 
-void HotdogController::FixedUpdate()
+void PickleController::FixedUpdate()
 {
 	if (!m_Target)
 		return;
@@ -65,20 +65,6 @@ void HotdogController::FixedUpdate()
 	// WHEN USING PLATFORM
 	if (!m_UsingLadder)
 	{
-		// IF ON SAME PLATFORM AND WALKING TO TARGET
-		if (thisPlatform && thisPlatform == targetPlatform && m_State == CharacterState::WalkRight)
-		{
-			if(thisPos.x < targetPos.x)
-				return;
-		}
-		// IF ON SAME PLATFORM AND WALKING TO TARGET
-		if (thisPlatform && thisPlatform == targetPlatform && m_State == CharacterState::WalkLeft)
-		{
-			if (thisPos.x > targetPos.x)
-				return;
-		}
-
-
 		// LOOK IF A LADDER HAS TO BE USED
 		// IF WALKING OR IDLE ON A PLATFORM
 		if (m_State == CharacterState::WalkRight || m_State == CharacterState::WalkLeft || m_State == CharacterState::Idle)
@@ -179,6 +165,23 @@ void HotdogController::FixedUpdate()
 		{
 			if (thisPlatform->CanSnapToPlatform(thisPos, m_Character->GetHeight()))
 			{
+				// 20% to go off the ladder
+				if (10 <= rand() % 100)
+				{
+					if (50 <= rand() % 100)
+					{
+						m_State = CharacterState::WalkRight;
+					}
+					else
+					{
+						m_State = CharacterState::WalkLeft;
+					}
+
+					m_PrevLadder = thisLadder;
+					m_UsingLadder = false;
+					return;
+				}
+
 				// IF THIS PLATFORM IS THE SAME AS THE TARGETS ONE GO TO TARGET
 				if (thisPlatform == targetPlatform)
 				{
@@ -208,7 +211,7 @@ void HotdogController::FixedUpdate()
 					}
 				}
 				// IF CHAR WAS GOING DOWN
-				else if(m_State == CharacterState::LadderDown)
+				else if (m_State == CharacterState::LadderDown)
 				{
 					// IF TARGET IS LOWER AND NOT THE END AF LADDER -> KEEP GOING
 					if (thisPos.y < targetPos.y && !(thisLadder->IsAtEndOffLadder(thisPos, m_Character->GetHeight())))
@@ -235,7 +238,7 @@ void HotdogController::FixedUpdate()
 	}
 }
 
-void HotdogController::Update()
+void PickleController::Update()
 {
 	switch (m_State)
 	{

@@ -23,6 +23,7 @@
 #include "LivesComponent.h"
 #include "Enemy.h"
 #include "HotdogController.h"
+#include "PickleController.h"
 
 void LoadGame();
 
@@ -622,6 +623,7 @@ void LoadGame()
 	scene.Add(go);
 
 	// Adding hot dogs
+	const int hotdogValue = 100;
 	go = std::make_shared<dae::GameObject>();
 	go->AddComponent<dae::Animator>();
 	go->AddComponent<HotdogController>()->SetTarget(pPeter);
@@ -630,10 +632,13 @@ void LoadGame()
 	go->AddComponent<dae::RenderComponent>()->SetTexture("BurgertimeSprites.png");
 	Enemy* e = go->AddComponent<Enemy>();
 	e->SetType(EnemyType::HotDog);
+	e->SetValue(hotdogValue);
+	e->AddObserver(peterScore);
 	go->SetWorldPosition({ 40.f, 120.f, 0.f });
 	scene.Add(go);
 
 	// Adding Egg
+	const int eggValue = 300;
 	go = std::make_shared<dae::GameObject>();
 	go->AddComponent<dae::Animator>();
 	go->AddComponent<HotdogController>()->SetTarget(pPeter);
@@ -642,6 +647,23 @@ void LoadGame()
 	go->AddComponent<dae::RenderComponent>()->SetTexture("BurgertimeSprites.png");
 	e = go->AddComponent<Enemy>();
 	e->SetType(EnemyType::Egg);
+	e->SetValue(eggValue);
+	e->AddObserver(peterScore);
 	go->SetWorldPosition({ 500.f, 120.f, 0.f });
+	scene.Add(go);
+
+	// Adding Pickle
+	const int pickleValue = 200;
+	go = std::make_shared<dae::GameObject>();
+	go->AddComponent<dae::Animator>();
+	go->AddComponent<PickleController>()->SetTarget(pPeter);
+	go->AddComponent<dae::Collider>()->SetLabel("Enemy");
+	go->AddComponent<dae::DebugRenderComponent>();
+	go->AddComponent<dae::RenderComponent>()->SetTexture("BurgertimeSprites.png");
+	e = go->AddComponent<Enemy>();
+	e->SetType(EnemyType::Pickle);
+	e->SetValue(pickleValue);
+	e->AddObserver(peterScore);
+	go->SetWorldPosition({ 420.f, 330.f, 0.f });
 	scene.Add(go);
 }

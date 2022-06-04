@@ -28,7 +28,11 @@ public:
 	void Start() override;
 	void FixedUpdate() override;
 
+	void Kill() override;
+
 	void SetType(const EnemyType& type) { m_Type = type; };
+	void SetValue(const int value) { m_Value = value; };
+	int GetValue() const { return m_Value; };
 
 private:
 	Enemy(dae::GameObject* gameObject);
@@ -36,5 +40,6 @@ private:
 	friend T* dae::GameObject::AddComponent();
 
 	EnemyType m_Type;
+	int m_Value;
 };
 

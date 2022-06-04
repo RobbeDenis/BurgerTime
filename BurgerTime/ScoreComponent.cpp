@@ -2,10 +2,10 @@
 #include "ScoreComponent.h"
 #include "ResourceManager.h"
 #include "BTEvents.h"
+#include "Enemy.h"
 
 ScoreComponent::ScoreComponent(dae::GameObject* gameObject)
 	: BaseComponent(gameObject)
-	, m_KillValue{ m_BaseKillValue }
 {
 
 }
@@ -15,13 +15,22 @@ void ScoreComponent::PostLoad()
 	m_pTextPoints = m_pGameObject->GetComponent<dae::TextComponent>();
 }
 
-void ScoreComponent::Notify(int event)
+void ScoreComponent::Notify(BaseComponent* c, int event)
 {
 	switch (event)
 	{
 	case BTEvents::EnemyDied:
-		EnemyDied();
+		EnemyDied(c);
 		break;
+	}
+
+	Notify(event);
+}
+
+void ScoreComponent::Notify(int event)
+{
+	switch (event)
+	{
 	case BTEvents::BurgerDropped:
 		BurgerDropped();
 		break;
@@ -30,35 +39,27 @@ void ScoreComponent::Notify(int event)
 	}
 }
 
-void ScoreComponent::EnemyDied()
+void ScoreComponent::EnemyDied(BaseComponent* enemy)
 {
-	m_Score += m_KillValue;
-	m_KillValue *= 2;
+	Enemy* e = static_cast<Enemy*>(enemy);
+	m_Score += e->GetValue();
 
 	m_pTextPoints->SetText(std::to_string(m_Score));
-	CheckIfGameWon();
 }
 
 void ScoreComponent::BurgerDropped()
 {
-	m_Score += 50;
+	m_Score += m_BurgerValue;
 	m_pTextPoints->SetText(std::to_string(m_Score));
-	CheckIfGameWon();
 }
 
 void ScoreComponent::ResetScore()
 {
 	m_Score = 0;
-	m_KillValue = m_BaseKillValue;
 	m_pTextPoints->SetText(std::to_string(m_Score));
 }
 
 void ScoreComponent::SetColor(const SDL_Color& color)
 {
 	m_pTextPoints->SetColor(color);
-}
-
-void ScoreComponent::CheckIfGameWon()
-{
-	
 }
