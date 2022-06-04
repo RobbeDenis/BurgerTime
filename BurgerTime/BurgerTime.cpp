@@ -12,6 +12,7 @@
 #include <Animator.h>
 #include <Collider.h>
 #include <DebugRenderComponent.h>
+#include <SoundSystem.h>
 
 #include "PeterPepper.h"
 #include "BurgerTimeCommands.h"
@@ -26,8 +27,12 @@
 #include "PickleController.h"
 #include "PepperCloud.h"
 #include "PepperUI.h"
+#include "SoundManager.h"
+#include "BTEvents.h"
 
 void LoadGame();
+
+SoundManager* g_pSoundManager = new SoundManager();
 
 int main(int, char* []) 
 {
@@ -40,6 +45,9 @@ int main(int, char* [])
 	LoadGame();
 
 	engine.Run();
+
+	delete g_pSoundManager;
+
 	return 0;
 }
 
@@ -47,9 +55,16 @@ void LoadGame()
 {
 	auto& scene = dae::SceneManager::GetInstance().CreateScene("Level");
 	auto& input = dae::InputManager::GetInstance();
-	auto go = std::make_shared<dae::GameObject>();
 
 	scene.EnableDebugRender(false);
+
+	// Adding sounds
+	g_pSoundManager->SetVolume(0.1f);
+
+	SoundSLocator::GetSoundSystem().RegisterSound(BTEvents::PlayerDied, "LoseLife.mp3");
+
+	// Adding GameObjects
+	auto go = std::make_shared<dae::GameObject>();
 
 	// Background
 	dae::RenderComponent* pBackgroundRender = go->AddComponent<dae::RenderComponent>();
@@ -629,6 +644,7 @@ void LoadGame()
 	pPeter->AddObserver(peterScore);
 	pPeter->AddObserver(peterLives);
 	pPeter->AddObserver(pepperUI);
+	pPeter->AddObserver(g_pSoundManager);
 
 	go->SetWorldPosition(10, 500);
 

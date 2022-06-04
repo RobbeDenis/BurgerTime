@@ -1,6 +1,7 @@
 #include "RodEnginePCH.h"
 #include "sdl_SoundSystem.h"
 #include <map>
+#include <mutex>
 #include <thread>
 
 #include "SDL_mixer.h"
@@ -68,14 +69,19 @@ public:
 		{
 			if (m_Pending[i].id == id)
 			{
+				m_Mutex.lock();
 				m_Pending[i].volume = glm::max(volume, m_Pending[i].volume);
+				m_Mutex.unlock();
+
 				return;
 			}
 		}
 
+		m_Mutex.lock();
 		m_Pending[m_Tail].id = id;
 		m_Pending[m_Tail].volume = volume;
 		m_Tail = (m_Tail + 1) % m_MaxPending;
+		m_Mutex.unlock();
 	}
 #pragma warning (pop)
 
@@ -107,6 +113,8 @@ private:
 	static const unsigned int m_MaxPending = 16;
 	PlaySound m_Pending[m_MaxPending]{};
 	std::jthread m_AudioThread;
+	std::jthread m_LoadThread;
+	std::mutex m_Mutex;
 
 	unsigned int m_Head;
 	unsigned int m_Tail;

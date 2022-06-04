@@ -177,6 +177,7 @@
     <ClCompile Include="Plate.cpp" />
     <ClCompile Include="Platform.cpp" />
     <ClCompile Include="ScoreComponent.cpp" />
+    <ClCompile Include="SoundManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BTEvents.h" />
@@ -194,6 +195,7 @@
     <ClInclude Include="Plate.h" />
     <ClInclude Include="Platform.h" />
     <ClInclude Include="ScoreComponent.h" />
+    <ClInclude Include="SoundManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
