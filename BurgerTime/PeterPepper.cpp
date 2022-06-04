@@ -12,8 +12,10 @@ PeterPepper::PeterPepper(dae::GameObject* gameObject)
 	, m_DeathTime(0.f)
 	, m_PepperCloud(nullptr)
 	, m_PepperReach(34)
+	, m_PepperCount(0)
+	, m_MaxPepper(5)
 {
-	
+	m_PepperCount = m_MaxPepper;
 }
 
 void PeterPepper::PostLoad() 
@@ -78,6 +80,9 @@ void PeterPepper::Die()
 
 void PeterPepper::UseAbility()
 {
+	if (m_PepperCount <= 0)
+		return;
+
 	glm::vec3 newPos = m_pGameObject->GetWorldPosition();
 
 	switch (m_State)
@@ -112,4 +117,6 @@ void PeterPepper::UseAbility()
 
 	m_PepperCloud->GetGameObject()->SetWorldPosition(newPos);
 	m_PepperCloud->Activate();
+	--m_PepperCount;
+	m_pSubject->Notify(this, BTEvents::PepperUsed);
 }

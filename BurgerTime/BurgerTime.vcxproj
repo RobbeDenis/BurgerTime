@@ -171,6 +171,7 @@
     <ClCompile Include="Ladder.cpp" />
     <ClCompile Include="LivesComponent.cpp" />
     <ClCompile Include="PepperCloud.cpp" />
+    <ClCompile Include="PepperUI.cpp" />
     <ClCompile Include="PeterPepper.cpp" />
     <ClCompile Include="PickleController.cpp" />
     <ClCompile Include="Plate.cpp" />
@@ -187,6 +188,7 @@
     <ClInclude Include="Ladder.h" />
     <ClInclude Include="LivesComponent.h" />
     <ClInclude Include="PepperCloud.h" />
+    <ClInclude Include="PepperUI.h" />
     <ClInclude Include="PeterPepper.h" />
     <ClInclude Include="PickleController.h" />
     <ClInclude Include="Plate.h" />

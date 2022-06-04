@@ -25,6 +25,7 @@
 #include "HotdogController.h"
 #include "PickleController.h"
 #include "PepperCloud.h"
+#include "PepperUI.h"
 
 void LoadGame();
 
@@ -87,6 +88,24 @@ void LoadGame()
 	pTextScore->SetText("1UP");
 	child->SetLocalPosition({ 20, -20, 0 });
 
+	// Pepper count
+	go = std::make_shared<dae::GameObject>();
+	go->AddComponent<dae::RenderComponent>();
+	PepperUI* pepperUI = go->AddComponent<PepperUI>();
+	dae::TextComponent* pTextPepper = go->AddComponent<dae::TextComponent>();
+	pTextPepper->SetFont(dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 22), false);
+	pTextPepper->SetColor({ 255, 255, 255 }, false);
+	go->SetWorldPosition(550, 23);
+	scene.Add(go);
+
+	child = go->AddChild();
+	auto pRender = child->AddComponent<dae::RenderComponent>();
+	pRender->SetTexture("BurgertimeSprites.png");
+	pRender->UseSrc(true);
+	pRender->SetSrc(216.f, 9.f, 24.f, 6.f);
+	pRender->SetDst(0.f, 0.f, 50.f, 15.f);
+	child->SetLocalPosition({ -20, -20, 0 });
+
 	// Lives
 	go = std::make_shared<dae::GameObject>();
 	go->AddComponent<dae::RenderComponent>();
@@ -94,7 +113,7 @@ void LoadGame()
 	dae::TextComponent* pTextLives = go->AddComponent<dae::TextComponent>();
 	pTextLives->SetFont(dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 22), false);
 	pTextLives->SetColor({ 255, 255, 255 }, false);
-	go->SetWorldPosition(550, 23);
+	go->SetWorldPosition(550, 60);
 	scene.Add(go);
 
 	child = go->AddChild();
@@ -620,6 +639,7 @@ void LoadGame()
 	// Adding observors
 	pPeter->AddObserver(peterScore);
 	pPeter->AddObserver(peterLives);
+	pPeter->AddObserver(pepperUI);
 
 	go->SetWorldPosition(10, 500);
 

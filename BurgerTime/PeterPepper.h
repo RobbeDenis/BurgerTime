@@ -11,6 +11,7 @@ public:
 	void Update() override;
 
 	int GetLives() const { return m_Lives; };
+	int GetPepperCount() const { return m_PepperCount; };
 	void Kill() override;
 	void UseAbility() override;
 	void AddPepperCloud(PepperCloud* cloud) { m_PepperCloud = cloud; };
@@ -28,6 +29,8 @@ private:
 	float m_MaxDeathTime;
 	float m_DeathTime;
 	int m_PepperReach;
+	int	m_MaxPepper;
+	int m_PepperCount;
 };
 
 

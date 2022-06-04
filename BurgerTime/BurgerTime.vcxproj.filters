@@ -57,6 +57,9 @@
     <ClCompile Include="PepperCloud.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="PepperUI.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LivesComponent.h">
@@ -99,6 +102,9 @@
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="PepperCloud.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="PepperUI.h">
       <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
