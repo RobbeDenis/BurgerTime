@@ -167,6 +167,9 @@ void Character::SnapToOverlappingLadder()
 
 bool Character::CanMoveOnLadder() const
 {
+	if (!m_OverlappingLadder)
+		return false;
+
 	if (m_OverlapData.LadderOverlap)
 	{
 		return m_OverlappingLadder->CanSnapToLadder(m_pGameObject->GetWorldPosition(), m_Width);
@@ -176,6 +179,9 @@ bool Character::CanMoveOnLadder() const
 
 bool Character::CanMoveOnPlatform() const
 {
+	if (!m_OverlappingPlatform)
+		return false;
+
 	if (m_OverlapData.PlatformOverlap)
 	{
 		return m_OverlappingPlatform->CanSnapToPlatform(m_pGameObject->GetWorldPosition(), m_Height);

@@ -138,6 +138,9 @@ void Enemy::Kill()
 
 void Enemy::Fall(BurgerPart* bP)
 {
+	if (m_Killed || !m_Active)
+		return;
+
 	m_FollowPart = bP;
 	m_Animator->Pause();
 	m_Killed = true;
