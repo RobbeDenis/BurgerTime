@@ -40,6 +40,7 @@ public:
 	virtual void PostLoad() override;
 	virtual void Start() override;
 	virtual void Update() override;
+	virtual void Reset() override;
 
 	virtual void MoveRight();
 	virtual void MoveLeft();

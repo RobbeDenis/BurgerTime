@@ -288,3 +288,8 @@ void Character::AddObserver(dae::Observer* observer)
 {
 	m_pSubject->AddObserver(observer);
 }
+
+void Character::Reset()
+{
+	Respawn();
+}

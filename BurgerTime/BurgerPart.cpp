@@ -169,6 +169,7 @@ void BurgerPart::HandleOverlaps()
 				{
 					m_pGameObject->SetWorldPosition(newPos);
 					m_IsFalling = false;
+					SoundSLocator::GetSoundSystem().Play(BTEvents::BurgerDropped, 0.1f);
 				}
 			}
 		}

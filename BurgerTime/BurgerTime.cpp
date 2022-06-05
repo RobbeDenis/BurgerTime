@@ -29,30 +29,29 @@
 #include "PepperUI.h"
 #include "SoundManager.h"
 #include "BTEvents.h"
+#include "GameManager.h"
 
-void LoadGame();
+void LoadGame(GameManager* pGame, SoundManager* pSoundManager);
 
-void CreateSinglePlayer();
-void CreateCoop();
-void CreateVersus();
+void CreateSinglePlayer(GameManager* pGame, SoundManager* pSoundManager);
+void CreateCoop(GameManager* pGame, SoundManager* pSoundManager);
+void CreateVersus(GameManager* pGame, SoundManager* pSoundManager);
 
-void LoadLevel(dae::Scene& scene, dae::Observer* scoreComp, Character* target);
+void LoadLevel(dae::Scene& scene, dae::Observer* pGame, dae::Observer* scoreComp, dae::Observer* pSoundManager, Character* target);
 
 std::shared_ptr<dae::GameObject> CreateBackground(const std::string& texture);
 std::shared_ptr<dae::GameObject> CreateFPSCounter(const glm::vec3& pos, const SDL_Color& color);
 std::shared_ptr<dae::GameObject> CreateScoreUI(const glm::vec3& pos, const SDL_Color& scoreColor, const SDL_Color& textColor);
 std::shared_ptr<dae::GameObject> CreatePepperCountUI(const glm::vec3& pos, const SDL_Color& pepperColor);
 std::shared_ptr<dae::GameObject> CreateLivesUI(const glm::vec3& pos, const std::string& texture);
-std::shared_ptr<dae::GameObject> CreatePlayerCharacter(const glm::vec3& pos, const std::string& texture, dae::Observer* score, dae::Observer* lives, dae::Observer* pepperUI, PepperCloud* cloud);
+std::shared_ptr<dae::GameObject> CreatePlayerCharacter(const glm::vec3& pos, const std::string& texture, dae::Observer* pGame, dae::Observer* score, dae::Observer* pSoundManager, dae::Observer* lives, dae::Observer* pepperUI, PepperCloud* cloud);
 std::shared_ptr<dae::GameObject> CreatePepperCloud();
 
 std::shared_ptr<dae::GameObject> CreatePlatform(const int platformWidth, const glm::vec3& pos);
 std::shared_ptr<dae::GameObject> CreateLadder(const int ladderHeight, const glm::vec3& pos);
 std::shared_ptr<dae::GameObject> CreateBurgerPart(dae::Observer* score, const glm::vec3& pos, const PartType type);
 std::shared_ptr<dae::GameObject> CreatePlate(const glm::vec3& pos);
-std::shared_ptr<dae::GameObject> CreateEnemy(dae::Observer* score, Character* target, const glm::vec3& pos, const EnemyType type);
-
-SoundManager* g_pSoundManager = new SoundManager();
+std::shared_ptr<dae::GameObject> CreateEnemy(dae::Observer* pGame, dae::Observer* score, dae::Observer* pSoundManager, Character* target, const glm::vec3& pos, const EnemyType type);
 
 int main(int, char* []) 
 {
@@ -63,36 +62,40 @@ int main(int, char* [])
 	dae::ResourceManager::GetInstance().Init("../Data/");
 	dae::InputManager::GetInstance().AddController(0);
 
-	g_pSoundManager->SetVolume(0.1f);
+	SoundManager* pSoundManager = new SoundManager();
+	GameManager* pGame = new GameManager();
+
+	LoadGame(pGame, pSoundManager);
+
+	engine.Run();
+
+	delete pSoundManager;
+	delete pGame;
+
+	return 0;
+}
+
+void LoadGame(GameManager* pGame, SoundManager* pSoundManager)
+{
+	pSoundManager->SetVolume(0.1f);
 	SoundSLocator::GetSoundSystem().RegisterSound(BTEvents::PlayerDied, "LoseLife.mp3");
 	SoundSLocator::GetSoundSystem().RegisterSound(BTEvents::BurgerWalk, "BurgerWalk.wav");
 	SoundSLocator::GetSoundSystem().RegisterSound(BTEvents::EnemyDied, "EnemyDied.wav");
 	SoundSLocator::GetSoundSystem().RegisterSound(BTEvents::PepperUsed, "Attack.wav");
 	SoundSLocator::GetSoundSystem().RegisterSound(BTEvents::BurgerDropped, "Bounce.wav");
 
-	LoadGame();
+	CreateSinglePlayer(pGame, pSoundManager);
+	CreateCoop(pGame, pSoundManager);
+	CreateVersus(pGame, pSoundManager);
 
-	engine.Run();
-
-	delete g_pSoundManager;
-
-	return 0;
-}
-
-void LoadGame()
-{
-	CreateSinglePlayer();
-	CreateCoop();
-	CreateVersus();
-
-	//dae::SceneManager::GetInstance().SetScene("SinglePlayer");
+	dae::SceneManager::GetInstance().SetScene("SinglePlayer");
 	//dae::SceneManager::GetInstance().SetScene("Coop");
-	dae::SceneManager::GetInstance().SetScene("Versus");
+	//dae::SceneManager::GetInstance().SetScene("Versus");
 }
 
-void CreateSinglePlayer()
+void CreateSinglePlayer(GameManager* pGame, SoundManager* pSoundManager)
 {
-	auto& scene = dae::SceneManager::GetInstance().CreateScene("SinglePlayer");
+	auto& scene = dae::SceneManager::GetInstance().CreateScene(pGame->GetSinglePlayerName());
 	auto& input = dae::InputManager::GetInstance();
 
 	scene.EnableDebugRender(false);
@@ -123,7 +126,7 @@ void CreateSinglePlayer()
 	PepperCloud* cloud = go->GetComponent<PepperCloud>();
 
 	// CREATING PETER PEPPER
-	scene.Add(go = CreatePlayerCharacter({ 10, 500, 0 }, "BurgertimeSprites.png", score, lives, pepperUI, cloud));
+	scene.Add(go = CreatePlayerCharacter({ 10, 500, 0 }, "BurgertimeSprites.png", pGame, score, lives, pepperUI, pSoundManager, cloud));
 	PeterPepper* pPeter = go->GetComponent<PeterPepper>();
 
 	// KEYBOARD INPUTS
@@ -149,12 +152,12 @@ void CreateSinglePlayer()
 	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonA, dae::ButtonState::Pressed }, std::make_unique<IUseAbility>(pPeter), 0);
 
 	//Load level
-	LoadLevel(scene, score, pPeter);
+	LoadLevel(scene, pGame, score, pSoundManager, pPeter);
 }
 
-void CreateCoop()
+void CreateCoop(GameManager* pGame, SoundManager* pSoundManager)
 {
-	auto& scene = dae::SceneManager::GetInstance().CreateScene("Coop");
+	auto& scene = dae::SceneManager::GetInstance().CreateScene(pGame->GetCoopName());
 	auto& input = dae::InputManager::GetInstance();
 
 	scene.EnableDebugRender(false);
@@ -189,7 +192,7 @@ void CreateCoop()
 	PepperCloud* cloudSalt = go->GetComponent<PepperCloud>();
 
 	// CREATING PETER PEPPER
-	scene.Add(go = CreatePlayerCharacter({ 10, 500, 0 }, "BurgertimeSprites.png", score, lives, pepperUI, cloudPepper));
+	scene.Add(go = CreatePlayerCharacter({ 10, 500, 0 }, "BurgertimeSprites.png", pGame, score, lives, pepperUI, pSoundManager, cloudPepper));
 	PeterPepper* pPepper = go->GetComponent<PeterPepper>();
 
 	// KEYBOARD INPUTS
@@ -204,7 +207,7 @@ void CreateCoop()
 	input.AddKeyboardCommand({ SDL_SCANCODE_X, dae::ButtonState::Pressed }, std::make_unique<IUseAbility>(pPepper), 1);
 
 	// CREATING SALT
-	scene.Add(go = CreatePlayerCharacter({ 200, 500, 0 }, "Salt.png", score, lives, pepperUI, cloudSalt));
+	scene.Add(go = CreatePlayerCharacter({ 200, 500, 0 }, "Salt.png", pGame, score, lives, pepperUI, pSoundManager, cloudSalt));
 	PeterPepper* pSalt = go->GetComponent<PeterPepper>();
 
 	// CONTROLLER INPUTS
@@ -219,12 +222,12 @@ void CreateCoop()
 	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonA, dae::ButtonState::Pressed }, std::make_unique<IUseAbility>(pSalt), 1);
 
 	//Load level
-	LoadLevel(scene, score, pPepper);
+	LoadLevel(scene, pGame, score, pSoundManager, pPepper);
 }
 
-void CreateVersus()
+void CreateVersus(GameManager* pGame, SoundManager* pSoundManager)
 {
-	auto& scene = dae::SceneManager::GetInstance().CreateScene("Versus");
+	auto& scene = dae::SceneManager::GetInstance().CreateScene(pGame->GetVersusName());
 	auto& input = dae::InputManager::GetInstance();
 
 	scene.EnableDebugRender(false);
@@ -255,7 +258,7 @@ void CreateVersus()
 	PepperCloud* cloud = go->GetComponent<PepperCloud>();
 
 	// CREATING PETER PEPPER
-	scene.Add(go = CreatePlayerCharacter({ 10, 500, 0 }, "BurgertimeSprites.png", score, lives, pepperUI, cloud));
+	scene.Add(go = CreatePlayerCharacter({ 10, 500, 0 }, "BurgertimeSprites.png", pGame, score, lives, pepperUI, pSoundManager, cloud));
 	PeterPepper* pPeter = go->GetComponent<PeterPepper>();
 
 	// KEYBOARD INPUTS
@@ -278,7 +281,7 @@ void CreateVersus()
 	hotdog->SetType(EnemyType::HotDog);
 	hotdog->SetValue(100);
 	hotdog->AddObserver(score);
-	hotdog->AddObserver(g_pSoundManager);
+	hotdog->AddObserver(pSoundManager);
 	go->SetWorldPosition({ 400.f, 120.f, 0.f });
 	scene.Add(go);
 
@@ -293,10 +296,10 @@ void CreateVersus()
 	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonDown, dae::ButtonState::Released }, std::make_unique<IStopMove>(hotdog), 2);
 
 	//Load level
-	LoadLevel(scene, score, pPeter);
+	LoadLevel(scene, pGame, score, pSoundManager, pPeter);
 }
 
-void LoadLevel(dae::Scene& scene, dae::Observer* scoreComp, Character* target)
+void LoadLevel(dae::Scene& scene, dae::Observer* pGame, dae::Observer* scoreComp, dae::Observer* pSoundManager, Character* target)
 {
 	// Adding Ladders
 	// First row
@@ -364,14 +367,14 @@ void LoadLevel(dae::Scene& scene, dae::Observer* scoreComp, Character* target)
 	scene.Add(CreatePlate({ 450.f, 548.f, 0.f }));
 
 	// Adding hot dogs
-	scene.Add(CreateEnemy(scoreComp, target, { 100.f, 120.f, 0.f }, EnemyType::HotDog));
-	scene.Add(CreateEnemy(scoreComp, target, { 40.f, 120.f, 0.f }, EnemyType::HotDog));
+	scene.Add(CreateEnemy(pGame, scoreComp, pSoundManager, target, { 100.f, 120.f, 0.f }, EnemyType::HotDog));
+	scene.Add(CreateEnemy(pGame, scoreComp, pSoundManager, target, { 40.f, 120.f, 0.f }, EnemyType::HotDog));
 
 	// Adding Egg
-	scene.Add(CreateEnemy(scoreComp, target, { 500.f, 120.f, 0.f }, EnemyType::Egg));
+	scene.Add(CreateEnemy(pGame, scoreComp, pSoundManager, target, { 500.f, 120.f, 0.f }, EnemyType::Egg));
 
 	// Adding Pickle
-	scene.Add(CreateEnemy(scoreComp, target, { 420.f, 330.f, 0.f }, EnemyType::Pickle));
+	scene.Add(CreateEnemy(pGame, scoreComp, pSoundManager, target, { 420.f, 330.f, 0.f }, EnemyType::Pickle));
 }
 
 std::shared_ptr<dae::GameObject> CreatePepperCloud()
@@ -386,7 +389,7 @@ std::shared_ptr<dae::GameObject> CreatePepperCloud()
 	return go;
 }
 
-std::shared_ptr<dae::GameObject> CreatePlayerCharacter(const glm::vec3& pos, const std::string& texture, dae::Observer* score, dae::Observer* lives, dae::Observer* pepperUI, PepperCloud* cloud)
+std::shared_ptr<dae::GameObject> CreatePlayerCharacter(const glm::vec3& pos, const std::string& texture, dae::Observer* pGame, dae::Observer* score, dae::Observer* pSoundManager, dae::Observer* lives, dae::Observer* pepperUI, PepperCloud* cloud)
 {
 	auto go = std::make_shared<dae::GameObject>();
 
@@ -401,7 +404,8 @@ std::shared_ptr<dae::GameObject> CreatePlayerCharacter(const glm::vec3& pos, con
 	pPeter->AddObserver(score);
 	pPeter->AddObserver(lives);
 	pPeter->AddObserver(pepperUI);
-	pPeter->AddObserver(g_pSoundManager);
+	pPeter->AddObserver(pSoundManager);
+	pPeter->AddObserver(pGame);
 	pPeter->AddPepperCloud(cloud);
 
 	go->SetWorldPosition(pos);
@@ -554,7 +558,7 @@ std::shared_ptr<dae::GameObject> CreatePlate(const glm::vec3& pos)
 	return go;
 }
 
-std::shared_ptr<dae::GameObject> CreateEnemy(dae::Observer* score, Character* target, const glm::vec3& pos, const EnemyType type)
+std::shared_ptr<dae::GameObject> CreateEnemy(dae::Observer* pGame, dae::Observer* score, dae::Observer* pSoundManager, Character* target, const glm::vec3& pos, const EnemyType type)
 {
 	int value = 0;
 
@@ -581,7 +585,8 @@ std::shared_ptr<dae::GameObject> CreateEnemy(dae::Observer* score, Character* ta
 	e->SetType(type);
 	e->SetValue(value);
 	e->AddObserver(score);
-	e->AddObserver(g_pSoundManager);
+	e->AddObserver(pSoundManager);
+	e->AddObserver(pGame);
 	go->SetWorldPosition(pos);
 	
 	return go;
