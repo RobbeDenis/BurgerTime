@@ -34,10 +34,14 @@ bool dae::InputManager::ProcessInput()
 		}
 	}
 
+	ProcessKeyboardInput();
+
 	SDL_Event e;
 	while (SDL_PollEvent(&e)) 
 	{
-		if (e.type == SDL_QUIT) {
+		switch (e.type)
+		{
+		case SDL_QUIT:
 			return false;
 		}
 	}
@@ -83,4 +87,51 @@ void dae::InputManager::AddControllerCommand(const ControllerInput data, std::un
 void dae::InputManager::AddController(int controllerIndex)
 {
 	m_Controllers.push_back(std::make_unique<XBox360Controller>(controllerIndex));
+}
+
+void dae::InputManager::AddKeyboardCommand(const KeyboardInput data, std::unique_ptr<Command> pCommand)
+{
+	std::pair<std::unique_ptr<Command>, bool> pair = { std::move(pCommand), false };
+
+	if (m_KeyboardCommands.find(data) != end(m_KeyboardCommands))
+	{
+		m_KeyboardCommands[data] = std::move(pair);
+		return;
+	}
+
+	m_KeyboardCommands.emplace(data, std::move(pair));
+}
+
+void dae::InputManager::ProcessKeyboardInput()
+{
+	const Uint8* state = SDL_GetKeyboardState(NULL);
+
+	for (auto& command : m_KeyboardCommands)
+	{
+		bool currentState = state[command.first.Key];
+
+		switch (command.first.State)
+		{
+			case ButtonState::Pressed:
+			{
+				if (currentState && !command.second.second)
+					command.second.first->Execute();
+				break;
+			}
+			case ButtonState::Released:
+			{
+				if (!currentState && command.second.second)
+					command.second.first->Execute();
+				break;
+			}
+			case ButtonState::Down:
+			{
+				if (currentState && command.second.second)
+					command.second.first->Execute();
+				break;
+			}
+		}
+
+		command.second.second = currentState;
+	}
 }
