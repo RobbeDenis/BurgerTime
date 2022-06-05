@@ -109,6 +109,19 @@ void PeterPepper::UseAbility()
 			newPos.y += m_PepperReach + m_Height / 2;
 			break;
 		}
+		case CharacterState::Idle:
+		{
+			if (m_PrevState == CharacterState::WalkRight)
+			{
+				newPos.x += m_Width / 2 + m_PepperReach;
+				break;
+			}
+			else if (m_PrevState == CharacterState::WalkLeft)
+			{
+				newPos.x -= m_Width / 2 + m_PepperReach;
+				break;
+			}
+		}
 		default:
 		{
 			return;

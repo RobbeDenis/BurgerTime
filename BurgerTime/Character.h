@@ -83,6 +83,7 @@ protected:
 	int m_Height;
 	float m_MovementSpeed;
 	int m_State;
+	int m_PrevState;
 	bool m_PendingMove;
 	bool m_Killed;
 	bool m_Active;

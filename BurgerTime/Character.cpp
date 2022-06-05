@@ -13,6 +13,7 @@ Character::Character(dae::GameObject* gameObject)
 	, m_MovementSpeed(100.f)
 	, m_SpawnPos{ 0.f,0.f,0.f }
 	, m_Active(true)
+	, m_PrevState(CharacterState::Idle)
 {
 	m_pSubject = std::make_shared<dae::Subject>();
 }
@@ -192,6 +193,7 @@ void Character::MoveRight()
 	if (m_State != CharacterState::WalkRight)
 		m_Animator->SetAnimation(CharacterState::WalkRight);
 
+	m_PrevState = m_State;
 	m_State = CharacterState::WalkRight;
 	m_PendingMove = true;
 }
@@ -206,6 +208,7 @@ void Character::MoveLeft()
 	if (m_State != CharacterState::WalkLeft)
 		m_Animator->SetAnimation(CharacterState::WalkLeft);
 
+	m_PrevState = m_State;
 	m_State = CharacterState::WalkLeft;
 	m_PendingMove = true;
 }
@@ -222,6 +225,7 @@ void Character::MoveUpLadder()
 	else if (m_State != CharacterState::LadderUp)
 		m_Animator->SetAnimation(CharacterState::LadderUp);
 
+	m_PrevState = m_State;
 	m_State = CharacterState::LadderUp;
 	m_PendingMove = true;
 }
@@ -238,6 +242,7 @@ void Character::MoveDownLadder()
 	else if (m_State != CharacterState::LadderDown)
 		m_Animator->SetAnimation(CharacterState::LadderDown);
 
+	m_PrevState = m_State;
 	m_State = CharacterState::LadderDown;
 	m_PendingMove = true;
 }
@@ -247,6 +252,7 @@ void Character::StopMoving()
 	if (!m_Active || m_Killed || m_PendingMove)
 		return;
 
+	m_PrevState = m_State;
 	if (m_State == CharacterState::LadderDown)
 	{
 		m_State = CharacterState::LadderIdleDown;
