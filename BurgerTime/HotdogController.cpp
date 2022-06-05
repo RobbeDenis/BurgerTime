@@ -158,16 +158,19 @@ void HotdogController::FixedUpdate()
 			}
 		}
 
-		// WALK OTHER WAY IF AT THE END OF PLATFORM
-		if (m_State == CharacterState::WalkLeft)
+		if (thisPlatform)
 		{
-			if (thisPos.x - m_WidthDetectOffset < thisPlatform->GetGameObject()->GetWorldPosition().x)
-				m_State = CharacterState::WalkRight;
-		}
-		else if (m_State == CharacterState::WalkRight)
-		{
-			if (thisPos.x + m_WidthDetectOffset + m_Character->GetWidth() > thisPlatform->GetGameObject()->GetWorldPosition().x + thisPlatform->GetWidth())
-				m_State = CharacterState::WalkLeft;
+			// WALK OTHER WAY IF AT THE END OF PLATFORM
+			if (m_State == CharacterState::WalkLeft)
+			{
+				if (thisPos.x - m_WidthDetectOffset < thisPlatform->GetGameObject()->GetWorldPosition().x)
+					m_State = CharacterState::WalkRight;
+			}
+			else if (m_State == CharacterState::WalkRight)
+			{
+				if (thisPos.x + m_WidthDetectOffset + m_Character->GetWidth() > thisPlatform->GetGameObject()->GetWorldPosition().x + thisPlatform->GetWidth())
+					m_State = CharacterState::WalkLeft;
+			}
 		}
 	}
 

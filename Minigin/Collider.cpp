@@ -1,15 +1,20 @@
 #include "RodEnginePCH.h"
 #include "Collider.h"
 #include "Renderer.h"
-
-std::vector<dae::Collider*> dae::Collider::g_Colliders;
+#include "Scene.h"
+#include "SceneManager.h"
 
 dae::Collider::Collider(GameObject* gameObject)
 	: BaseComponent(gameObject)
 	, m_Label("")
 	, m_Rect{ 0,0,0,0 }
 {
-	g_Colliders.push_back(this);
+	
+}
+
+void dae::Collider::PostLoad()
+{
+	m_pGameObject->GetScene()->AddCollider(this);
 }
 
 bool dae::Collider::IsOverlappingWith(Collider* c1, Collider* c2)
@@ -40,4 +45,9 @@ const SDL_Rect& dae::Collider::GetRect()
 	m_Rect.y = static_cast<int>(m_pGameObject->GetWorldPosition().y);
 
 	return m_Rect;
+}
+
+const std::vector<dae::Collider*>& dae::Collider::GetColliders() const
+{
+	return m_pGameObject->GetScene()->GetColliders();
 }

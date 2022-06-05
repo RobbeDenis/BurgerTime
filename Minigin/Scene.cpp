@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "RenderComponent.h"
 #include "DebugRenderComponent.h"
+#include "Collider.h"
 
 using namespace dae;
 
@@ -29,6 +30,11 @@ void Scene::AddDebugRenderComponent(DebugRenderComponent* pRenderComp)
 void Scene::AddRenderComponent(RenderComponent* pRenderComp)
 {
 	m_pRenderComponents.push_back(pRenderComp);
+}
+
+void Scene::AddCollider(Collider* pCollider)
+{
+	m_pColliders.push_back(pCollider);
 }
 
 void Scene::PostLoad()

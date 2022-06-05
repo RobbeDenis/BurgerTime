@@ -10,13 +10,11 @@ namespace dae
 
 	class Collider final : public BaseComponent
 	{
-	private:
-		static std::vector<Collider*> g_Colliders;
-
 	public:
-		static bool IsOverlappingWith(Collider* c1, Collider* c2);
+		void PostLoad() override;
 
-		const std::vector<Collider*>& GetColliders() const { return g_Colliders; };
+		static bool IsOverlappingWith(Collider* c1, Collider* c2);
+		const std::vector<Collider*>& GetColliders() const;
 
 		void SetLabel(const std::string& label) { m_Label = label; };
 		const std::string& GetLabel() const { return m_Label; };
