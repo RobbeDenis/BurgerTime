@@ -128,8 +128,9 @@ void PeterPepper::UseAbility()
 		}
 	}
 
+	--m_PepperCount;
 	m_PepperCloud->GetGameObject()->SetWorldPosition(newPos);
 	m_PepperCloud->Activate();
-	--m_PepperCount;
+
 	m_pSubject->Notify(this, BTEvents::PepperUsed);
 }
