@@ -142,7 +142,10 @@ void dae::GameObject::SetLocalPosition(float x, float y, float z)
 
 dae::Scene* dae::GameObject::GetScene() const
 {
-	return m_pScene;
+	if (m_pParent)
+		return m_pParent->GetScene();
+	else
+		return m_pScene;
 }
 
 
@@ -155,7 +158,6 @@ std::shared_ptr<GameObject> dae::GameObject::AddChild(const std::string& label)
 {
 	std::shared_ptr<GameObject> pChild = std::make_shared<GameObject>();
 
-	pChild->m_pScene = m_pScene;
 	pChild->m_Label = label;
 	pChild->m_pParent = this;
 

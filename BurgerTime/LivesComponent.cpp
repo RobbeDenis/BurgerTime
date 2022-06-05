@@ -8,6 +8,7 @@ LivesComponent::LivesComponent(dae::GameObject* gameObject)
 	, m_Offset(28)
 	, m_Height(22)
 	, m_Width(22)
+	, m_Texture("BurgertimeSprites.png")
 {
 
 }
@@ -25,7 +26,7 @@ void LivesComponent::SetMaxLives(const int lives)
 	for (int i = 0; i < lives; ++i)
 	{
 		dae::RenderComponent* c = m_pGameObject->AddComponent<dae::RenderComponent>();
-		c->SetTexture("BurgertimeSprites.png");
+		c->SetTexture(m_Texture);
 		c->UseSrc(true);
 		c->SetSrc(201.f, 0.f, 7.f, 8.f);
 

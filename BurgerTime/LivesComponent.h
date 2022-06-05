@@ -15,6 +15,7 @@ public:
 	void Notify(BaseComponent* pComponent, int event) override;
 
 	void SetMaxLives(const int lives);
+	void SetTexture(const std::string& texture) { m_Texture = texture; };
 
 private:
 	LivesComponent(dae::GameObject* gameObject);
@@ -24,6 +25,7 @@ private:
 	void PlayerDied(PeterPepper* peter);
 	
 	std::vector<dae::RenderComponent*> m_RenderComponents;
+	std::string m_Texture;
 	int m_Offset;
 	int m_Width;
 	int m_Height;

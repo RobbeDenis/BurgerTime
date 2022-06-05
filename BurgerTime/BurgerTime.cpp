@@ -32,6 +32,18 @@
 
 void LoadGame();
 
+void CreateSinglePlayer();
+
+void LoadLevel(dae::Scene& scene, dae::Observer* scoreComp, Character* target);
+
+std::shared_ptr<dae::GameObject> CreateBackground(const std::string& texture);
+std::shared_ptr<dae::GameObject> CreateFPSCounter(const glm::vec3& pos, const SDL_Color& color);
+std::shared_ptr<dae::GameObject> CreateScoreUI(const glm::vec3& pos, const SDL_Color& scoreColor, const SDL_Color& textColor);
+std::shared_ptr<dae::GameObject> CreatePepperCountUI(const glm::vec3& pos, const SDL_Color& pepperColor);
+std::shared_ptr<dae::GameObject> CreateLivesUI(const glm::vec3& pos, const std::string& texture);
+std::shared_ptr<dae::GameObject> CreatePlayerCharacter(const glm::vec3& pos, const std::string& texture, dae::Observer* score, dae::Observer* lives, dae::Observer* pepperUI, PepperCloud* cloud);
+std::shared_ptr<dae::GameObject> CreatePepperCloud();
+
 std::shared_ptr<dae::GameObject> CreatePlatform(const int platformWidth, const glm::vec3& pos);
 std::shared_ptr<dae::GameObject> CreateLadder(const int ladderHeight, const glm::vec3& pos);
 std::shared_ptr<dae::GameObject> CreateBurgerPart(dae::Observer* score, const glm::vec3& pos, const int type);
@@ -48,6 +60,15 @@ int main(int, char* [])
 
 	dae::ResourceManager::GetInstance().Init("../Data/");
 
+	// Init sounds
+	g_pSoundManager->SetVolume(0.1f);
+
+	SoundSLocator::GetSoundSystem().RegisterSound(BTEvents::PlayerDied, "LoseLife.mp3");
+	SoundSLocator::GetSoundSystem().RegisterSound(BTEvents::BurgerWalk, "BurgerWalk.wav");
+	SoundSLocator::GetSoundSystem().RegisterSound(BTEvents::EnemyDied, "EnemyDied.wav");
+	SoundSLocator::GetSoundSystem().RegisterSound(BTEvents::PepperUsed, "Attack.wav");
+	SoundSLocator::GetSoundSystem().RegisterSound(BTEvents::BurgerDropped, "Bounce.wav");
+
 	LoadGame();
 
 	engine.Run();
@@ -59,85 +80,73 @@ int main(int, char* [])
 
 void LoadGame()
 {
+	CreateSinglePlayer();
+}
+
+void CreateSinglePlayer()
+{
 	auto& scene = dae::SceneManager::GetInstance().CreateScene("Level");
 	auto& input = dae::InputManager::GetInstance();
 
 	scene.EnableDebugRender(false);
 
-	// Adding sounds
-	g_pSoundManager->SetVolume(0.1f);
-
-	SoundSLocator::GetSoundSystem().RegisterSound(BTEvents::PlayerDied, "LoseLife.mp3");
-	SoundSLocator::GetSoundSystem().RegisterSound(BTEvents::BurgerWalk, "BurgerWalk.wav");
-	SoundSLocator::GetSoundSystem().RegisterSound(BTEvents::EnemyDied, "EnemyDied.wav");
-	SoundSLocator::GetSoundSystem().RegisterSound(BTEvents::PepperUsed, "Attack.wav");
-	SoundSLocator::GetSoundSystem().RegisterSound(BTEvents::BurgerDropped, "Bounce.wav");
-
 	// Adding GameObjects
-	auto go = std::make_shared<dae::GameObject>();
+	std::shared_ptr<dae::GameObject> go;
 
 	// Background
-	dae::RenderComponent* pBackgroundRender = go->AddComponent<dae::RenderComponent>();
-	pBackgroundRender->SetTexture("BurgerTimeBackground.png");
-	pBackgroundRender->SetDst(25.f, 100.f, 530.f, 530.f);
-	scene.Add(go);
-	
-	// FPS Counter
-	go = std::make_shared<dae::GameObject>();
-	dae::TextComponent* pTextComponent = go.get()->AddComponent<dae::TextComponent>();
-	pTextComponent->SetFont(dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 13), false);
-	pTextComponent->SetText("", false);
-	pTextComponent->SetColor({ 40, 215, 67 });
+	scene.Add(go = CreateBackground("BurgerTimeBackground.png"));
 
-	go->AddComponent<dae::RenderComponent>();
-	dae::FPSCounter* pFpsCounter = go->AddComponent<dae::FPSCounter>();
-	pFpsCounter->UseSmoothing(true);
-	go->SetWorldPosition(7, 7);
-	scene.Add(go);
+	// FPS Counter
+	scene.Add(CreateFPSCounter({ 7.f, 7.f, 0.f }, { 40, 215, 67 }));
 
 	// Score component
-	go = std::make_shared<dae::GameObject>();
-	go->AddComponent<dae::RenderComponent>();
-	ScoreComponent* peterScore = go->AddComponent<ScoreComponent>();
-	dae::TextComponent* pTextScore = go->AddComponent<dae::TextComponent>();
-	pTextScore->SetFont(dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 22), false);
-	pTextScore->SetColor({ 255, 255, 255 }, false);
-	go->SetWorldPosition(40, 23);
-	scene.Add(go);
-
-	auto child = go->AddChild();
-	child->AddComponent<dae::RenderComponent>();
-	pTextScore = child->AddComponent<dae::TextComponent>();
-	pTextScore->SetFont(dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 22), false);
-	pTextScore->SetColor({ 255, 0, 0 }, false);
-	pTextScore->SetText("1UP");
-	child->SetLocalPosition({ 20, -20, 0 });
+	scene.Add(go = CreateScoreUI({40.f, 23.f, 0.f}, { 255, 255, 255 }, { 255, 0, 0 }));
+	ScoreComponent* score = go->GetComponent<ScoreComponent>();
 
 	// Pepper count
-	go = std::make_shared<dae::GameObject>();
-	go->AddComponent<dae::RenderComponent>();
-	PepperUI* pepperUI = go->AddComponent<PepperUI>();
-	dae::TextComponent* pTextPepper = go->AddComponent<dae::TextComponent>();
-	pTextPepper->SetFont(dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 22), false);
-	pTextPepper->SetColor({ 255, 255, 255 }, false);
-	go->SetWorldPosition(550, 23);
-	scene.Add(go);
-
-	child = go->AddChild();
-	auto pRender = child->AddComponent<dae::RenderComponent>();
-	pRender->SetTexture("BurgertimeSprites.png");
-	pRender->UseSrc(true);
-	pRender->SetSrc(216.f, 9.f, 24.f, 6.f);
-	pRender->SetDst(0.f, 0.f, 50.f, 15.f);
-	child->SetLocalPosition({ -20, -20, 0 });
+	scene.Add(go = CreatePepperCountUI({ 550, 23, 0 }, { 255, 255, 255 }));
+	PepperUI* pepperUI = go->GetComponent<PepperUI>();
 
 	// Lives
-	go = std::make_shared<dae::GameObject>();
-	LivesComponent* peterLives = go->AddComponent<LivesComponent>();
-	peterLives->SetMaxLives(3);
-	go->SetWorldPosition(5, 640);
-	scene.Add(go);
+	scene.Add(go = CreateLivesUI({ 5,640,0 }, "Salt.png"));
+	LivesComponent* lives = go->GetComponent<LivesComponent>();
 
+	// Creating pepper cloud
+	scene.Add(go = CreatePepperCloud());
+	PepperCloud* cloud = go->GetComponent<PepperCloud>();
+
+	// CREATING PETER PEPPER
+	scene.Add(go = CreatePlayerCharacter({ 10, 500, 0 }, "Salt.png", score, lives, pepperUI, cloud));
+	PeterPepper* pPeter = go->GetComponent<PeterPepper>();
+
+	// KEYBOARD INPUTS
+	input.AddKeyboardCommand({ SDL_SCANCODE_RIGHT, dae::ButtonState::Down }, std::make_unique<IMoveRight>(pPeter));
+	input.AddKeyboardCommand({ SDL_SCANCODE_LEFT, dae::ButtonState::Down }, std::make_unique<IMoveLeft>(pPeter));
+	input.AddKeyboardCommand({ SDL_SCANCODE_UP, dae::ButtonState::Down }, std::make_unique<IMoveUpLadder>(pPeter));
+	input.AddKeyboardCommand({ SDL_SCANCODE_DOWN, dae::ButtonState::Down }, std::make_unique<IMoveDownLadder>(pPeter));
+	input.AddKeyboardCommand({ SDL_SCANCODE_RIGHT, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter));
+	input.AddKeyboardCommand({ SDL_SCANCODE_LEFT, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter));
+	input.AddKeyboardCommand({ SDL_SCANCODE_UP, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter));
+	input.AddKeyboardCommand({ SDL_SCANCODE_DOWN, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter));
+	input.AddKeyboardCommand({ SDL_SCANCODE_X, dae::ButtonState::Pressed }, std::make_unique<IUseAbility>(pPeter));
+
+	// CONTROLLER INPUTS
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonRight, dae::ButtonState::Down }, std::make_unique<IMoveRight>(pPeter));
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonLeft, dae::ButtonState::Down }, std::make_unique<IMoveLeft>(pPeter));
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonUp, dae::ButtonState::Down }, std::make_unique<IMoveUpLadder>(pPeter));
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonDown, dae::ButtonState::Down }, std::make_unique<IMoveDownLadder>(pPeter));
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonRight, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter));
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonLeft, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter));
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonUp, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter));
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonDown, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter));
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonA, dae::ButtonState::Pressed }, std::make_unique<IUseAbility>(pPeter));
+
+	//Load level
+	LoadLevel(scene, score, pPeter);
+}
+
+void LoadLevel(dae::Scene& scene, dae::Observer* scoreComp, Character* target)
+{
 	// Adding Ladders
 	// First row
 	scene.Add(CreateLadder(90, { 36.f, 135.f, 0.f }));
@@ -177,25 +186,25 @@ void LoadGame()
 
 	// Adding Burger parts
 	// Colum 1
-	scene.Add(CreateBurgerPart(peterScore, { 67.f, 125.f, 0.f }, PartType::TopBun));
-	scene.Add(CreateBurgerPart(peterScore, { 67.f, 211.f, 0.f }, PartType::Lettuce));
-	scene.Add(CreateBurgerPart(peterScore, { 67.f, 295.f, 0.f }, PartType::Patty));
-	scene.Add(CreateBurgerPart(peterScore, { 67.f, 507.f, 0.f }, PartType::BotBun));
+	scene.Add(CreateBurgerPart(scoreComp, { 67.f, 125.f, 0.f }, PartType::TopBun));
+	scene.Add(CreateBurgerPart(scoreComp, { 67.f, 211.f, 0.f }, PartType::Lettuce));
+	scene.Add(CreateBurgerPart(scoreComp, { 67.f, 295.f, 0.f }, PartType::Patty));
+	scene.Add(CreateBurgerPart(scoreComp, { 67.f, 507.f, 0.f }, PartType::BotBun));
 	// Colum 2
-	scene.Add(CreateBurgerPart(peterScore, { 190.f, 253.f, 0.f }, PartType::TopBun));
-	scene.Add(CreateBurgerPart(peterScore, { 190.f, 337.f, 0.f }, PartType::Lettuce));
-	scene.Add(CreateBurgerPart(peterScore, { 190.f, 423.f, 0.f }, PartType::Patty));
-	scene.Add(CreateBurgerPart(peterScore, { 190.f, 507.f, 0.f }, PartType::BotBun));
+	scene.Add(CreateBurgerPart(scoreComp, { 190.f, 253.f, 0.f }, PartType::TopBun));
+	scene.Add(CreateBurgerPart(scoreComp, { 190.f, 337.f, 0.f }, PartType::Lettuce));
+	scene.Add(CreateBurgerPart(scoreComp, { 190.f, 423.f, 0.f }, PartType::Patty));
+	scene.Add(CreateBurgerPart(scoreComp, { 190.f, 507.f, 0.f }, PartType::BotBun));
 	// Colum 3
-	scene.Add(CreateBurgerPart(peterScore, { 312.f, 125.f, 0.f }, PartType::TopBun));
-	scene.Add(CreateBurgerPart(peterScore, { 312.f, 211.f, 0.f }, PartType::Lettuce));
-	scene.Add(CreateBurgerPart(peterScore, { 312.f, 337.f, 0.f }, PartType::Patty));
-	scene.Add(CreateBurgerPart(peterScore, { 312.f, 507.f, 0.f }, PartType::BotBun));
+	scene.Add(CreateBurgerPart(scoreComp, { 312.f, 125.f, 0.f }, PartType::TopBun));
+	scene.Add(CreateBurgerPart(scoreComp, { 312.f, 211.f, 0.f }, PartType::Lettuce));
+	scene.Add(CreateBurgerPart(scoreComp, { 312.f, 337.f, 0.f }, PartType::Patty));
+	scene.Add(CreateBurgerPart(scoreComp, { 312.f, 507.f, 0.f }, PartType::BotBun));
 	// Colum 4
-	scene.Add(CreateBurgerPart(peterScore, { 435.f, 125.f, 0.f }, PartType::TopBun));
-	scene.Add(CreateBurgerPart(peterScore, { 435.f, 211.f, 0.f }, PartType::Lettuce));
-	scene.Add(CreateBurgerPart(peterScore, { 435.f, 295.f, 0.f }, PartType::Patty));
-	scene.Add(CreateBurgerPart(peterScore, { 435.f, 380.f, 0.f }, PartType::BotBun));
+	scene.Add(CreateBurgerPart(scoreComp, { 435.f, 125.f, 0.f }, PartType::TopBun));
+	scene.Add(CreateBurgerPart(scoreComp, { 435.f, 211.f, 0.f }, PartType::Lettuce));
+	scene.Add(CreateBurgerPart(scoreComp, { 435.f, 295.f, 0.f }, PartType::Patty));
+	scene.Add(CreateBurgerPart(scoreComp, { 435.f, 380.f, 0.f }, PartType::BotBun));
 
 	// Add plates
 	scene.Add(CreatePlate({ 92.f, 548.f, 0.f }));
@@ -203,8 +212,32 @@ void LoadGame()
 	scene.Add(CreatePlate({ 350.f, 548.f, 0.f }));
 	scene.Add(CreatePlate({ 450.f, 548.f, 0.f }));
 
-	// CREATING PETER PEPPER
-	go = std::make_shared<dae::GameObject>();
+	// Adding hot dogs
+	scene.Add(CreateEnemy(scoreComp, target, { 100.f, 120.f, 0.f }, EnemyType::HotDog));
+	scene.Add(CreateEnemy(scoreComp, target, { 40.f, 120.f, 0.f }, EnemyType::HotDog));
+
+	// Adding Egg
+	scene.Add(CreateEnemy(scoreComp, target, { 500.f, 120.f, 0.f }, EnemyType::Egg));
+
+	// Adding Pickle
+	scene.Add(CreateEnemy(scoreComp, target, { 420.f, 330.f, 0.f }, EnemyType::Pickle));
+}
+
+std::shared_ptr<dae::GameObject> CreatePepperCloud()
+{
+	auto go = std::make_shared<dae::GameObject>();
+	go->AddComponent<PepperCloud>();
+	go->AddComponent<dae::Animator>();
+	go->AddComponent<dae::Collider>()->SetLabel("Pepper");
+	go->AddComponent<dae::DebugRenderComponent>();
+	go->AddComponent<dae::RenderComponent>()->SetTexture("BurgertimeSprites.png");
+
+	return go;
+}
+
+std::shared_ptr<dae::GameObject> CreatePlayerCharacter(const glm::vec3& pos, const std::string& texture, dae::Observer* score, dae::Observer* lives, dae::Observer* pepperUI, PepperCloud* cloud)
+{
+	auto go = std::make_shared<dae::GameObject>();
 
 	PeterPepper* pPeter = go->AddComponent<PeterPepper>();
 	go->AddComponent<dae::Animator>();
@@ -212,64 +245,94 @@ void LoadGame()
 	go->AddComponent<dae::DebugRenderComponent>();
 
 	dae::RenderComponent* pPeterPepperRender = go->AddComponent<dae::RenderComponent>();
-	pPeterPepperRender->SetTexture("Salt.png");
+	pPeterPepperRender->SetTexture(texture);
 
-	// Peter pepper
-	// KEYBOARD INPUTS
-	input.AddKeyboardCommand({ SDL_SCANCODE_RIGHT, dae::ButtonState::Down }, std::make_unique<IMoveRight>(pPeter));
-	input.AddKeyboardCommand({ SDL_SCANCODE_LEFT, dae::ButtonState::Down }, std::make_unique<IMoveLeft>(pPeter));
-	input.AddKeyboardCommand({ SDL_SCANCODE_UP, dae::ButtonState::Down }, std::make_unique<IMoveUpLadder>(pPeter));
-	input.AddKeyboardCommand({ SDL_SCANCODE_DOWN, dae::ButtonState::Down }, std::make_unique<IMoveDownLadder>(pPeter));
-
-	input.AddKeyboardCommand({ SDL_SCANCODE_RIGHT, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter));
-	input.AddKeyboardCommand({ SDL_SCANCODE_LEFT, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter));
-	input.AddKeyboardCommand({ SDL_SCANCODE_UP, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter));
-	input.AddKeyboardCommand({ SDL_SCANCODE_DOWN, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter));
-
-	input.AddKeyboardCommand({ SDL_SCANCODE_X, dae::ButtonState::Pressed }, std::make_unique<IUseAbility>(pPeter));
-
-	// CONTROLLER INPUTS
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonRight, dae::ButtonState::Down }, std::make_unique<IMoveRight>(pPeter));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonLeft, dae::ButtonState::Down }, std::make_unique<IMoveLeft>(pPeter));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonUp, dae::ButtonState::Down }, std::make_unique<IMoveUpLadder>(pPeter));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonDown, dae::ButtonState::Down }, std::make_unique<IMoveDownLadder>(pPeter));
-
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonRight, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonLeft, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonUp, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonDown, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter));
-
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonA, dae::ButtonState::Pressed }, std::make_unique<IUseAbility>(pPeter));
-
-	// Adding observors
-	pPeter->AddObserver(peterScore);
-	pPeter->AddObserver(peterLives);
+	pPeter->AddObserver(score);
+	pPeter->AddObserver(lives);
 	pPeter->AddObserver(pepperUI);
 	pPeter->AddObserver(g_pSoundManager);
-
-	go->SetWorldPosition(10, 500);
-
-	scene.Add(go);
-
-	// Adding pepper cloud
-	go = std::make_shared<dae::GameObject>();
-	PepperCloud* cloud = go->AddComponent<PepperCloud>();
-	go->AddComponent<dae::Animator>();
-	go->AddComponent<dae::Collider>()->SetLabel("Pepper");
-	go->AddComponent<dae::DebugRenderComponent>();
-	go->AddComponent<dae::RenderComponent>()->SetTexture("BurgertimeSprites.png");
-	scene.Add(go);
 	pPeter->AddPepperCloud(cloud);
 
-	// Adding hot dogs
-	scene.Add(CreateEnemy(peterScore, pPeter, { 100.f, 120.f, 0.f }, EnemyType::HotDog));
-	scene.Add(CreateEnemy(peterScore, pPeter, { 40.f, 120.f, 0.f }, EnemyType::HotDog));
+	go->SetWorldPosition(pos);
 
-	// Adding Egg
-	scene.Add(CreateEnemy(peterScore, pPeter, { 500.f, 120.f, 0.f }, EnemyType::Egg));
+	return go;
+}
 
-	// Adding Pickle
-	scene.Add(CreateEnemy(peterScore, pPeter, { 420.f, 330.f, 0.f }, EnemyType::Pickle));
+std::shared_ptr<dae::GameObject> CreateLivesUI(const glm::vec3& pos, const std::string& texture)
+{
+	auto go = std::make_shared<dae::GameObject>();
+	auto peterLives = go->AddComponent<LivesComponent>();
+	peterLives->SetTexture(texture);
+	peterLives->SetMaxLives(3);
+	go->SetWorldPosition(pos);
+	
+	return go;
+}
+
+std::shared_ptr<dae::GameObject> CreatePepperCountUI(const glm::vec3& pos, const SDL_Color& pepperColor)
+{
+	auto go = std::make_shared<dae::GameObject>();
+	go->AddComponent<dae::RenderComponent>();
+	go->AddComponent<PepperUI>();
+	auto pTextPepper = go->AddComponent<dae::TextComponent>();
+	pTextPepper->SetFont(dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 22), false);
+	pTextPepper->SetColor(pepperColor, false);
+	go->SetWorldPosition(pos);
+
+	auto child = go->AddChild();
+	auto pRender = child->AddComponent<dae::RenderComponent>();
+	pRender->SetTexture("BurgertimeSprites.png");
+	pRender->UseSrc(true);
+	pRender->SetSrc(216.f, 9.f, 24.f, 6.f);
+	pRender->SetDst(0.f, 0.f, 50.f, 15.f);
+	child->SetLocalPosition({ -20, -20, 0 });
+
+	return go;
+}
+
+std::shared_ptr<dae::GameObject> CreateFPSCounter(const glm::vec3& pos, const SDL_Color& color)
+{
+	auto go = std::make_shared<dae::GameObject>();
+	auto pTextComponent = go.get()->AddComponent<dae::TextComponent>();
+	pTextComponent->SetFont(dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 13), false);
+	pTextComponent->SetText("", false);
+	pTextComponent->SetColor(color);
+	go->AddComponent<dae::RenderComponent>();
+	auto pFpsCounter = go->AddComponent<dae::FPSCounter>();
+	pFpsCounter->UseSmoothing(true);
+	go->SetWorldPosition(pos);
+	
+	return go;
+}
+
+std::shared_ptr<dae::GameObject> CreateScoreUI(const glm::vec3& pos, const SDL_Color& scoreColor, const SDL_Color& textColor)
+{
+	auto go = std::make_shared<dae::GameObject>();
+	go->AddComponent<dae::RenderComponent>();
+	go->AddComponent<ScoreComponent>();
+	auto pTextScore = go->AddComponent<dae::TextComponent>();
+	pTextScore->SetFont(dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 22), false);
+	pTextScore->SetColor(scoreColor, false);
+	go->SetWorldPosition(pos);
+
+	auto child = go->AddChild();
+	child->AddComponent<dae::RenderComponent>();
+	pTextScore = child->AddComponent<dae::TextComponent>();
+	pTextScore->SetFont(dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 22), false);
+	pTextScore->SetColor(textColor, false);
+	pTextScore->SetText("1UP");
+	child->SetLocalPosition({ 20, -20, 0 });
+
+	return go;
+}
+
+std::shared_ptr<dae::GameObject> CreateBackground(const std::string& texture)
+{
+	auto go = std::make_shared<dae::GameObject>();
+	dae::RenderComponent* pBackgroundRender = go->AddComponent<dae::RenderComponent>();
+	pBackgroundRender->SetTexture(texture);
+	pBackgroundRender->SetDst(25.f, 100.f, 530.f, 530.f);
+	return go;
 }
 
 std::shared_ptr<dae::GameObject> CreateLadder(const int ladderHeight, const glm::vec3& pos)
