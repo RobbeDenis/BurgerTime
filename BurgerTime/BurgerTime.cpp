@@ -48,9 +48,9 @@ std::shared_ptr<dae::GameObject> CreatePepperCloud();
 
 std::shared_ptr<dae::GameObject> CreatePlatform(const int platformWidth, const glm::vec3& pos);
 std::shared_ptr<dae::GameObject> CreateLadder(const int ladderHeight, const glm::vec3& pos);
-std::shared_ptr<dae::GameObject> CreateBurgerPart(dae::Observer* score, const glm::vec3& pos, const int type);
+std::shared_ptr<dae::GameObject> CreateBurgerPart(dae::Observer* score, const glm::vec3& pos, const PartType type);
 std::shared_ptr<dae::GameObject> CreatePlate(const glm::vec3& pos);
-std::shared_ptr<dae::GameObject> CreateEnemy(dae::Observer* score, Character* target, const glm::vec3& pos, const int type);
+std::shared_ptr<dae::GameObject> CreateEnemy(dae::Observer* score, Character* target, const glm::vec3& pos, const EnemyType type);
 
 SoundManager* g_pSoundManager = new SoundManager();
 
@@ -521,7 +521,7 @@ std::shared_ptr<dae::GameObject> CreatePlatform(const int platformWidth, const g
 	return go;
 }
 
-std::shared_ptr<dae::GameObject> CreateBurgerPart(dae::Observer* score, const glm::vec3& pos, const int type)
+std::shared_ptr<dae::GameObject> CreateBurgerPart(dae::Observer* score, const glm::vec3& pos, const PartType type)
 {
 	const std::string burgerLabel = "Burger";
 
@@ -530,7 +530,7 @@ std::shared_ptr<dae::GameObject> CreateBurgerPart(dae::Observer* score, const gl
 	auto collider = go->AddComponent<dae::Collider>();
 	collider->SetLabel(burgerLabel);
 	auto b = go->AddComponent<BurgerPart>();
-	b->SetType(PartType(type));
+	b->SetType(type);
 	b->AddObserver(score);
 	go->SetWorldPosition(pos);
 
@@ -554,7 +554,7 @@ std::shared_ptr<dae::GameObject> CreatePlate(const glm::vec3& pos)
 	return go;
 }
 
-std::shared_ptr<dae::GameObject> CreateEnemy(dae::Observer* score, Character* target, const glm::vec3& pos, const int type)
+std::shared_ptr<dae::GameObject> CreateEnemy(dae::Observer* score, Character* target, const glm::vec3& pos, const EnemyType type)
 {
 	int value = 0;
 
@@ -578,7 +578,7 @@ std::shared_ptr<dae::GameObject> CreateEnemy(dae::Observer* score, Character* ta
 	go->AddComponent<dae::DebugRenderComponent>();
 	go->AddComponent<dae::RenderComponent>()->SetTexture("BurgertimeSprites.png");
 	auto e = go->AddComponent<Enemy>();
-	e->SetType(EnemyType(type));
+	e->SetType(type);
 	e->SetValue(value);
 	e->AddObserver(score);
 	e->AddObserver(g_pSoundManager);

@@ -17,6 +17,7 @@ namespace dae
 		void Update();
 		void FixedUpdate();
 		void LateUpdate();
+		void Reset();
 
 		size_t GetChildAmount() const { return m_pChildren.size(); };
 		std::shared_ptr<GameObject> AddChild(const std::string& label);

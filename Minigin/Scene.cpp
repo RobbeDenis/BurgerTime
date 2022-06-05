@@ -94,3 +94,11 @@ void Scene::Render() const
 	}
 }
 
+void Scene::Reset()
+{
+	for (auto& object : m_Objects)
+	{
+		object->Reset();
+	}
+}
+

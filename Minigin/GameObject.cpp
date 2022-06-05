@@ -97,6 +97,19 @@ void dae::GameObject::LateUpdate()
 	}
 }
 
+void dae::GameObject::Reset()
+{
+	for (BaseComponent* c : m_pComponents)
+	{
+		c->Reset();
+	}
+
+	for (std::shared_ptr<GameObject> obj : m_pChildren)
+	{
+		obj->Reset();
+	}
+}
+
 void dae::GameObject::SetScene(Scene* pScene)
 {
 	m_pScene = pScene;

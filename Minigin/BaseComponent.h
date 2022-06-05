@@ -12,6 +12,7 @@ namespace dae
 		virtual void Update() {};
 		virtual void FixedUpdate() {};
 		virtual void LateUpdate() {};
+		virtual void Reset() {};
 
 		virtual ~BaseComponent() = default;
 

@@ -51,6 +51,14 @@ void dae::SceneManager::Render()
 	m_ActiveScene->Render();
 }
 
+void dae::SceneManager::Reset()
+{
+	if (!m_ActiveScene)
+		return;
+
+	m_ActiveScene->Reset();
+}
+
 dae::Scene& dae::SceneManager::CreateScene(const std::string& name)
 {
 	InputManager::GetInstance().AddNewSceneCommands();

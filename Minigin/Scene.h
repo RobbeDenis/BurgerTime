@@ -23,6 +23,7 @@ namespace dae
 		void FixedUpdate();
 		void LateUpdate();
 		void Render() const;
+		void Reset();
 
 		void EnableDebugRender(bool enable) { m_EnableDebug = enable; };
 		const std::string& GetName() { return m_Name; };
