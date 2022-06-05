@@ -3,7 +3,7 @@
 #include <Collider.h>
 #include <Subject.h>
 
-enum class PartType
+enum PartType
 {
 	TopBun = 0,
 	BotBun = 1,

@@ -1,7 +1,7 @@
 #pragma once
 #include "Character.h"
 
-enum class EnemyType
+enum EnemyType
 {
 	HotDog = 0,
 	Pickle = 1,
