@@ -75,24 +75,24 @@ namespace dae
 		bool ProcessInput();
 		~InputManager();
 
-		void AddControllerCommand(const ControllerInput data, std::unique_ptr<Command> pCommand);
+		void AddControllerCommand(const ControllerInput data, std::unique_ptr<Command> pCommand, const int sceneIdx);
 		void AddController(int controllerIndex);
 
 		bool IsPressed(XBox360Controller::ControllerButton button, unsigned int controllerIdx = 0) const;
 		bool IsReleased(XBox360Controller::ControllerButton button, unsigned int controllerIdx = 0) const;
 		bool IsDown(XBox360Controller::ControllerButton button, unsigned int controllerIdx = 0) const;
 
-		void AddKeyboardCommand(const KeyboardInput data, std::unique_ptr<Command> pCommand);
+		void AddKeyboardCommand(const KeyboardInput data, std::unique_ptr<Command> pCommand, const int sceneIdx);
+
+		void AddNewSceneCommands();
 
 	private:
 		using ControllerCommandsMap = std::unordered_map<ControllerInput, std::unique_ptr<Command>, ControllerInputHasher>;
-		ControllerCommandsMap m_ControllerCommands{};
-		std::vector<std::unique_ptr<XBox360Controller>> m_Controllers{};
-
-
-		// KEYBOARD
-		void ProcessKeyboardInput();
 		using KeyboardCommandsMap = std::unordered_map<KeyboardInput, std::pair<std::unique_ptr<Command>, bool>, KeyboardInputHasher>;
-		KeyboardCommandsMap m_KeyboardCommands{};
+		using SceneCommands = std::pair<ControllerCommandsMap, KeyboardCommandsMap>;
+		std::vector<SceneCommands*> m_Commands{};
+
+		std::vector<std::unique_ptr<XBox360Controller>> m_Controllers{};
+		void ProcessKeyboardInput();
 	};
 }

@@ -22,7 +22,6 @@ void PeterPepper::PostLoad()
 {
 	Character::PostLoad();
 
-	dae::InputManager::GetInstance().AddController(0);
 	m_pSubject->Notify(this, BTEvents::PlayerReset);
 
 	const float animWalkSpeed = 0.05f;

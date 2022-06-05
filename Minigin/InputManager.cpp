@@ -1,18 +1,21 @@
 #include "RodEnginePCH.h"
 #include "InputManager.h"
+#include "SceneManager.h"
 
 dae::InputManager::~InputManager()
 {
-	m_ControllerCommands.erase(begin(m_ControllerCommands), end(m_ControllerCommands));
+	m_Commands.erase(begin(m_Commands), end(m_Commands));
 }
 
 bool dae::InputManager::ProcessInput()
 {
+	const int sceneIdx = SceneManager::GetInstance().GetSceneIdx();
+
 	for (const std::unique_ptr<XBox360Controller>& controller : m_Controllers)
 	{
 		controller->ProcessInput();
 
-		for (auto& command : m_ControllerCommands)
+		for (auto& command : m_Commands[sceneIdx]->first)
 		{
 			switch (command.first.State)
 			{
@@ -73,15 +76,15 @@ bool dae::InputManager::IsDown(XBox360Controller::ControllerButton button, unsig
 	return m_Controllers[controllerIdx]->IsDown(button);
 }
 
-void dae::InputManager::AddControllerCommand(const ControllerInput data, std::unique_ptr<Command> pCommand)
+void dae::InputManager::AddControllerCommand(const ControllerInput data, std::unique_ptr<Command> pCommand, const int sceneIdx)
 {
-	if (m_ControllerCommands.find(data) != end(m_ControllerCommands))
+	if (m_Commands[sceneIdx]->first.find(data) != end(m_Commands[sceneIdx]->first))
 	{
-		m_ControllerCommands[data] = std::move(pCommand);
+		m_Commands[sceneIdx]->first[data] = std::move(pCommand);
 		return;
 	}
 
-	m_ControllerCommands.emplace(data, std::move(pCommand));
+	m_Commands[sceneIdx]->first.emplace(data, std::move(pCommand));
 }
 
 void dae::InputManager::AddController(int controllerIndex)
@@ -89,24 +92,25 @@ void dae::InputManager::AddController(int controllerIndex)
 	m_Controllers.push_back(std::make_unique<XBox360Controller>(controllerIndex));
 }
 
-void dae::InputManager::AddKeyboardCommand(const KeyboardInput data, std::unique_ptr<Command> pCommand)
+void dae::InputManager::AddKeyboardCommand(const KeyboardInput data, std::unique_ptr<Command> pCommand, const int sceneIdx)
 {
 	std::pair<std::unique_ptr<Command>, bool> pair = { std::move(pCommand), false };
 
-	if (m_KeyboardCommands.find(data) != end(m_KeyboardCommands))
+	if (m_Commands[sceneIdx]->second.find(data) != end(m_Commands[sceneIdx]->second))
 	{
-		m_KeyboardCommands[data] = std::move(pair);
+		m_Commands[sceneIdx]->second[data] = std::move(pair);
 		return;
 	}
 
-	m_KeyboardCommands.emplace(data, std::move(pair));
+	m_Commands[sceneIdx]->second.emplace(data, std::move(pair));
 }
 
 void dae::InputManager::ProcessKeyboardInput()
 {
 	const Uint8* state = SDL_GetKeyboardState(NULL);
+	const int sceneIdx = SceneManager::GetInstance().GetSceneIdx();
 
-	for (auto& command : m_KeyboardCommands)
+	for (auto& command : m_Commands[sceneIdx]->second)
 	{
 		bool currentState = state[command.first.Key];
 
@@ -134,4 +138,12 @@ void dae::InputManager::ProcessKeyboardInput()
 
 		command.second.second = currentState;
 	}
+}
+
+void dae::InputManager::AddNewSceneCommands()
+{
+	ControllerCommandsMap ccmap{};
+	KeyboardCommandsMap kcmap{};
+	SceneCommands* pair = new SceneCommands{ std::move(ccmap),  std::move(kcmap) };
+	m_Commands.push_back(std::move(pair));
 }

@@ -8,6 +8,8 @@ namespace dae
 	{
 	public:
 		Scene& CreateScene(const std::string& name);
+		void SetScene(const std::string& name);
+		int GetSceneIdx() const { return m_SceneIdx; };
 
 		void PostLoad();
 		void Start();
@@ -15,9 +17,12 @@ namespace dae
 		void FixedUpdate();
 		void LateUpdate();
 		void Render();
+
 	private:
 		friend class Singleton<SceneManager>;
 		SceneManager() = default;
 		std::vector<std::shared_ptr<Scene>> m_Scenes;
+		std::shared_ptr<Scene> m_ActiveScene;
+		int m_SceneIdx;
 	};
 }

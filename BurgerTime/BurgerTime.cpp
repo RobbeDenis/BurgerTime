@@ -61,10 +61,9 @@ int main(int, char* [])
 	engine.Initialize();
 
 	dae::ResourceManager::GetInstance().Init("../Data/");
+	dae::InputManager::GetInstance().AddController(0);
 
-	// Init sounds
 	g_pSoundManager->SetVolume(0.1f);
-
 	SoundSLocator::GetSoundSystem().RegisterSound(BTEvents::PlayerDied, "LoseLife.mp3");
 	SoundSLocator::GetSoundSystem().RegisterSound(BTEvents::BurgerWalk, "BurgerWalk.wav");
 	SoundSLocator::GetSoundSystem().RegisterSound(BTEvents::EnemyDied, "EnemyDied.wav");
@@ -82,88 +81,18 @@ int main(int, char* [])
 
 void LoadGame()
 {
-	//CreateSinglePlayer();
-	//CreateCoop();
+	CreateSinglePlayer();
+	CreateCoop();
 	CreateVersus();
-}
 
-void CreateVersus()
-{
-	auto& scene = dae::SceneManager::GetInstance().CreateScene("Versus");
-	auto& input = dae::InputManager::GetInstance();
-
-	scene.EnableDebugRender(false);
-
-	// Adding GameObjects
-	std::shared_ptr<dae::GameObject> go;
-
-	// Background
-	scene.Add(go = CreateBackground("BurgerTimeBackground.png"));
-
-	// FPS Counter
-	scene.Add(CreateFPSCounter({ 7.f, 7.f, 0.f }, { 40, 215, 67 }));
-
-	// Score component
-	scene.Add(go = CreateScoreUI({ 40.f, 23.f, 0.f }, { 255, 255, 255 }, { 255, 0, 0 }));
-	ScoreComponent* score = go->GetComponent<ScoreComponent>();
-
-	// Pepper count
-	scene.Add(go = CreatePepperCountUI({ 550, 23, 0 }, { 255, 255, 255 }));
-	PepperUI* pepperUI = go->GetComponent<PepperUI>();
-
-	// Lives
-	scene.Add(go = CreateLivesUI({ 5,640,0 }, "BurgertimeSprites.png"));
-	LivesComponent* lives = go->GetComponent<LivesComponent>();
-
-	// Creating pepper cloud
-	scene.Add(go = CreatePepperCloud());
-	PepperCloud* cloud = go->GetComponent<PepperCloud>();
-
-	// CREATING PETER PEPPER
-	scene.Add(go = CreatePlayerCharacter({ 10, 500, 0 }, "BurgertimeSprites.png", score, lives, pepperUI, cloud));
-	PeterPepper* pPeter = go->GetComponent<PeterPepper>();
-
-	// KEYBOARD INPUTS
-	input.AddKeyboardCommand({ SDL_SCANCODE_RIGHT, dae::ButtonState::Down }, std::make_unique<IMoveRight>(pPeter));
-	input.AddKeyboardCommand({ SDL_SCANCODE_LEFT, dae::ButtonState::Down }, std::make_unique<IMoveLeft>(pPeter));
-	input.AddKeyboardCommand({ SDL_SCANCODE_UP, dae::ButtonState::Down }, std::make_unique<IMoveUpLadder>(pPeter));
-	input.AddKeyboardCommand({ SDL_SCANCODE_DOWN, dae::ButtonState::Down }, std::make_unique<IMoveDownLadder>(pPeter));
-	input.AddKeyboardCommand({ SDL_SCANCODE_RIGHT, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter));
-	input.AddKeyboardCommand({ SDL_SCANCODE_LEFT, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter));
-	input.AddKeyboardCommand({ SDL_SCANCODE_UP, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter));
-	input.AddKeyboardCommand({ SDL_SCANCODE_DOWN, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter));
-	input.AddKeyboardCommand({ SDL_SCANCODE_X, dae::ButtonState::Pressed }, std::make_unique<IUseAbility>(pPeter));
-
-	go = std::make_shared<dae::GameObject>();
-	go->AddComponent<dae::Animator>();
-	go->AddComponent<dae::Collider>()->SetLabel("Enemy");
-	go->AddComponent<dae::DebugRenderComponent>();
-	go->AddComponent<dae::RenderComponent>()->SetTexture("BurgertimeSprites.png");
-	auto hotdog = go->AddComponent<Enemy>();
-	hotdog->SetType(EnemyType::HotDog);
-	hotdog->SetValue(100);
-	hotdog->AddObserver(score);
-	hotdog->AddObserver(g_pSoundManager);
-	go->SetWorldPosition({ 400.f, 120.f, 0.f });
-	scene.Add(go);
-
-	// CONTROLLER INPUTS
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonRight, dae::ButtonState::Down }, std::make_unique<IMoveRight>(hotdog));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonLeft, dae::ButtonState::Down }, std::make_unique<IMoveLeft>(hotdog));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonUp, dae::ButtonState::Down }, std::make_unique<IMoveUpLadder>(hotdog));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonDown, dae::ButtonState::Down }, std::make_unique<IMoveDownLadder>(hotdog));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonRight, dae::ButtonState::Released }, std::make_unique<IStopMove>(hotdog));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonLeft, dae::ButtonState::Released }, std::make_unique<IStopMove>(hotdog));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonUp, dae::ButtonState::Released }, std::make_unique<IStopMove>(hotdog));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonDown, dae::ButtonState::Released }, std::make_unique<IStopMove>(hotdog));
-
-	//Load level
-	LoadLevel(scene, score, pPeter);
+	//dae::SceneManager::GetInstance().SetScene("SinglePlayer");
+	//dae::SceneManager::GetInstance().SetScene("Coop");
+	dae::SceneManager::GetInstance().SetScene("Versus");
 }
 
 void CreateSinglePlayer()
 {
-	auto& scene = dae::SceneManager::GetInstance().CreateScene("Singleplayer");
+	auto& scene = dae::SceneManager::GetInstance().CreateScene("SinglePlayer");
 	auto& input = dae::InputManager::GetInstance();
 
 	scene.EnableDebugRender(false);
@@ -198,26 +127,26 @@ void CreateSinglePlayer()
 	PeterPepper* pPeter = go->GetComponent<PeterPepper>();
 
 	// KEYBOARD INPUTS
-	input.AddKeyboardCommand({ SDL_SCANCODE_RIGHT, dae::ButtonState::Down }, std::make_unique<IMoveRight>(pPeter));
-	input.AddKeyboardCommand({ SDL_SCANCODE_LEFT, dae::ButtonState::Down }, std::make_unique<IMoveLeft>(pPeter));
-	input.AddKeyboardCommand({ SDL_SCANCODE_UP, dae::ButtonState::Down }, std::make_unique<IMoveUpLadder>(pPeter));
-	input.AddKeyboardCommand({ SDL_SCANCODE_DOWN, dae::ButtonState::Down }, std::make_unique<IMoveDownLadder>(pPeter));
-	input.AddKeyboardCommand({ SDL_SCANCODE_RIGHT, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter));
-	input.AddKeyboardCommand({ SDL_SCANCODE_LEFT, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter));
-	input.AddKeyboardCommand({ SDL_SCANCODE_UP, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter));
-	input.AddKeyboardCommand({ SDL_SCANCODE_DOWN, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter));
-	input.AddKeyboardCommand({ SDL_SCANCODE_X, dae::ButtonState::Pressed }, std::make_unique<IUseAbility>(pPeter));
+	input.AddKeyboardCommand({ SDL_SCANCODE_RIGHT, dae::ButtonState::Down }, std::make_unique<IMoveRight>(pPeter), 0);
+	input.AddKeyboardCommand({ SDL_SCANCODE_LEFT, dae::ButtonState::Down }, std::make_unique<IMoveLeft>(pPeter), 0);
+	input.AddKeyboardCommand({ SDL_SCANCODE_UP, dae::ButtonState::Down }, std::make_unique<IMoveUpLadder>(pPeter), 0);
+	input.AddKeyboardCommand({ SDL_SCANCODE_DOWN, dae::ButtonState::Down }, std::make_unique<IMoveDownLadder>(pPeter), 0);
+	input.AddKeyboardCommand({ SDL_SCANCODE_RIGHT, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter), 0);
+	input.AddKeyboardCommand({ SDL_SCANCODE_LEFT, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter), 0);
+	input.AddKeyboardCommand({ SDL_SCANCODE_UP, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter), 0);
+	input.AddKeyboardCommand({ SDL_SCANCODE_DOWN, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter), 0);
+	input.AddKeyboardCommand({ SDL_SCANCODE_X, dae::ButtonState::Pressed }, std::make_unique<IUseAbility>(pPeter), 0);
 
 	// CONTROLLER INPUTS
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonRight, dae::ButtonState::Down }, std::make_unique<IMoveRight>(pPeter));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonLeft, dae::ButtonState::Down }, std::make_unique<IMoveLeft>(pPeter));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonUp, dae::ButtonState::Down }, std::make_unique<IMoveUpLadder>(pPeter));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonDown, dae::ButtonState::Down }, std::make_unique<IMoveDownLadder>(pPeter));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonRight, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonLeft, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonUp, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonDown, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonA, dae::ButtonState::Pressed }, std::make_unique<IUseAbility>(pPeter));
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonRight, dae::ButtonState::Down }, std::make_unique<IMoveRight>(pPeter), 0);
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonLeft, dae::ButtonState::Down }, std::make_unique<IMoveLeft>(pPeter), 0);
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonUp, dae::ButtonState::Down }, std::make_unique<IMoveUpLadder>(pPeter), 0);
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonDown, dae::ButtonState::Down }, std::make_unique<IMoveDownLadder>(pPeter), 0);
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonRight, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter), 0);
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonLeft, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter), 0);
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonUp, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter), 0);
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonDown, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter), 0);
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonA, dae::ButtonState::Pressed }, std::make_unique<IUseAbility>(pPeter), 0);
 
 	//Load level
 	LoadLevel(scene, score, pPeter);
@@ -264,33 +193,107 @@ void CreateCoop()
 	PeterPepper* pPepper = go->GetComponent<PeterPepper>();
 
 	// KEYBOARD INPUTS
-	input.AddKeyboardCommand({ SDL_SCANCODE_RIGHT, dae::ButtonState::Down }, std::make_unique<IMoveRight>(pPepper));
-	input.AddKeyboardCommand({ SDL_SCANCODE_LEFT, dae::ButtonState::Down }, std::make_unique<IMoveLeft>(pPepper));
-	input.AddKeyboardCommand({ SDL_SCANCODE_UP, dae::ButtonState::Down }, std::make_unique<IMoveUpLadder>(pPepper));
-	input.AddKeyboardCommand({ SDL_SCANCODE_DOWN, dae::ButtonState::Down }, std::make_unique<IMoveDownLadder>(pPepper));
-	input.AddKeyboardCommand({ SDL_SCANCODE_RIGHT, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPepper));
-	input.AddKeyboardCommand({ SDL_SCANCODE_LEFT, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPepper));
-	input.AddKeyboardCommand({ SDL_SCANCODE_UP, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPepper));
-	input.AddKeyboardCommand({ SDL_SCANCODE_DOWN, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPepper));
-	input.AddKeyboardCommand({ SDL_SCANCODE_X, dae::ButtonState::Pressed }, std::make_unique<IUseAbility>(pPepper));
+	input.AddKeyboardCommand({ SDL_SCANCODE_RIGHT, dae::ButtonState::Down }, std::make_unique<IMoveRight>(pPepper), 1);
+	input.AddKeyboardCommand({ SDL_SCANCODE_LEFT, dae::ButtonState::Down }, std::make_unique<IMoveLeft>(pPepper), 1);
+	input.AddKeyboardCommand({ SDL_SCANCODE_UP, dae::ButtonState::Down }, std::make_unique<IMoveUpLadder>(pPepper), 1);
+	input.AddKeyboardCommand({ SDL_SCANCODE_DOWN, dae::ButtonState::Down }, std::make_unique<IMoveDownLadder>(pPepper), 1);
+	input.AddKeyboardCommand({ SDL_SCANCODE_RIGHT, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPepper), 1);
+	input.AddKeyboardCommand({ SDL_SCANCODE_LEFT, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPepper), 1);
+	input.AddKeyboardCommand({ SDL_SCANCODE_UP, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPepper), 1);
+	input.AddKeyboardCommand({ SDL_SCANCODE_DOWN, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPepper), 1);
+	input.AddKeyboardCommand({ SDL_SCANCODE_X, dae::ButtonState::Pressed }, std::make_unique<IUseAbility>(pPepper), 1);
 
 	// CREATING SALT
 	scene.Add(go = CreatePlayerCharacter({ 200, 500, 0 }, "Salt.png", score, lives, pepperUI, cloudSalt));
 	PeterPepper* pSalt = go->GetComponent<PeterPepper>();
 
 	// CONTROLLER INPUTS
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonRight, dae::ButtonState::Down }, std::make_unique<IMoveRight>(pSalt));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonLeft, dae::ButtonState::Down }, std::make_unique<IMoveLeft>(pSalt));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonUp, dae::ButtonState::Down }, std::make_unique<IMoveUpLadder>(pSalt));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonDown, dae::ButtonState::Down }, std::make_unique<IMoveDownLadder>(pSalt));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonRight, dae::ButtonState::Released }, std::make_unique<IStopMove>(pSalt));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonLeft, dae::ButtonState::Released }, std::make_unique<IStopMove>(pSalt));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonUp, dae::ButtonState::Released }, std::make_unique<IStopMove>(pSalt));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonDown, dae::ButtonState::Released }, std::make_unique<IStopMove>(pSalt));
-	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonA, dae::ButtonState::Pressed }, std::make_unique<IUseAbility>(pSalt));
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonRight, dae::ButtonState::Down }, std::make_unique<IMoveRight>(pSalt), 1);
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonLeft, dae::ButtonState::Down }, std::make_unique<IMoveLeft>(pSalt), 1);
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonUp, dae::ButtonState::Down }, std::make_unique<IMoveUpLadder>(pSalt), 1);
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonDown, dae::ButtonState::Down }, std::make_unique<IMoveDownLadder>(pSalt), 1);
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonRight, dae::ButtonState::Released }, std::make_unique<IStopMove>(pSalt), 1);
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonLeft, dae::ButtonState::Released }, std::make_unique<IStopMove>(pSalt), 1);
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonUp, dae::ButtonState::Released }, std::make_unique<IStopMove>(pSalt), 1);
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonDown, dae::ButtonState::Released }, std::make_unique<IStopMove>(pSalt), 1);
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonA, dae::ButtonState::Pressed }, std::make_unique<IUseAbility>(pSalt), 1);
 
 	//Load level
 	LoadLevel(scene, score, pPepper);
+}
+
+void CreateVersus()
+{
+	auto& scene = dae::SceneManager::GetInstance().CreateScene("Versus");
+	auto& input = dae::InputManager::GetInstance();
+
+	scene.EnableDebugRender(false);
+
+	// Adding GameObjects
+	std::shared_ptr<dae::GameObject> go;
+
+	// Background
+	scene.Add(go = CreateBackground("BurgerTimeBackground.png"));
+
+	// FPS Counter
+	scene.Add(CreateFPSCounter({ 7.f, 7.f, 0.f }, { 40, 215, 67 }));
+
+	// Score component
+	scene.Add(go = CreateScoreUI({ 40.f, 23.f, 0.f }, { 255, 255, 255 }, { 255, 0, 0 }));
+	ScoreComponent* score = go->GetComponent<ScoreComponent>();
+
+	// Pepper count
+	scene.Add(go = CreatePepperCountUI({ 550, 23, 0 }, { 255, 255, 255 }));
+	PepperUI* pepperUI = go->GetComponent<PepperUI>();
+
+	// Lives
+	scene.Add(go = CreateLivesUI({ 5,640,0 }, "BurgertimeSprites.png"));
+	LivesComponent* lives = go->GetComponent<LivesComponent>();
+
+	// Creating pepper cloud
+	scene.Add(go = CreatePepperCloud());
+	PepperCloud* cloud = go->GetComponent<PepperCloud>();
+
+	// CREATING PETER PEPPER
+	scene.Add(go = CreatePlayerCharacter({ 10, 500, 0 }, "BurgertimeSprites.png", score, lives, pepperUI, cloud));
+	PeterPepper* pPeter = go->GetComponent<PeterPepper>();
+
+	// KEYBOARD INPUTS
+	input.AddKeyboardCommand({ SDL_SCANCODE_RIGHT, dae::ButtonState::Down }, std::make_unique<IMoveRight>(pPeter), 2);
+	input.AddKeyboardCommand({ SDL_SCANCODE_LEFT, dae::ButtonState::Down }, std::make_unique<IMoveLeft>(pPeter), 2);
+	input.AddKeyboardCommand({ SDL_SCANCODE_UP, dae::ButtonState::Down }, std::make_unique<IMoveUpLadder>(pPeter), 2);
+	input.AddKeyboardCommand({ SDL_SCANCODE_DOWN, dae::ButtonState::Down }, std::make_unique<IMoveDownLadder>(pPeter), 2);
+	input.AddKeyboardCommand({ SDL_SCANCODE_RIGHT, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter), 2);
+	input.AddKeyboardCommand({ SDL_SCANCODE_LEFT, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter), 2);
+	input.AddKeyboardCommand({ SDL_SCANCODE_UP, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter), 2);
+	input.AddKeyboardCommand({ SDL_SCANCODE_DOWN, dae::ButtonState::Released }, std::make_unique<IStopMove>(pPeter), 2);
+	input.AddKeyboardCommand({ SDL_SCANCODE_X, dae::ButtonState::Pressed }, std::make_unique<IUseAbility>(pPeter), 2);
+
+	go = std::make_shared<dae::GameObject>();
+	go->AddComponent<dae::Animator>();
+	go->AddComponent<dae::Collider>()->SetLabel("Enemy");
+	go->AddComponent<dae::DebugRenderComponent>();
+	go->AddComponent<dae::RenderComponent>()->SetTexture("BurgertimeSprites.png");
+	auto hotdog = go->AddComponent<Enemy>();
+	hotdog->SetType(EnemyType::HotDog);
+	hotdog->SetValue(100);
+	hotdog->AddObserver(score);
+	hotdog->AddObserver(g_pSoundManager);
+	go->SetWorldPosition({ 400.f, 120.f, 0.f });
+	scene.Add(go);
+
+	// CONTROLLER INPUTS
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonRight, dae::ButtonState::Down }, std::make_unique<IMoveRight>(hotdog), 2);
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonLeft, dae::ButtonState::Down }, std::make_unique<IMoveLeft>(hotdog), 2);
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonUp, dae::ButtonState::Down }, std::make_unique<IMoveUpLadder>(hotdog), 2);
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonDown, dae::ButtonState::Down }, std::make_unique<IMoveDownLadder>(hotdog), 2);
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonRight, dae::ButtonState::Released }, std::make_unique<IStopMove>(hotdog), 2);
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonLeft, dae::ButtonState::Released }, std::make_unique<IStopMove>(hotdog), 2);
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonUp, dae::ButtonState::Released }, std::make_unique<IStopMove>(hotdog), 2);
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonDown, dae::ButtonState::Released }, std::make_unique<IStopMove>(hotdog), 2);
+
+	//Load level
+	LoadLevel(scene, score, pPeter);
 }
 
 void LoadLevel(dae::Scene& scene, dae::Observer* scoreComp, Character* target)

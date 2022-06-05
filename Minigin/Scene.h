@@ -23,6 +23,7 @@ namespace dae
 		void Render() const;
 
 		void EnableDebugRender(bool enable) { m_EnableDebug = enable; };
+		const std::string& GetName() { return m_Name; };
 
 		~Scene();
 		Scene(const Scene& other) = delete;
@@ -38,8 +39,6 @@ namespace dae
 		std::vector<RenderComponent*> m_pRenderComponents{};
 		std::vector<DebugRenderComponent*> m_pDebugRenderComponents{};
 		bool m_EnableDebug;
-
-		static unsigned int m_IdCounter; 
 	};
 
 }
