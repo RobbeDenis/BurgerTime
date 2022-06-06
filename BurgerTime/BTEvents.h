@@ -11,5 +11,6 @@ enum BTEvents
 	BurgerWalk = 6,
 	GameOver = 7,
 	UIIndexChanged = 8,
-	UIConfirmed = 9
+	UIConfirmed = 9,
+	PlateFilled = 10
 };

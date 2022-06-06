@@ -7,6 +7,8 @@
 GameManager::GameManager()
 	: dae::Observer()
 	, m_IsGameOver(false)
+	, m_MaxPlatesFilled(4)
+	, m_PlatesFilled(0)
 {
 
 }
@@ -37,6 +39,19 @@ void GameManager::Notify(int event)
 	case BTEvents::GameOver:
 		GameOver();
 		break;
+	case BTEvents::PlateFilled:
+		PlateFilled();
+		break;
+	}
+}
+
+void GameManager::PlateFilled()
+{
+	++m_PlatesFilled;
+	if (m_PlatesFilled >= m_MaxPlatesFilled)
+	{
+		GameWon();
+		m_PlatesFilled = 0;
 	}
 }
 
@@ -74,7 +89,8 @@ void GameManager::Confirmed(UIPointer* p)
 
 void GameManager::ResetLevel()
 {
-	dae::SceneManager::GetInstance().Reset();
+	//dae::SceneManager::GetInstance().Reset();
+	dae::SceneManager::GetInstance().Start();
 }
 
 void GameManager::GameOver()
@@ -90,4 +106,13 @@ void GameManager::GameOver()
 void GameManager::ResetWholeScene()
 {
 	dae::InputManager::GetInstance().Reset();
+}
+
+void GameManager::GameWon()
+{
+	ResetLevel();
+	std::cout << "Game Won\n";
+	m_IsGameOver = true;
+	ResetWholeScene();
+	dae::SceneManager::GetInstance().SetScene(m_GameWon);
 }

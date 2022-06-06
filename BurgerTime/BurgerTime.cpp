@@ -54,7 +54,7 @@ std::shared_ptr<dae::GameObject> CreatePepperCloud();
 std::shared_ptr<dae::GameObject> CreatePlatform(const int platformWidth, const glm::vec3& pos);
 std::shared_ptr<dae::GameObject> CreateLadder(const int ladderHeight, const glm::vec3& pos);
 std::shared_ptr<dae::GameObject> CreateBurgerPart(dae::Observer* score, const glm::vec3& pos, const PartType type);
-std::shared_ptr<dae::GameObject> CreatePlate(const glm::vec3& pos);
+std::shared_ptr<dae::GameObject> CreatePlate(const glm::vec3& pos, dae::Observer* pGame);
 std::shared_ptr<dae::GameObject> CreateEnemy(dae::Observer* pGame, dae::Observer* score, dae::Observer* pSoundManager, Character* target, const glm::vec3& pos, const EnemyType type);
 
 int main(int, char* []) 
@@ -94,13 +94,14 @@ void LoadGame(GameManager* pGame, SoundManager* pSoundManager)
 	CreateVersus(pGame, pSoundManager);
 	CreateStartMenu(pGame, pSoundManager);
 	CreateGameOver(pGame);
+	CreateGameWon(pGame);
 
 	dae::SceneManager::GetInstance().SetScene("StartMenu");
 }
 
 void CreateGameWon(GameManager* pGame)
 {
-	auto& scene = dae::SceneManager::GetInstance().CreateScene(pGame->GetGameOverName());
+	auto& scene = dae::SceneManager::GetInstance().CreateScene(pGame->GetGameWonName());
 	auto& input = dae::InputManager::GetInstance();
 
 	// Adding GameObjects
@@ -461,10 +462,10 @@ void LoadLevel(dae::Scene& scene, dae::Observer* pGame, dae::Observer* scoreComp
 	scene.Add(CreateBurgerPart(scoreComp, { 435.f, 380.f, 0.f }, PartType::BotBun));
 
 	// Add plates
-	scene.Add(CreatePlate({ 92.f, 548.f, 0.f }));
-	scene.Add(CreatePlate({ 220.f, 548.f, 0.f }));
-	scene.Add(CreatePlate({ 350.f, 548.f, 0.f }));
-	scene.Add(CreatePlate({ 450.f, 548.f, 0.f }));
+	scene.Add(CreatePlate({ 92.f, 548.f, 0.f }, pGame));
+	scene.Add(CreatePlate({ 220.f, 548.f, 0.f }, pGame));
+	scene.Add(CreatePlate({ 350.f, 548.f, 0.f }, pGame));
+	scene.Add(CreatePlate({ 450.f, 548.f, 0.f }, pGame));
 
 	// Adding hot dogs
 	scene.Add(CreateEnemy(pGame, scoreComp, pSoundManager, target, { 100.f, 120.f, 0.f }, EnemyType::HotDog));
@@ -641,7 +642,7 @@ std::shared_ptr<dae::GameObject> CreateBurgerPart(dae::Observer* score, const gl
 	return go;
 }
 
-std::shared_ptr<dae::GameObject> CreatePlate(const glm::vec3& pos)
+std::shared_ptr<dae::GameObject> CreatePlate(const glm::vec3& pos, dae::Observer* pGame)
 {
 	const std::string plateLabel = "Plate";
 	const int width = 30;
@@ -650,7 +651,8 @@ std::shared_ptr<dae::GameObject> CreatePlate(const glm::vec3& pos)
 	auto go = std::make_shared<dae::GameObject>();
 	auto collider = go->AddComponent<dae::Collider>();
 	collider->SetLabel(plateLabel);
-	go->AddComponent<Plate>();
+	auto p = go->AddComponent<Plate>();
+	p->AddObserver(pGame);
 	auto debugRender = go->AddComponent<dae::DebugRenderComponent>();
 	debugRender->SetDimensions(width, height);
 	go->SetWorldPosition(pos);

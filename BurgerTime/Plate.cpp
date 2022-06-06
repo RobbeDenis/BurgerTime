@@ -1,13 +1,15 @@
 #include "Plate.h"
 #include "BurgerPart.h"
+#include "BTEvents.h"
 
 Plate::Plate(dae::GameObject* gameObject)
 	: BaseComponent(gameObject)
 	, m_Height(80)
 	, m_Width(30)
 	, m_Collider(nullptr)
+	, m_Filled(false)
 {
-
+	m_pSubject = std::make_shared<dae::Subject>();
 }
 
 void Plate::PostLoad()
@@ -29,6 +31,12 @@ void Plate::FixedUpdate()
 			{
 				BurgerPart* b = c->GetGameObject()->GetComponent<BurgerPart>();
 				b->EnableStacking(true);
+
+				if (!m_Filled && b->GetType() == PartType::TopBun)
+				{
+					m_pSubject->Notify(PlateFilled);
+					m_Filled = true;
+				}
 			}
 		}
 	}
@@ -45,4 +53,9 @@ bool Plate::CalculateClampedPos(glm::vec3& pos, const int height)
 	}
 
 	return false;
+}
+
+void Plate::AddObserver(dae::Observer* observer)
+{
+	m_pSubject->AddObserver(observer);
 }
