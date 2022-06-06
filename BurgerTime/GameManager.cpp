@@ -22,6 +22,7 @@ void GameManager::Notify(dae::BaseComponent* c, int event)
 		Confirmed(static_cast<UIPointer*>(c));
 		break;
 	}
+	Notify(event);
 }
 
 void GameManager::Notify(int event)

@@ -44,7 +44,7 @@ void LoadLevel(dae::Scene& scene, dae::Observer* pGame, dae::Observer* scoreComp
 std::shared_ptr<dae::GameObject> CreateBackground(const std::string& texture);
 std::shared_ptr<dae::GameObject> CreateFPSCounter(const glm::vec3& pos, const SDL_Color& color);
 std::shared_ptr<dae::GameObject> CreateScoreUI(const glm::vec3& pos, const SDL_Color& scoreColor, const SDL_Color& textColor);
-std::shared_ptr<dae::GameObject> CreatePepperCountUI(const glm::vec3& pos, const SDL_Color& pepperColor);
+std::shared_ptr<dae::GameObject> CreatePepperCountUI(const glm::vec3& pos, const SDL_Color& pepperColor, const std::string& texture);
 std::shared_ptr<dae::GameObject> CreateLivesUI(const glm::vec3& pos, const std::string& texture);
 std::shared_ptr<dae::GameObject> CreatePlayerCharacter(const glm::vec3& pos, const std::string& texture, dae::Observer* pGame, dae::Observer* score, dae::Observer* pSoundManager, dae::Observer* lives, dae::Observer* pepperUI, PepperCloud* cloud);
 std::shared_ptr<dae::GameObject> CreatePepperCloud();
@@ -152,7 +152,7 @@ void CreateSinglePlayer(GameManager* pGame, SoundManager* pSoundManager)
 	ScoreComponent* score = go->GetComponent<ScoreComponent>();
 
 	// Pepper count
-	scene.Add(go = CreatePepperCountUI({ 550, 23, 0 }, { 255, 255, 255 }));
+	scene.Add(go = CreatePepperCountUI({ 550, 23, 0 }, { 255, 255, 255 }, "BurgertimeSprites.png"));
 	PepperUI* pepperUI = go->GetComponent<PepperUI>();
 
 	// Lives
@@ -214,12 +214,20 @@ void CreateCoop(GameManager* pGame, SoundManager* pSoundManager)
 	ScoreComponent* score = go->GetComponent<ScoreComponent>();
 
 	// Pepper count
-	scene.Add(go = CreatePepperCountUI({ 550, 23, 0 }, { 255, 255, 255 }));
+	scene.Add(go = CreatePepperCountUI({ 550, 23, 0 }, { 255, 0, 0 }, "BurgertimeSprites.png"));
 	PepperUI* pepperUI = go->GetComponent<PepperUI>();
+
+	// Salt count
+	scene.Add(go = CreatePepperCountUI({ 550, 65, 0 }, { 0, 0, 255 }, "Salt.png"));
+	PepperUI* saltUI = go->GetComponent<PepperUI>();
 
 	// Lives
 	scene.Add(go = CreateLivesUI({ 5,640,0 }, "BurgertimeSprites.png"));
 	LivesComponent* lives = go->GetComponent<LivesComponent>();
+
+	// salt Lives
+	scene.Add(go = CreateLivesUI({ 550,640,0 }, "Salt.png"));
+	LivesComponent* saltLives = go->GetComponent<LivesComponent>();
 
 	// Creating pepper cloud
 	scene.Add(go = CreatePepperCloud());
@@ -245,7 +253,7 @@ void CreateCoop(GameManager* pGame, SoundManager* pSoundManager)
 	input.AddKeyboardCommand({ SDL_SCANCODE_X, dae::ButtonState::Pressed }, std::make_unique<IUseAbility>(pPepper), scene.GetIndex());
 
 	// CREATING SALT
-	scene.Add(go = CreatePlayerCharacter({ 200, 500, 0 }, "Salt.png", pGame, score, lives, pepperUI, pSoundManager, cloudSalt));
+	scene.Add(go = CreatePlayerCharacter({ 200, 500, 0 }, "Salt.png", pGame, score, saltLives, saltUI, pSoundManager, cloudSalt));
 	PeterPepper* pSalt = go->GetComponent<PeterPepper>();
 
 	// CONTROLLER INPUTS
@@ -284,7 +292,7 @@ void CreateVersus(GameManager* pGame, SoundManager* pSoundManager)
 	ScoreComponent* score = go->GetComponent<ScoreComponent>();
 
 	// Pepper count
-	scene.Add(go = CreatePepperCountUI({ 550, 23, 0 }, { 255, 255, 255 }));
+	scene.Add(go = CreatePepperCountUI({ 550, 23, 0 }, { 255, 255, 255 }, "BurgertimeSprites.png"));
 	PepperUI* pepperUI = go->GetComponent<PepperUI>();
 
 	// Lives
@@ -462,7 +470,7 @@ std::shared_ptr<dae::GameObject> CreateLivesUI(const glm::vec3& pos, const std::
 	return go;
 }
 
-std::shared_ptr<dae::GameObject> CreatePepperCountUI(const glm::vec3& pos, const SDL_Color& pepperColor)
+std::shared_ptr<dae::GameObject> CreatePepperCountUI(const glm::vec3& pos, const SDL_Color& pepperColor, const std::string& texture)
 {
 	auto go = std::make_shared<dae::GameObject>();
 	go->AddComponent<dae::RenderComponent>();
@@ -474,7 +482,7 @@ std::shared_ptr<dae::GameObject> CreatePepperCountUI(const glm::vec3& pos, const
 
 	auto child = go->AddChild();
 	auto pRender = child->AddComponent<dae::RenderComponent>();
-	pRender->SetTexture("BurgertimeSprites.png");
+	pRender->SetTexture(texture);
 	pRender->UseSrc(true);
 	pRender->SetSrc(216.f, 9.f, 24.f, 6.f);
 	pRender->SetDst(0.f, 0.f, 50.f, 15.f);
