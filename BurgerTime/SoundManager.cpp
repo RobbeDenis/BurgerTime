@@ -18,6 +18,9 @@ void SoundManager::Notify(int event)
 	case BTEvents::PepperUsed:
 		SoundSLocator::GetSoundSystem().Play(BTEvents::PepperUsed, m_Volume);
 		break;
+	case BTEvents::UIIndexChanged:
+		SoundSLocator::GetSoundSystem().Play(BTEvents::UIIndexChanged, m_Volume);
+		break;
 	default:
 		break;
 	}

@@ -1,6 +1,7 @@
 #pragma once
 #include <Command.h>
 #include "Character.h"
+#include "UIPointer.h"
 
 // Peter Pepper inputs
 // RIGHT
@@ -90,4 +91,47 @@ public:
 
 private:
 	Character* m_pPeter = nullptr;
+};
+
+class PointerUp final : public Command
+{
+public:
+	PointerUp(UIPointer* pointer) : m_pPointer(pointer) {}
+
+	void Execute() override
+	{
+		m_pPointer->Up();
+	}
+
+private:
+	UIPointer* m_pPointer = nullptr;
+};
+
+class PointerDown final : public Command
+{
+public:
+	PointerDown(UIPointer* pointer) : m_pPointer(pointer) {}
+
+	void Execute() override
+	{
+		m_pPointer->Down();
+	}
+
+private:
+	UIPointer* m_pPointer = nullptr;
+};
+
+class Confirmed final : public Command
+{
+public:
+	Confirmed(UIPointer* pointer) : m_pPointer(pointer) {}
+
+	void Execute() override
+	{
+		if(m_pPointer)
+			m_pPointer->Confirm();
+	}
+
+private:
+	UIPointer* m_pPointer = nullptr;
 };

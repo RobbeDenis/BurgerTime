@@ -8,5 +8,8 @@ enum BTEvents
 	BurgerDropped = 3,
 	EnemiesDiedOnTop = 4,
 	PepperUsed = 5,
-	BurgerWalk = 6
+	BurgerWalk = 6,
+	GameOver = 7,
+	UIIndexChanged = 8,
+	UIConfirmed = 9
 };

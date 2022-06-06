@@ -75,6 +75,11 @@ void PeterPepper::Die()
 	m_Animator->SetAnimation(CharacterState::Death);
 	--m_Lives;
 	m_pSubject->Notify(this, BTEvents::PlayerDied);
+
+	if (m_Lives <= 0)
+	{
+		m_pSubject->Notify(this, BTEvents::GameOver);
+	}
 }
 
 void PeterPepper::UseAbility()

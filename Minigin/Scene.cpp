@@ -7,9 +7,10 @@
 
 using namespace dae;
 
-Scene::Scene(const std::string& name) 
+Scene::Scene(const std::string& name, const int index) 
 	: m_Name(name) 
 	, m_EnableDebug(false)
+	, m_Index(index)
 {
 
 }

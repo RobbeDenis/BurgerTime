@@ -61,7 +61,7 @@ void dae::RenderComponent::Render() const
 	}
 	else if(m_UseDst)
 	{
-		Renderer::GetInstance().RenderTexture(*m_Texture2D, m_DstRect);
+		Renderer::GetInstance().RenderTexture(*m_Texture2D, int(pos.x + m_DstRect.x), int(pos.y + m_DstRect.y), m_DstRect.w, m_DstRect.h);
 	}
 	else
 	{

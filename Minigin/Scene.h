@@ -28,6 +28,7 @@ namespace dae
 		void EnableDebugRender(bool enable) { m_EnableDebug = enable; };
 		const std::string& GetName() { return m_Name; };
 		const std::vector<Collider*>& GetColliders() const { return m_pColliders; };
+		int GetIndex() const { return m_Index; };
 
 		~Scene();
 		Scene(const Scene& other) = delete;
@@ -36,13 +37,14 @@ namespace dae
 		Scene& operator=(Scene&& other) = delete;
 
 	private: 
-		explicit Scene(const std::string& name);
+		explicit Scene(const std::string& name, int index);
 
 		std::string m_Name;
 		std::vector<std::shared_ptr<GameObject>> m_Objects{};
 		std::vector<RenderComponent*> m_pRenderComponents{};
 		std::vector<DebugRenderComponent*> m_pDebugRenderComponents{};
 		std::vector<Collider*> m_pColliders{};
+		int m_Index;
 		bool m_EnableDebug;
 	};
 

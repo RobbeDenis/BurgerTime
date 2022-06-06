@@ -62,7 +62,7 @@ void dae::SceneManager::Reset()
 dae::Scene& dae::SceneManager::CreateScene(const std::string& name)
 {
 	InputManager::GetInstance().AddNewSceneCommands();
-	const auto& scene = std::shared_ptr<Scene>(new Scene(name));
+	const auto& scene = std::shared_ptr<Scene>(new Scene(name, int(m_Scenes.size())));
 	m_Scenes.push_back(scene);
 	return *scene;
 }
@@ -81,4 +81,6 @@ void dae::SceneManager::SetScene(const std::string& name)
 
 	m_SceneIdx = i - 1;
 	m_ActiveScene = *it;
+
+	m_ActiveScene->Start();
 }
