@@ -7,8 +7,14 @@
 
 ScoreComponent::ScoreComponent(dae::GameObject* gameObject)
 	: BaseComponent(gameObject)
+	, m_HighScore(nullptr)
 {
 
+}
+
+void ScoreComponent::Reset()
+{
+	ResetScore();
 }
 
 void ScoreComponent::PostLoad()
@@ -38,8 +44,6 @@ void ScoreComponent::Notify(int event)
 	case BTEvents::BurgerDropped:
 		BurgerDropped();
 		break;
-	case BTEvents::PlayerReset:
-		ResetScore();
 	}
 }
 
@@ -67,6 +71,7 @@ void ScoreComponent::BurgerDropped()
 
 void ScoreComponent::ResetScore()
 {
+	m_HighScore->SaveScore(m_Score);
 	m_Score = 0;
 	m_pTextPoints->SetText(std::to_string(m_Score));
 }

@@ -69,6 +69,9 @@
     <ClCompile Include="UIPointer.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="HighScore.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LivesComponent.h">
@@ -127,6 +130,9 @@
     </ClInclude>
     <ClInclude Include="RespawnManager.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HighScore.h">
+      <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

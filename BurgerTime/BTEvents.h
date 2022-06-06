@@ -12,5 +12,6 @@ enum BTEvents
 	GameOver = 7,
 	UIIndexChanged = 8,
 	UIConfirmed = 9,
-	PlateFilled = 10
+	PlateFilled = 10,
+	ResetScore = 11
 };

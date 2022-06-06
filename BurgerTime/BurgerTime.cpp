@@ -13,6 +13,10 @@
 #include <Collider.h>
 #include <DebugRenderComponent.h>
 #include <SoundSystem.h>
+#include <Observer.h>
+
+#include <iostream>
+#include <fstream>
 
 #include "PeterPepper.h"
 #include "BurgerTimeCommands.h"
@@ -31,6 +35,7 @@
 #include "BTEvents.h"
 #include "GameManager.h"
 #include "UIPointer.h"
+#include "HighScore.h"
 
 void LoadGame(GameManager* pGame, SoundManager* pSoundManager);
 
@@ -46,6 +51,7 @@ void LoadLevel(dae::Scene& scene, dae::Observer* pGame, dae::Observer* scoreComp
 std::shared_ptr<dae::GameObject> CreateBackground(const std::string& texture);
 std::shared_ptr<dae::GameObject> CreateFPSCounter(const glm::vec3& pos, const SDL_Color& color);
 std::shared_ptr<dae::GameObject> CreateScoreUI(const glm::vec3& pos, const SDL_Color& scoreColor, const SDL_Color& textColor);
+std::shared_ptr<dae::GameObject> CreateHighScoreUI(const glm::vec3& pos, const SDL_Color& scoreColor, const SDL_Color& textColor);
 std::shared_ptr<dae::GameObject> CreatePepperCountUI(const glm::vec3& pos, const SDL_Color& pepperColor, const std::string& texture);
 std::shared_ptr<dae::GameObject> CreateLivesUI(const glm::vec3& pos, const std::string& texture);
 std::shared_ptr<dae::GameObject> CreatePlayerCharacter(const glm::vec3& pos, const std::string& texture, dae::Observer* pGame, dae::Observer* score, dae::Observer* pSoundManager, dae::Observer* lives, dae::Observer* pepperUI, PepperCloud* cloud);
@@ -56,6 +62,36 @@ std::shared_ptr<dae::GameObject> CreateLadder(const int ladderHeight, const glm:
 std::shared_ptr<dae::GameObject> CreateBurgerPart(dae::Observer* score, const glm::vec3& pos, const PartType type);
 std::shared_ptr<dae::GameObject> CreatePlate(const glm::vec3& pos, dae::Observer* pGame);
 std::shared_ptr<dae::GameObject> CreateEnemy(dae::Observer* pGame, dae::Observer* score, dae::Observer* pSoundManager, Character* target, const glm::vec3& pos, const EnemyType type);
+
+template<typename T>
+void WritePod(T pod, std::ofstream& output);
+template<typename T>
+void ReadPod(T& pod, std::streamsize size, std::ifstream& input);
+const std::string m_SaveFile = "../Data/Saves/Level01.txt";
+
+template<typename T>
+void WritePod(T pod, std::ofstream& output)
+{
+	if (output.is_open())
+	{
+		if (std::is_pod<T>::value == 1)
+		{
+			output.write((char*)&pod, sizeof(pod));
+		}
+	}
+}
+
+template<typename T>
+void ReadPod(T& pod, std::streamsize size, std::ifstream& input)
+{
+	if (input.is_open())
+	{
+		if (std::is_pod<T>::value == 1)
+		{
+			input.read((char*)&pod, size);
+		}
+	}
+}
 
 int main(int, char* []) 
 {
@@ -202,9 +238,15 @@ void CreateSinglePlayer(GameManager* pGame, SoundManager* pSoundManager)
 	// FPS Counter
 	scene.Add(CreateFPSCounter({ 7.f, 7.f, 0.f }, { 40, 215, 67 }));
 
+	// Create high score
+	scene.Add(go = CreateHighScoreUI({ 210.f, 23.f, 0.f }, { 255, 255, 255 }, { 255, 0, 0 }));
+	HighScore* hs = go->GetComponent<HighScore>();
+	
+
 	// Score component
 	scene.Add(go = CreateScoreUI({40.f, 23.f, 0.f}, { 255, 255, 255 }, { 255, 0, 0 }));
 	ScoreComponent* score = go->GetComponent<ScoreComponent>();
+	score->AddHighScore(hs);
 
 	// Pepper count
 	scene.Add(go = CreatePepperCountUI({ 550, 23, 0 }, { 255, 255, 255 }, "BurgertimeSprites.png"));
@@ -264,9 +306,14 @@ void CreateCoop(GameManager* pGame, SoundManager* pSoundManager)
 	// FPS Counter
 	scene.Add(CreateFPSCounter({ 7.f, 7.f, 0.f }, { 40, 215, 67 }));
 
+	// Create high score
+	scene.Add(go = CreateHighScoreUI({ 210.f, 23.f, 0.f }, { 255, 255, 255 }, { 255, 0, 0 }));
+	HighScore* hs = go->GetComponent<HighScore>();
+
 	// Score component
 	scene.Add(go = CreateScoreUI({ 40.f, 23.f, 0.f }, { 255, 255, 255 }, { 255, 0, 0 }));
 	ScoreComponent* score = go->GetComponent<ScoreComponent>();
+	score->AddHighScore(hs);
 
 	// Pepper count
 	scene.Add(go = CreatePepperCountUI({ 550, 23, 0 }, { 255, 0, 0 }, "BurgertimeSprites.png"));
@@ -342,9 +389,14 @@ void CreateVersus(GameManager* pGame, SoundManager* pSoundManager)
 	// FPS Counter
 	scene.Add(CreateFPSCounter({ 7.f, 7.f, 0.f }, { 40, 215, 67 }));
 
+	// Create high score
+	scene.Add(go = CreateHighScoreUI({ 210.f, 23.f, 0.f }, { 255, 255, 255 }, { 255, 0, 0 }));
+	HighScore* hs = go->GetComponent<HighScore>();
+
 	// Score component
 	scene.Add(go = CreateScoreUI({ 40.f, 23.f, 0.f }, { 255, 255, 255 }, { 255, 0, 0 }));
 	ScoreComponent* score = go->GetComponent<ScoreComponent>();
+	score->AddHighScore(hs);
 
 	// Pepper count
 	scene.Add(go = CreatePepperCountUI({ 550, 23, 0 }, { 255, 255, 255 }, "BurgertimeSprites.png"));
@@ -558,6 +610,27 @@ std::shared_ptr<dae::GameObject> CreateFPSCounter(const glm::vec3& pos, const SD
 	pFpsCounter->UseSmoothing(true);
 	go->SetWorldPosition(pos);
 	
+	return go;
+}
+
+std::shared_ptr<dae::GameObject> CreateHighScoreUI(const glm::vec3& pos, const SDL_Color& scoreColor, const SDL_Color& textColor)
+{
+	auto go = std::make_shared<dae::GameObject>();
+	go->AddComponent<dae::RenderComponent>();
+	go->AddComponent<HighScore>();
+	auto pTextScore = go->AddComponent<dae::TextComponent>();
+	pTextScore->SetFont(dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 22), false);
+	pTextScore->SetColor(scoreColor, false);
+	go->SetWorldPosition(pos);
+
+	auto child = go->AddChild();
+	child->AddComponent<dae::RenderComponent>();
+	pTextScore = child->AddComponent<dae::TextComponent>();
+	pTextScore->SetFont(dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 22), false);
+	pTextScore->SetColor(textColor, false);
+	pTextScore->SetText("HIGH-SCORE");
+	child->SetLocalPosition({ -20, -20, 0 });
+
 	return go;
 }
 
