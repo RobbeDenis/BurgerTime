@@ -9,6 +9,12 @@ dae::InputManager::~InputManager()
 
 bool dae::InputManager::ProcessInput()
 {
+	if (m_Skip)
+	{
+		m_Skip = false;
+		return true;
+	}
+
 	const int sceneIdx = SceneManager::GetInstance().GetSceneIdx();
 
 	for (const std::unique_ptr<XBox360Controller>& controller : m_Controllers)
@@ -146,4 +152,11 @@ void dae::InputManager::AddNewSceneCommands()
 	KeyboardCommandsMap kcmap{};
 	SceneCommands* pair = new SceneCommands{ std::move(ccmap),  std::move(kcmap) };
 	m_Commands.push_back(std::move(pair));
+}
+
+void dae::InputManager::Reset()
+{
+
+
+	m_Skip = true;
 }

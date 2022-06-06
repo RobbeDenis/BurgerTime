@@ -16,8 +16,10 @@ public:
 	const std::string& GetCoopName() const { return m_Coop; };
 	const std::string& GetVersusName() const { return m_Versus; };
 	const std::string& GetStartMenuName() const { return m_StartMenu; };
+	const std::string& GetGameOverName() const { return m_GameOver; };
 
 private:
+	void ResetWholeScene();
 	void ResetLevel();
 	void GameOver();
 	void Confirmed(UIPointer* p);
@@ -26,5 +28,8 @@ private:
 	const std::string m_Coop = "Coop";
 	const std::string m_Versus = "Versus";
 	const std::string m_StartMenu = "StartMenu";
+	const std::string m_GameOver = "GameOver";
+
+	bool m_IsGameOver;
 };
 

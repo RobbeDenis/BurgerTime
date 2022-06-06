@@ -2,9 +2,11 @@
 #include "BTEvents.h"
 #include <SceneManager.h>
 #include "UIPointer.h"
+#include <InputManager.h>
 
 GameManager::GameManager()
 	: dae::Observer()
+	, m_IsGameOver(false)
 {
 
 }
@@ -40,7 +42,13 @@ void GameManager::Notify(int event)
 
 void GameManager::Confirmed(UIPointer* p)
 {
-	if (p)
+	if (m_IsGameOver)
+	{
+		m_IsGameOver = false;
+		ResetWholeScene();
+		dae::SceneManager::GetInstance().SetScene(m_StartMenu);
+	}
+	else if (p)
 	{
 		int index = p->GetIndex();
 		switch (index)
@@ -73,4 +81,13 @@ void GameManager::GameOver()
 {
 	ResetLevel();
 	std::cout << "Game Over\n";
+	m_IsGameOver = true;
+
+	ResetWholeScene();
+	dae::SceneManager::GetInstance().SetScene(m_GameOver);
+}
+
+void GameManager::ResetWholeScene()
+{
+	dae::InputManager::GetInstance().Reset();
 }

@@ -86,6 +86,8 @@ namespace dae
 
 		void AddNewSceneCommands();
 
+		void Reset();
+
 	private:
 		using ControllerCommandsMap = std::unordered_map<ControllerInput, std::unique_ptr<Command>, ControllerInputHasher>;
 		using KeyboardCommandsMap = std::unordered_map<KeyboardInput, std::pair<std::unique_ptr<Command>, bool>, KeyboardInputHasher>;
@@ -94,5 +96,7 @@ namespace dae
 
 		std::vector<std::unique_ptr<XBox360Controller>> m_Controllers{};
 		void ProcessKeyboardInput();
+
+		bool m_Skip = false;
 	};
 }

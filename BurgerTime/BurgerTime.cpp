@@ -38,6 +38,8 @@ void CreateStartMenu(GameManager* pGame, SoundManager* pSoundManager);
 void CreateSinglePlayer(GameManager* pGame, SoundManager* pSoundManager);
 void CreateCoop(GameManager* pGame, SoundManager* pSoundManager);
 void CreateVersus(GameManager* pGame, SoundManager* pSoundManager);
+void CreateGameOver(GameManager* pGame);
+void CreateGameWon(GameManager* pGame);
 
 void LoadLevel(dae::Scene& scene, dae::Observer* pGame, dae::Observer* scoreComp, dae::Observer* pSoundManager, Character* target);
 
@@ -91,11 +93,63 @@ void LoadGame(GameManager* pGame, SoundManager* pSoundManager)
 	CreateCoop(pGame, pSoundManager);
 	CreateVersus(pGame, pSoundManager);
 	CreateStartMenu(pGame, pSoundManager);
+	CreateGameOver(pGame);
 
 	dae::SceneManager::GetInstance().SetScene("StartMenu");
-	//dae::SceneManager::GetInstance().SetScene("SinglePlayer");
-	//dae::SceneManager::GetInstance().SetScene("Coop");
-	//dae::SceneManager::GetInstance().SetScene("Versus");
+}
+
+void CreateGameWon(GameManager* pGame)
+{
+	auto& scene = dae::SceneManager::GetInstance().CreateScene(pGame->GetGameOverName());
+	auto& input = dae::InputManager::GetInstance();
+
+	// Adding GameObjects
+	std::shared_ptr<dae::GameObject> go;
+
+	// Add background
+	scene.Add(go = CreateBackground("Won.png"));
+
+	// FPS Counter
+	scene.Add(CreateFPSCounter({ 7.f, 7.f, 0.f }, { 40, 215, 67 }));
+
+	// Adding pointer
+	go = std::make_shared<dae::GameObject>();
+	go->AddComponent<dae::RenderComponent>();
+	auto* p = go->AddComponent<UIPointer>();
+	p->SetMax(1);
+	p->AddObserver(pGame);
+	go->SetWorldPosition({ 90, 295,0 });
+	scene.Add(go);
+
+	input.AddKeyboardCommand({ SDL_SCANCODE_SPACE, dae::ButtonState::Released }, std::make_unique<Confirmed>(p), scene.GetIndex());
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonA, dae::ButtonState::Released }, std::make_unique<Confirmed>(p), scene.GetIndex());
+}
+
+void CreateGameOver(GameManager* pGame)
+{
+	auto& scene = dae::SceneManager::GetInstance().CreateScene(pGame->GetGameOverName());
+	auto& input = dae::InputManager::GetInstance();
+
+	// Adding GameObjects
+	std::shared_ptr<dae::GameObject> go;
+
+	// Add background
+	scene.Add(go = CreateBackground("GameOver.png"));
+
+	// FPS Counter
+	scene.Add(CreateFPSCounter({ 7.f, 7.f, 0.f }, { 40, 215, 67 }));
+
+	// Adding pointer
+	go = std::make_shared<dae::GameObject>();
+	go->AddComponent<dae::RenderComponent>();
+	auto* p = go->AddComponent<UIPointer>();
+	p->SetMax(1);
+	p->AddObserver(pGame);
+	go->SetWorldPosition({ 90, 295,0 });
+	scene.Add(go);
+
+	input.AddKeyboardCommand({ SDL_SCANCODE_SPACE, dae::ButtonState::Released }, std::make_unique<Confirmed>(p), scene.GetIndex());
+	input.AddControllerCommand({ dae::XBox360Controller::ControllerButton::ButtonA, dae::ButtonState::Released }, std::make_unique<Confirmed>(p), scene.GetIndex());
 }
 
 void CreateStartMenu(GameManager* pGame, SoundManager* pSoundManager)
