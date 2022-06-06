@@ -3,6 +3,7 @@
 #include <SceneManager.h>
 #include "UIPointer.h"
 #include <InputManager.h>
+#include "RespawnManager.h"
 
 GameManager::GameManager()
 	: dae::Observer()
@@ -89,8 +90,7 @@ void GameManager::Confirmed(UIPointer* p)
 
 void GameManager::ResetLevel()
 {
-	//dae::SceneManager::GetInstance().Reset();
-	dae::SceneManager::GetInstance().Start();
+	RespawnManager::GetInstance().Respawn();
 }
 
 void GameManager::GameOver()
@@ -106,6 +106,7 @@ void GameManager::GameOver()
 void GameManager::ResetWholeScene()
 {
 	dae::InputManager::GetInstance().Reset();
+	dae::SceneManager::GetInstance().Reset();
 }
 
 void GameManager::GameWon()

@@ -125,5 +125,8 @@
     <ClInclude Include="UIPointer.h">
       <Filter>Components</Filter>
     </ClInclude>
+    <ClInclude Include="RespawnManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

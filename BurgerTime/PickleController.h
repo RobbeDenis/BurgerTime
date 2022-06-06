@@ -11,6 +11,7 @@ public:
 	void PostLoad() override;
 	void FixedUpdate() override;
 	void Update() override;
+	void Reset() override;
 
 	void SetTarget(Character* target) { m_Target = target; };
 

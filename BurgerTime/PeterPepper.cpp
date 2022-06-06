@@ -137,3 +137,11 @@ void PeterPepper::UseAbility()
 	--m_PepperCount;
 	m_pSubject->Notify(this, BTEvents::PepperUsed);
 }
+
+void PeterPepper::Reset()
+{
+	Character::Reset();
+	m_PepperCount = m_MaxPepper;
+	m_Lives = 3;
+	m_pSubject->Notify(this, BTEvents::PlayerReset);
+}

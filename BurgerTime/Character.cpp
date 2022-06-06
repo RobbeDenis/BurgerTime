@@ -3,6 +3,7 @@
 #include <ETime.h>
 #include "Platform.h"
 #include "Ladder.h"
+#include "RespawnManager.h"
 
 Character::Character(dae::GameObject* gameObject)
 	: BaseComponent(gameObject)
@@ -16,6 +17,7 @@ Character::Character(dae::GameObject* gameObject)
 	, m_PrevState(CharacterState::Idle)
 {
 	m_pSubject = std::make_shared<dae::Subject>();
+	RespawnManager::GetInstance().AddChar(this);
 }
 
 void Character::PostLoad()
@@ -34,6 +36,20 @@ void Character::Start()
 	HandleOverlaps();
 	SnapToOverlappingPlatform();
 	m_SpawnPos = m_pGameObject->GetWorldPosition();
+}
+
+void Character::Respawn()
+{
+	m_PrevState = CharacterState::Idle;
+	m_State = CharacterState::Idle;
+	m_Animator->SetAnimation(m_State);
+	m_Killed = false;
+	m_Active = true;
+	m_PendingMove = false;
+
+	m_pGameObject->SetWorldPosition(m_SpawnPos);
+	HandleOverlaps();
+	SnapToOverlappingPlatform();
 }
 
 void Character::Update()
@@ -274,14 +290,6 @@ void Character::StopMoving()
 		m_State = CharacterState::Idle;
 		m_Animator->SetAnimation(CharacterState::Idle);
 	}
-}
-
-void Character::Respawn()
-{
-	m_pGameObject->SetWorldPosition(m_SpawnPos);
-	m_State = CharacterState::Idle;
-	m_Animator->SetAnimation(m_State);
-	m_Killed = false;
 }
 
 void Character::AddObserver(dae::Observer* observer)

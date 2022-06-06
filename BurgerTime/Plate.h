@@ -9,6 +9,7 @@ class Plate final : public dae::BaseComponent
 public:
 	void PostLoad() override;
 	void FixedUpdate() override;
+	void Reset() override;
 
 	bool CalculateClampedPos(glm::vec3& pos, const int height);
 	void AddObserver(dae::Observer* observer);

@@ -48,6 +48,29 @@ void BurgerPart::PostLoad()
 	renderComp->UseSrc(true);
 }
 
+void BurgerPart::Start()
+{
+	m_StartPos = m_pGameObject->GetWorldPosition();
+}
+
+void BurgerPart::Reset()
+{
+	m_pGameObject->SetWorldPosition(m_StartPos);
+	m_PlayerFall = false;
+	m_FallCounter = 0;
+	m_Stacking = false;
+	m_HitPart = false;
+	m_PrevOverlapPlatform = false;
+	m_BeginOverlapPlatform = false;
+	m_OverlapPlatform = false;
+	m_IsFalling = false;
+
+	for (int i = 0; i < m_TotalSegments; i++)
+	{
+		m_Segments[i] = false;
+	}
+}
+
 void BurgerPart::FixedUpdate()
 {
 	HandleOverlaps();

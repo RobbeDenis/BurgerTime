@@ -9,6 +9,7 @@ public:
 	void PostLoad() override;
 	void Start() override;
 	void Update() override;
+	void Reset() override;
 
 	int GetLives() const { return m_Lives; };
 	int GetPepperCount() const { return m_PepperCount; };
@@ -31,6 +32,7 @@ private:
 	int m_PepperReach;
 	int	m_MaxPepper;
 	int m_PepperCount;
+	bool m_died;
 };
 
 

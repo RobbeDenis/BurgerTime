@@ -19,7 +19,9 @@ class BurgerPart final : public dae::BaseComponent
 {
 public:
 	void PostLoad() override;
+	void Start() override;
 	void FixedUpdate() override;
+	void Reset() override;
 
 	void AddObserver(dae::Observer* observer);
 
@@ -44,6 +46,7 @@ private:
 	std::vector<bool> m_Segments;
 	int m_TotalSegments;
 
+	glm::vec3 m_StartPos;
 	std::shared_ptr<dae::Subject> m_pSubject;
 	dae::Collider* m_Collider;
 	PartType m_Type;

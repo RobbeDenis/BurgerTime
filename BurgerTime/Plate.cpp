@@ -18,6 +18,11 @@ void Plate::PostLoad()
 	m_Collider->SetDimensions(m_Width, m_Height);
 }
 
+void Plate::Reset()
+{
+	m_Filled = false;
+}
+
 void Plate::FixedUpdate()
 {
 	for (dae::Collider* c : m_Collider->GetColliders())

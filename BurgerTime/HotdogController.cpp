@@ -21,6 +21,15 @@ HotdogController::HotdogController(dae::GameObject* gameObject)
 
 }
 
+void HotdogController::Reset()
+{
+	m_State = 0;
+	m_PrevLadder = nullptr;
+	m_PrevPlatform = nullptr;
+	m_UsingLadder = false;
+	m_Active = false;
+}
+
 void HotdogController::PostLoad()
 {
 	m_Character = m_pGameObject->GetComponent<Character>();

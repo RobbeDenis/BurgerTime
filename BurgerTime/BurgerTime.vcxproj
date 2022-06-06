@@ -197,6 +197,7 @@
     <ClInclude Include="PickleController.h" />
     <ClInclude Include="Plate.h" />
     <ClInclude Include="Platform.h" />
+    <ClInclude Include="RespawnManager.h" />
     <ClInclude Include="ScoreComponent.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="UIPointer.h" />
